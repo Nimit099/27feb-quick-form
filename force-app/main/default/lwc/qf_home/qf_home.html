@@ -1,0 +1,223 @@
+<template>
+
+    <!-- ============== error toast=========== -->
+    <template if:true={error_toast}>
+        <div>    
+        <div class="main">
+            <div class="slds-notify_container slds-is-relative">
+                  <div class="slds-notify slds-notify_toast toast_shadow" role="status">
+                        <div style=" width:1px; height:40px; border-radius: 10px;"></div>
+                        <span class="slds-icon_container slds-icon-utility-success slds-icon-utility-success  slds-no-flex slds-align-top" style="margin:5px 10px; font-size:24px;">
+                            <div style="height:26px; width:26px; background-color:rgb(252, 8, 8); border-radius:50%; color:white; margin:3px 0; padding:0 9px; font-weight:bold;">!</div>
+                        </span>
+                        <div class="slds-notify_content" style="display:block;">                        
+                            <h1 style="font-weight:bold;">Uh oh, something went wrong</h1>
+                            <h2 class="slds-text-heading_small" >Please Enter the Name</h2>
+                        </div>
+                        <div class="slds-notify__close">
+                              <button class="slds-button slds-button_icon slds-button_icon-inverse" title="Close" onclick={deleteno} style="margin: 7px 0;">
+                                    <lightning-icon icon-name="utility:close" size="small" variant="inverse" class="my-icon"></lightning-icon>
+                                    <span class="slds-assistive-text">Close</span>
+                              </button>
+                        </div>
+                  </div>
+            </div>
+        </div>
+        </div>
+        </template>
+        <!-- ============== error toast=========== -->
+
+    <!-- Main Form section -->
+    <div
+    class="slds-col slds-size_1-of-1 slds-small-size_9-of-12  slds-medium-size_9-of-12  slds-large-size_8-of-12 mainSection">
+    <div class="header" style="height:8%">
+        <img src={logo} alt="">
+        <h1 class="mainFormTitle"> Welcome {currentUserName}</h1>
+       
+    </div>
+
+    <!-- search box and create form buttons -->
+    <div class="slds-grid slds-wrap slds-grid_align-spread uppersection" >
+        <!-- Search box -->
+        <div class="slds-col slds-medium-size_4-of-12 slds-size_1-of-1 slds-large-size_3-of-12">
+            <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_left searchBoxDiv">
+                <img src={searchicon} class="slds-icon slds-input__icon slds-input__icon_left slds-icon-text-default searchIcon">
+                
+                <lightning-input disabled={disableSearchBox} data-id="SearchBox" onchange={search}
+                    name="enter-search" label="" type="text" class="searchBox" placeholder="Search for forms"
+                    value={searchkey} autocomplete="off" ></lightning-input>
+
+
+            </div>
+        </div>
+
+         <!-- Create Form / folder buttons --> 
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_8-of-12 slds-large-size_8-of-12">
+            <div class="formButtons">
+                <!-- <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_left">
+                    <img src={addicon} class="slds-icon slds-input__icon slds-input__icon_left slds-icon-text-default">
+                    <lightning-button name="newform" label="New Form" onclick={openModal}
+                        class="formiconsmargin slds-button "></lightning-button>
+                </div> -->
+
+                <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_left alf-btn new_form"
+                    style="margin-left: 10px;" onclick={renameForm}>
+                    <img src={addicon} class="" style="height: 16px; margin-top: 0.1px;">
+                    <p class="allFormButtons">New Form</p>
+                    <!-- <lightning-button name="allform" label="New Form" onclick={showAllForms}
+                        class="allFormButtons slds-button " ></lightning-button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <template if:true={bNoRecordsFound}>
+
+            <div class="table">
+                <template if:true={NoRecordsFound}>
+            
+                        <!-- data table start-->
+
+                        <div class="dataTable">
+                            <div>
+                                <template if:true={spinnerDataTable}>
+                                    <div data-id="spinnerId" class="slds-spinner_container"
+                                        style="overflow: hidden;">
+                                        <div class="spinner-main-div">
+                                            <div class="loader--ripple">
+                                                <div></div>
+                                                <div></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template> 
+                                <div class="tableHeader">
+                                    <div class="tableIndexCol">INDEX </div>
+                                    <div class="tableTitleCol" onclick={sortFormList}>
+                                        <div class="slds-th__action slds-text-linkreset formTitle">
+                                            <span class="slds-truncate">TITLE</span>
+                                            <lightning-helptext class="helptext"></lightning-helptext>
+                                    </div>
+                                        
+                                    </div>
+                                    <div class="tableStatusCol">STATUS </div>
+                                    <div class="tableSubmissionCol">SUBMISSION</div>
+                                    <div class="tablePreviewCol" style="text-align: -webkit-center;"> PREVIEW</div>
+                                    <div class="tableActionCol"> ACTION </div>
+                                </div>
+                                <template for:each={PaginationList} for:item="obj">
+                                    <div class="tableBody" key={obj.Id}>
+                                        <div class="tableIndexCol">
+                                            {index}
+                                        </div>
+                                        <div class="tableTitleCol"  data-id={obj.Id} data-name={obj.Name} onmouseover={showpen} onmouseleave={hidepen} >
+                                            <div class="slds-truncate titlename " data-id={obj.Id} data-name={obj.Name} style="cursor:pointer;"  ondblclick={new_rename}>
+                                                <div class=""><lightning-formatted-text value={obj.Name} class="slds-col title_name" title={obj.Name} data-id={obj.Id}></lightning-formatted-text></div>
+                                                <div class="slds-col slds-grid slds-wrap rename_div" data-name={obj.Id} style ="display: none;"><lightning-input type="text" value={newFormName} data-id={obj.Id} onchange={rename} onkeypress={key} onclick={insideClick} class="rename_input"></lightning-input><div class="right" onclick={renameForm}><img src={right} alt=""></div><div class="wrong" onclick={cancleRenameForm}><img src={cross} alt=""></div></div>
+                                            </div>
+                                            <span class="editpen" data-id={obj.Id} data-name={obj.Name} onclick={new_rename} title="Rename" ><img src={editpen} alt="" ></span>
+                                        </div>
+                                        <div class="tableStatusCol">
+                                            <div class="slds-truncate">
+                                                <div class="container">
+                                                    <div class="content">
+                                                        <label class="switch">
+                                                            <input type="checkbox"
+                                                                checked={obj.Status__c}
+                                                                name={obj.Id}
+                                                                data-id={obj.Id}
+                                                                onchange={changestatus}
+                                                                />
+                                                            <small></small>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tableSubmissionCol">
+                                            <div class="slds-truncate">
+                                                {obj.Total_Submissions__c}
+                                            </div>
+                                        </div>
+                                        <div class="tablePreviewCol">
+                                            <div class="previewIcon">
+                                                <img src={previewicon} name={obj.Id} onclick={onpreview} width="45" />
+                                            </div>
+                                        </div>
+                                        <div class="tableActionCol">
+                                            <lightning-button-menu class="buttonMenu" variant="container"
+                                                name={obj.Id} value={obj.Name} data-id={obj.Id}
+                                                onselect={handleSelectAction} menu-alignment="auto">
+                                                <lightning-menu-item value="Edit" label="Edit"
+                                                    prefix-icon-name="utility:edit_form"></lightning-menu-item> 
+                                                <lightning-menu-item value="Delete" label="Delete"
+                                                    prefix-icon-name="utility:delete" ></lightning-menu-item>
+                                            </lightning-button-menu>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                </template>
+            </div>
+    </template>
+
+    <!-- Footer  -->
+    <template if:false={bNoRecordsFound}>
+        <div class="norecordfound">
+            <div class="desertImg" aria-hidden="true">
+                <img src="/img/chatter/Desert.svg" class="" alt="test" style="height: 29vh" />
+                <h3 class="slds-text-heading_medium" style="text-align: center; margin: 16px;">No forms found</h3>
+                <div class="slds-text-color_weak">
+                    
+                </div>
+            </div>
+        </div>
+    </template>
+    <div class="slds-col slds-size_1-of-1 footer" style="height:7.5%;">
+                <div class="slds-grid" style="gap: 10px;">
+                    <div class="help  slds-col">
+                        <img src={helpIcon} alt="" class="feedback" style="width: 6%;">
+                        <p><s>Help</s></p>
+                    </div>
+                    <div class="feedback help slds-col" style="margin-right: 63%;">
+                        <img src={feedbackIcon} alt="" class="feedback">
+                        <p><s>Give Feedback</s></p>
+                    </div>
+                    <div class="slds-col footerCss totalForms">
+                        Total Forms : {count}
+                    </div>
+                </div>
+    </div>
+</div>
+
+    <template if:true={deletepopup}>
+        <template if:true={spinnerdelete}>
+            <div data-id="spinnerId" class="slds-spinner_container"
+                style="overflow: hidden; border-radius:20px">
+                <div class="spinner-main-div">
+                </div>
+            </div>
+        </template>
+        <div class="deletepopup">
+            <section role="dialog" tabindex="-1" aria-labelledby="ModalHeading"
+                aria-modal="true" aria-describedby="ModalBody" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <div class=" slds-p-around_large deletecontent" data-id="ModalBody">
+                        <div class="deleteicon"><img src={bin} alt=""></div>
+                        <div class="confirm-message">
+                           Do you want to delete?
+                        </div>
+                        <div class="deletedescription">
+                          <p>  This process cannot be undone ! </p>
+                        </div>
+                        <div class="deletefooter">
+                            <button class="slds-button yes-btn" onclick={deleteyes}><p class="yes-text">Yes</p></button>
+                            <button class="slds-button no-btn" onclick={deleteno}><p class="no-text">No</p></button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </template>
+</template>
