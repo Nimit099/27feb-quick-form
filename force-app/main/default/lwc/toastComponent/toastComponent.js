@@ -6,10 +6,10 @@ import cross_gery from '@salesforce/resourceUrl/cross_gery';
 export default class ToastComponent extends LightningElement {
     @track type='success';
     @track message;
-    @track messageIsHtml=false;
+    @track messageIsHtml=true;
     @track showToastBar_success = false;
     @track showToastBar_error = false;
-    @api autoCloseTime = 5000;
+    @api autoCloseTime = 3000;
     @track icon='';
     cross_gery_img = cross_gery;
     
@@ -20,7 +20,7 @@ export default class ToastComponent extends LightningElement {
     showToast(type, message, time) {
         this.type = type;
         this.message = message;
-        this.autoCloseTime=time;
+      
         if(this.type == "success"){
             this.showToastBar_success = true;
             this.showToastBar_error = false;

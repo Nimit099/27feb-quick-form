@@ -38,14 +38,14 @@ import renameform from '@salesforce/apex/qfhome.renameform'             // RENAM
 
 export default class Qf extends LightningElement {
     PaginationList;                      //LIST OF FORMS
-    
     bNoRecordsFound = true; 
     NoRecordsFound = true;
     spinnerDataTable = false;
     deletepopup = false;
     spinnerdelete = false;
-    error_toast = false;
+    error_toast = true;
     data = false;
+    isModalOpen_2;
     renamediv;
     pencheck = false;
     count;                              // COUNT OF FORMS
@@ -114,13 +114,12 @@ export default class Qf extends LightningElement {
 // # Description: Used to Search Form From the List
 // =================================== -->
     search(event){
-        this.searchkey = event.target.value; 
         this.spinnerDataTable = true;
+        this.searchkey = event.target.value; 
+        console.log(this.spinnerDataTable);
         search({searchkey : this.searchkey}).then(result => {
           this.i = 1;
           this.spinnerDataTable = false;
-          console.log(result.length);
-
               for (let key in result) {
                 this.count = key;
                 if(this.count > 0){
@@ -129,7 +128,6 @@ export default class Qf extends LightningElement {
                 this.bNoRecordsFound = true;
                 }
                 else{
-                  console.log('hii');
                   this.bNoRecordsFound = false;
                 }
               }
@@ -167,21 +165,9 @@ export default class Qf extends LightningElement {
           this.deletepopup =true;
           this.id = event.target.dataset.id;
           this.spinnerdelete = true;
-          // this.spinnerDataTable = true;
-          // deleteform({id : this.id, searchkey : this.searchkey}).then(result => {
-          //     this.PaginationList = result;
-          //     this.spinnerDataTable = false;
-          //     this.count -= 1;
-          // })
+          
         }
           // DELETE FUNCTIONALITY [END]
-
-          // RENAME FUNCTIONALITY [START]
-        // else if(event.detail.value == 'Rename'){
-        //   this.isOpenRenameForm = true;
-        //   this.formname = event.target.value;
-        //   this.id = event.target.dataset.id;          
-        // }
     }
 
 
@@ -287,11 +273,13 @@ export default class Qf extends LightningElement {
                       this.count -= 1;
                       this.spinnerdelete = false;
                       this.spinnerDataTable = false;
+                      let toast_error_msg = 'Form is successfully deleted';
+                      this.error_toast = true;
+                      this.template.querySelector('c-toast-component').showToast('success',toast_error_msg,3000);
                   })
   }
   deleteno(){
     this.deletepopup = false;
-    this.error_toast = false;
   }
 
    // <!-- ===================================
