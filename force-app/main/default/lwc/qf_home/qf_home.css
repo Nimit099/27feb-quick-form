@@ -1381,6 +1381,7 @@ lightning-button{
     display: flex;
     align-items: flex-end;
     justify-content: center;
+    gap: 10px;
 }
 .yes-btn {
     height: 35px;
