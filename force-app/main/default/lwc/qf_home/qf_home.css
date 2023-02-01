@@ -1218,9 +1218,11 @@
     justify-content: center;
     align-items: center;
     box-shadow: 0px 7px 28px rgb(0 0 0 / 25%) !important;
-    border-radius: 28px;
+    border-radius: 25px;
     width: 70%;
     background-color: white;
+    position: absolute;
+    top: 36%;
 }
 .deleteicon{
     display: flex;
@@ -1391,7 +1393,10 @@ lightning-button{
     background: rgb(102, 153, 204) !important;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     font-size: 17px;
-    color: white;   
+    color: white;  
+    overflow: hidden;
+    --webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s; 
 }
 .no-btn {
     height: 35px;
@@ -1404,12 +1409,6 @@ lightning-button{
     color: black;
     background-color: #DEDEDE;
 }
-.yes-text {
-    
-}
-.no-text {
-   
-}
 /* ========================== Delete Popup ============================= */
 /* ==================== Error toast =======================  */
 .main{
@@ -1419,7 +1418,7 @@ lightning-button{
 .toast_shadow {
     box-shadow: 1px 2px 4px 0px #888888;
     border-radius: 3px;
-    background: #FFCCCB;
+    /* background: #FFCCCB; */
 }
 /* ==================== Error toast =======================  */
 
@@ -1440,3 +1439,23 @@ lightning-button{
     justify-content: flex-end;
     align-items: center;
 }
+
+button:after {
+    content: "";
+    background: #90EE90;
+    display: block;
+     position: absolute;
+    padding-top: 300%;
+    padding-left: 350%;
+    margin-left: -20px!important;
+    margin-top: -120%;
+    opacity: 0;
+   transition: all 0.3s
+  }
+  
+  button:active:after {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s
+  }
