@@ -319,3 +319,6 @@
 lightning-tabset{
   --lwc-borderRadiusMedium: 0rem !important;
 }
+.htmlhead{
+  font-weight: 600;
+}

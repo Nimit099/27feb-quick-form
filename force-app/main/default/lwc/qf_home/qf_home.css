@@ -241,16 +241,15 @@
 
  .tableTitleCol {
     overflow: hidden;
-    width: 22%;
-    padding-left: 6%;
+    width: 32%;
+    padding-left: 5%;
     display: flex;
     justify-content: space-between;
 }
 
  .tableStatusCol {
     text-align: center;
-    width: 20%;
-    padding-left: 7%;
+    width: 10%;
 }
 
  .tableSubmissionCol {
@@ -946,6 +945,7 @@
         height: 78%;
         margin: 0;
     }
+   
 }
 @media screen and (max-width:1400px) {
      .dataTable {
@@ -1245,6 +1245,7 @@
 .editpen{
     display: none;
     cursor: pointer;
+    margin-right: 14%;
 }
 
 
