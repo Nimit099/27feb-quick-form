@@ -75,7 +75,7 @@
                                     <div class="tableTitleCol" onclick={sortFormList}>
                                         <div class="slds-th__action slds-text-linkreset formTitle">
                                             <span class="slds-truncate">TITLE</span>
-                                            <lightning-helptext class="helptext" content='To rename the text, move the cursor over it and click the edit icon or double-click it.'></lightning-helptext>
+                                            <lightning-helptext class="helptext" content='To rename the text, move the cursor over the Form Name and click the edit icon or double-click on the Form Name.'></lightning-helptext>
                                     </div>
                                         
                                     </div>
@@ -91,10 +91,10 @@
                                         </div>
                                         <div class="tableTitleCol"  data-id={obj.Id} data-name={obj.Name} onmouseover={showpen} onmouseleave={hidepen} >
                                             <div class="slds-truncate titlename " data-id={obj.Id} data-name={obj.Name} style="cursor:pointer;"  ondblclick={new_rename}>
-                                                <div class=""><lightning-formatted-text value={obj.Name} class="slds-col title_name" title={obj.Name} data-id={obj.Id}></lightning-formatted-text></div>
+                                                <div class="name"><lightning-formatted-text value={obj.Name} class="slds-col title_name" title={obj.Name} data-id={obj.Id}></lightning-formatted-text></div>
                                                 <div class="slds-col slds-grid slds-wrap rename_div" data-name={obj.Id} style ="display: none;"><lightning-input type="text" value={newFormName} data-id={obj.Id} onchange={rename} onkeypress={key} onclick={insideClick} class="rename_input"></lightning-input><div class="right" onclick={renameForm}><img src={right} alt=""></div><div class="wrong" onclick={cancleRenameForm}><img src={cross} alt=""></div></div>
                                             </div>
-                                            <span class="editpen" data-id={obj.Id} data-name={obj.Name} onclick={new_rename} title="Rename" ><img src={editpen} alt="" ></span>
+                                            <span class="editpen" data-id={obj.Id} data-name={obj.Name} onclick={new_rename} title="Rename" ><img src={editpen} class="penicon"></span>
                                         </div>
                                         <div class="tableStatusCol">
                                             <div class="slds-truncate">
@@ -120,13 +120,13 @@
                                         </div>
                                         <div class="tablePreviewCol">
                                             <div class="previewIcon">
-                                                <img src={previewicon} name={obj.Id} onclick={onpreview} width="45" />
+                                                <img src={previewicon} name={obj.Id} onclick={onpreview} width="22" />
                                             </div>
                                         </div>
                                         <div class="tableActionCol">
                                             <lightning-button-menu class="buttonMenu" variant="container"
                                                 name={obj.Id} value={obj.Name} data-id={obj.Id}
-                                                onselect={handleSelectAction} menu-alignment="auto">
+                                                onselect={handleSelectAction} menu-alignment="auto-left">
                                                 <lightning-menu-item value="Edit" label="Edit"
                                                     prefix-icon-name="utility:edit_form"></lightning-menu-item> 
                                                 <lightning-menu-item value="Delete" label="Delete"
@@ -169,7 +169,7 @@
                 <div class="slds-grid footer1">
                     <div class="footer_half1">
                         <div class="help">
-                            <img src={helpIcon} alt="" class="feedback">
+                            <img src={helpIcon} alt="" class="feedback helpicon">
                             <p>Help</p>
                         </div>
                         <div class="feedback help" >

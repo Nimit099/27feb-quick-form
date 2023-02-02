@@ -247,7 +247,7 @@ export default class Qf extends LightningElement {
     showpen(event) {
         if(this.pencheck == false){
         document.addEventListener('click', this.outsideClick = this.cancleRenameForm.bind(this));
-        this.template.querySelector("span[data-id ="+event.currentTarget.dataset.id+"]").style.display='block'; 
+        this.template.querySelector("span[data-id ="+event.currentTarget.dataset.id+"]").style.display='flex'; 
 
         }
     }
