@@ -57,7 +57,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
     @track activesidebar = false;
     @track activeNotification = false;
     @track activethankyou = false;
-    @track activepreview = false;
+     activepreview = false;
     @track PageList = [];
     @track FormTitle = 'tempvlaue';
     @track FieldList = [];
@@ -314,7 +314,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
                this.activeDesignsidebar = false;
                this.activeNotification = false;
                this.activethankyou = false;
-               this.activepreview = false;
+             
            }
 
            else if (event.currentTarget.dataset.title == 'tab-3') {
@@ -322,12 +322,10 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
                this.activesidebar = false;
                this.activeNotification = false;
                this.activethankyou = false;
-               this.activepreview = false;
+             
            }
-
-
            console.log('in the if condition');
-
+           this.activepreview = false;
            this.activeDropZone = true;
            console.log(this.activeDropZone);
        }
@@ -359,12 +357,13 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
         this.activepreview = false;
     }
     else if (event.currentTarget.dataset.title == 'tab-7') {
+        this.activepreview = true
         this.activeDesignsidebar = false;
         this.activesidebar = false;
         this.activeDropZone = false;
         this.activeNotification = false;
         this.activethankyou = false;
-        this.activepreview = true;
+        this.activepreview = true
     }
     else if (event.currentTarget.dataset.title == 'tab-8') {
         this.activeDesignsidebar = false;

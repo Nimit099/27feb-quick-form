@@ -28,28 +28,36 @@ public with sharing class FormBuilderController {
                 Insert cv;
 
                 Form__c nform = [SELECT id,Form_Styling__c FROM Form__c where Id = : id];
-                String st = nform.Form_Styling__c;
-                System.debug(st);
-                if(st.contains('background-color:')){
-                    List<String> lst = st.split('background-color:');
-                    List<String> lst2 = lst[0].split(';');
-                    List<String> lst3 = lst[1].split(';');
-                    lst2.add('background-image:');
-                    lst3[0] = cv.id;
-                    String s3 = String.join(lst3, ';');
-                    System.debug(s3);
-                    String s2 = String.join(lst2, ';');
-                    System.debug(s2);
-                    st = s2+s3+';';
-                }
-                System.debug('ST after update:- '+st);
-                
-                String fullFileURL = '/sfc/servlet.shepherd/version/download/'+cv.id;
-                // nform.Form_Styling__c = 'background-image:'+'url("'+fullFileURL+'");';
-                nform.Form_Styling__c = st;
-                System.debug('ST after update:- '+st);
-                update nform;
 
+                System.debug(nform.Form_Styling__c);
+                if (nform.Form_Styling__c == null) {
+                    nform.Form_Styling__c = 'background-image:'+'url("/sfc/servlet.shepherd/version/download/'+cv.id+'")';
+                }else {
+                    List<String> lst = nform.Form_Styling__c.split(';');
+                    Integer count = 0;
+                    for (Integer i = 0; i < lst.size(); i++){
+                        List<String> lst2 = lst[i].split(':');
+                        if (lst2[0] == 'background-image') {
+                            String fullFileURL = 'url("/sfc/servlet.shepherd/version/download/'+cv.id+'")';
+                            lst2[1] = fullFileURL;
+                            System.debug(lst[i]);
+                            lst[i] = String.join(lst2, ':');
+                            System.debug(lst[i]);
+                            count++;
+                            break;
+                        }
+                    }
+                    if (count == 0) {
+                        nform.Form_Styling__c += 'background-image:'+'url("/sfc/servlet.shepherd/version/download/'+cv.id+'")';
+                    }else {
+                        String fvalue = String.join(lst, ';');
+                        nform.Form_Styling__c = fvalue;
+                    }
+                }
+                    if ((nform.Form_Styling__c).substring(nform.Form_Styling__c.length()-1,nform.Form_Styling__c.length() ) != ';') {
+                        nform.Form_Styling__c += ';';
+                    }
+                    update nform;
                 return nform.Form_Styling__c;
             } catch (Exception e) {
                 throw new AuraHandledException(e.getMessage());
@@ -74,25 +82,34 @@ public with sharing class FormBuilderController {
 
                 Form__c nform = [SELECT id,Page_CSS__c FROM Form__c where Id = : id];
                 String st = nform.Page_CSS__c;
-                System.debug(st);
-                if(st.contains('background-color:')){
-                    List<String> lst = st.split('background-color:');
-                    List<String> lst2 = lst[0].split(';');
-                    List<String> lst3 = lst[1].split(';');
-                    lst2.add('background-image:');
-                    lst3[0] = cv.id;
-                    String s3 = String.join(lst3, ';');
-                    String s2 = String.join(lst2, ';');
-                    st = s2+s3;
+                if (nform.Page_CSS__c == null) {
+                    nform.Page_CSS__c = 'background-image:'+'url("/sfc/servlet.shepherd/version/download/'+cv.id+'")';
+                }else {
+                    List<String> lst = nform.Page_CSS__c.split(';');
+                    Integer count = 0;
+                    for (Integer i = 0; i < lst.size(); i++){
+                        List<String> lst2 = lst[i].split(':');
+                        if (lst2[0] == 'background-image') {
+                            String fullFileURL = 'url("/sfc/servlet.shepherd/version/download/'+cv.id+'")';
+                            lst2[1] = fullFileURL;
+                            System.debug(lst[i]);
+                            lst[i] = String.join(lst2, ':');
+                            System.debug(lst[i]);
+                            count++;
+                            break;
+                        }
+                    }
+                    if (count == 0) {
+                        nform.Page_CSS__c += 'background-image:'+'url("/sfc/servlet.shepherd/version/download/'+cv.id+'")';
+                    }else {
+                        String fvalue = String.join(lst, ';');
+                        nform.Page_CSS__c = fvalue;
+                    }
                 }
-                System.debug('ST after update:- '+st);
-                
-                String fullFileURL = '/sfc/servlet.shepherd/version/download/'+cv.id;
-                // nform.Page_CSS__c = 'background-image:'+'url("'+fullFileURL+'");';
-                nform.Page_CSS__c = st;
-                System.debug('ST after update:- '+st);
-                update nform;
-
+                    if ((nform.Page_CSS__c).substring(nform.Page_CSS__c.length()-1,nform.Page_CSS__c.length() ) != ';') {
+                        nform.Page_CSS__c += ';';
+                    }
+                    update nform;
                 return nform.Page_CSS__c;
             } catch (Exception e) {
                 throw new AuraHandledException(e.getMessage());
@@ -172,22 +189,6 @@ public with sharing class FormBuilderController {
             try {
                 Form__c nform = [SELECT Id, Form_Styling__c FROM Form__c WHERE Id =: id];
                 String st = nform.Form_Styling__c;
-                List<String> str1 = Value.split(':');
-                System.debug(st);
-                if(st.contains('background-image:')){
-                    List<String> lst = st.split('background-image:');
-                    List<String> lst2 = lst[0].split(';');
-                    List<String> lst3 = lst[1].split(';');
-                    lst2.add('background-color:');
-                    lst3[0] = str1[1];
-                    String s3 = String.join(lst3, ';');
-                    String s2 = String.join(lst2, ';');
-                    st = s2+s3;
-                    st.replace(';background-color:', 'background-color:');
-                    nform.Form_Styling__c = st;
-                }
-                System.debug(nform.Form_Styling__c);
-                System.debug('value>>'+Value);
                 List<String> test = Value.split(';');
                 List<String> prop = test[0].split(':');
                 if (nform.Form_Styling__c == null) {
@@ -217,7 +218,6 @@ public with sharing class FormBuilderController {
                         nform.Form_Styling__c += ';';
                     }
                     update nform;
-                    // nform.Form_Styling__c = Value;
                     result = nform.Form_Styling__c;
                 } catch (Exception e) {
                     result = e.getMessage();
@@ -230,8 +230,7 @@ public with sharing class FormBuilderController {
             String result = '';
             try {
                 Form__c nform = [SELECT Id, Page_CSS__c FROM Form__c WHERE Id =: id];
-                System.debug(nform.Page_CSS__c);
-                System.debug('value>>'+Value);
+                String st = nform.Page_CSS__c;
                 List<String> test = Value.split(';');
                 List<String> prop = test[0].split(':');
                 if (nform.Page_CSS__c == null) {
@@ -313,6 +312,51 @@ public with sharing class FormBuilderController {
             return result;
         }
 
+        @AuraEnabled
+        public static String StoreHoverStyles(String Value, String id){
+            String result = '';
+            try {
+                Form__c nform = [SELECT Id, All_Field_Hover__c FROM Form__c WHERE Id =: id];
+                System.debug(nform.All_Field_Hover__c);
+                System.debug('value>>'+Value);
+                List<String> test = Value.split(';');
+                List<String> prop = test[0].split(':');
+                if (nform.All_Field_Hover__c == null) {
+                    nform.All_Field_Hover__c = Value;
+                }else {
+                    List<String> lst = nform.All_Field_Hover__c.split(';');
+                    Integer count = 0;
+                    for (Integer i = 0; i < lst.size(); i++){
+                        List<String> lst2 = lst[i].split(':');
+                        if (lst2[0] == prop[0]) {
+                            lst2[1] = prop[1];
+                            System.debug(lst[i]);
+                            lst[i] = String.join(lst2, ':');
+                            System.debug(lst[i]);
+                            count++;
+                            break;
+                        }
+                    }
+                    if (count == 0) {
+                        nform.All_Field_Hover__c += Value;
+                    }else {
+                        String fvalue = String.join(lst, ';');
+                        nform.All_Field_Hover__c = fvalue;
+                    }
+                }
+                    if ((nform.All_Field_Hover__c).substring(nform.All_Field_Hover__c.length()-1,nform.All_Field_Hover__c.length() ) != ';') {
+                        nform.All_Field_Hover__c += ';';
+                    }
+                    update nform;
+                    // nform.All_Field_Styling__c = Value;
+                    result = nform.All_Field_Hover__c;
+                } catch (Exception e) {
+                    result = e.getMessage();
+                }
+            return result;
+        }
+
+ 
         @AuraEnabled
         public static string getFormCSS(String id){
             Form__c nform = [SELECT Id, Form_Styling__c FROM Form__c WHERE Id =: id];

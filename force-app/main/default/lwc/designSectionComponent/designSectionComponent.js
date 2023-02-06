@@ -238,6 +238,8 @@ export default class DesignSectionComponent extends LightningElement {
         console.log('Name->'+Name);
         console.log('value->'+value);
         let str = Name+value+';';
+        console.log('Nimit str --->'+str);
+        console.log('Nimit recordid ---->'+this.recordid);
         StoreFormStyles({Value: str, id:this.recordid})
         .then(result=>{
           console.log(result);

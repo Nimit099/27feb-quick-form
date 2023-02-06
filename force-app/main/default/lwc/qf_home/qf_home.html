@@ -7,6 +7,7 @@
         <!-- ============== error toast=========== -->
 
     <!-- Main Form section -->
+    <template if:true={activehome}>
     <div
     class="slds-col slds-size_1-of-1 slds-small-size_9-of-12  slds-medium-size_9-of-12  slds-large-size_8-of-12 mainSection">
     <div class="header" style="height:8%">
@@ -119,8 +120,8 @@
                                             </div>
                                         </div>
                                         <div class="tablePreviewCol">
-                                            <div class="previewIcon">
-                                                <img src={previewicon} name={obj.Id} onclick={onpreview} width="22" />
+                                            <div class="previewIcon" data-id={obj.Id} onclick={onpreview}>
+                                                <img src={previewicon} name={obj.Id} width="22" />
                                             </div>
                                         </div>
                                         <div class="tableActionCol">
@@ -215,7 +216,11 @@
             </section>
         </div>
     </template>
+</template>
     <template if:true={isModalOpen}>
         <c-new-form-details onpopupclose={modalpopupclose}></c-new-form-details>
     </template>
+    <template if:true={activepreview}>
+        <c-preview-form-cmp formid={id} onpopupclose={modalpopupclose}></c-preview-form-cmp>
+    </template> 
 </template>

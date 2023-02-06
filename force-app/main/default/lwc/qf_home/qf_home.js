@@ -47,6 +47,8 @@ export default class Qf extends NavigationMixin(LightningElement) {
     spinnerdelete = false;
     error_toast = true;
     data = false;
+    @track activepreview = false;
+    @track activehome = true;
     isModalOpen_2;
     renamediv;
     pencheck = false;
@@ -348,5 +350,10 @@ new_rename(event){
             }
             return this.i++;
           }
-      
+
+      onpreview(event){
+        this.id = event.currentTarget.dataset.id;
+        this.activepreview = true;
+        this.activehome = false;
+      }
 }

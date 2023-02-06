@@ -15,8 +15,8 @@ import Add_icon from '@salesforce/resourceUrl/Add_icon';
 import Edit_page_icon from '@salesforce/resourceUrl/Edit_page_icon';
 import Edit_icon from '@salesforce/resourceUrl/Edit_icon';
 import Delete_icon from '@salesforce/resourceUrl/Delete_icon';
-// import getFormCSS from '@salesforce/apex/FormBuilderController.getFormCSS';
-// import getPageCSS from '@salesforce/apex/FormBuilderController.getPageCSS';
+import getFormCSS from '@salesforce/apex/FormBuilderController.getFormCSS';
+import getPageCSS from '@salesforce/apex/FormBuilderController.getPageCSS';
 import { NavigationMixin } from "lightning/navigation";
 
 export default class PreviewFormCmp extends LightningElement {
@@ -53,6 +53,7 @@ export default class PreviewFormCmp extends LightningElement {
     @api formid ='';
     //dropzone variables
      count=0;
+    @track getFieldCSS;
     @track activeDesignsidebar = false;
     @track activesidebar = false;
     @track activeNotification = false;
@@ -77,28 +78,18 @@ export default class PreviewFormCmp extends LightningElement {
 
         GetFormPage({ Form_Id: this.formid})
         .then(result => {
-            console.log('getformpage result -----> '+ result);
-            console.log('get form page called');
             this.PageList = result;
-            console.log('this-->>');
-            console.log(this.PageList[0].Name);
-            console.log('pagelist.length'+this.PageList.length);
-
+            this.secondmethod();
         }).catch(error => {
             console.log(error);
         });
-    this.secondmethod();
-
     }
 
     secondmethod(){
         getFieldsRecords()
             .then(result => {
-                console.log('Nimit -->'+result);
                 this.FieldList = result;
                 this.setPageField(result);
-                 
-                console.log(this.FieldList.length);
             })
             .catch(error => {
                 console.log(error);
@@ -109,21 +100,13 @@ export default class PreviewFormCmp extends LightningElement {
 
     setPageField(fieldLists) {
         let outerlist = [];
-        console.log('fieldlist --->' +fieldLists);
-        console.log('fieldList length --->'+fieldLists.length);
-        console.log('PageList length --->'+this.PageList.length);
         for (let i = 0; i < this.PageList.length; i++) {
             let innerlist = [];
             for (let j = 0; j < fieldLists.length; j++) {
-                console.log('fieldList length --->'+fieldLists.length);
                 if (this.PageList[i].Id == fieldLists[j].Form_Page__c) {
-                    console.log('inside inner loop');
                    let fieldofObj =  fieldLists[j].Name.split(',');
-                   console.log('in setpage field----->'+fieldofObj);
                    if(fieldofObj.length==2){
-                    console.log(fieldofObj.length);
                      if(fieldofObj[1]!='Extra' && fieldofObj[1]!=undefined && fieldofObj[1]!='undefined'){
-                        console.log(fieldofObj[0]);
                         this.removeObjFields.push(fieldofObj[0]);
                      }
                  }
@@ -135,8 +118,45 @@ export default class PreviewFormCmp extends LightningElement {
 
             outerlist.push(temp);
         }
-        console.log('OuterList' + outerlist);
         this.MainList = outerlist;
-        console.log('Mainlist -->'+this.MainList);
+
+
+        getFormCSS({id:this.formid})
+        .then(result=>{
+            this.getFieldCSS = result;
+            let array = this.template.querySelector('.myform');
+            let str = this.getFieldCSS;
+            array.style=str;
+        }).catch(error=>{
+            console.log({error});
+        })
+
+        getPageCSS({id:this.formid})
+        .then(result=>{
+            this.getFieldCSS = result;
+            let array = this.template.querySelectorAll('.page');
+            let str = this.getFieldCSS;
+            for (let i = 0; i < array.length; i++) {
+                const element = array[i];
+                element.style = str;
+            }
+        }).catch(error=>{
+            console.log({error});
+        })
+    }
+
+    get isIndexIsNotLast() {
+
+        if (this.index != this.PageList.length - 1) {
+            this.index += 1;
+            return true;
+        }
+        return false;
+    }
+    get isIndexLast() {
+        if (this.index == this.PageList.length - 1) {
+            return true;
+        }
+        return false;
     }
 }

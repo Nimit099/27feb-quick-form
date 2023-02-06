@@ -1,4 +1,6 @@
 <template>
+    <div class="fieldDiv1">
+<div class="myform" id="mainformid">
     <template for:each={MainList} for:item="page">
         <div class="page" id={page.pageId} key={page.pageId}>
             <div class="pagetitle">
@@ -22,14 +24,12 @@
                             <button class="pageIconButton"><img class="pageIcons" src={DeleteIcon} alt="Delete Page"></button>
                         </div> -->
             </div>
-                    <div class="example-dropzone" ondragover={onDragOver} ondrop={onDrop}
-                        ondragleave={dragLeave} ondragenter={dragEnter} data-page-record={page.pageId}>
+                    <div class="example-dropzone" data-page-record={page.pageId}>
 
                 <template for:each={page.FieldData} for:item="field">
 
-                            <div id={field.Id} class="field" draggable="true"
-                                data-order-id={field.Field_Order__c} data-page-record={field.Form_Page__c}
-                                data-record={field.Id} data-ref="inner" ondragstart={onDragStart} data-record-count={fieldcount}
+                            <div id={field.Id} class="field" data-order-id={field.Field_Order__c} data-page-record={field.Form_Page__c}
+                                data-record={field.Id} data-ref="inner"  data-record-count={fieldcount}
                                 onclick={handleid} key={field.Id} data-field-name={field.Name}>
                                 <c-quickformfieldcomponent formid={ParentMessage} t-view={field.Name} compview="Full"
                                     disable-field="true" field-attribute="" field-attribute-value=""
@@ -72,4 +72,6 @@
         </div>
 
     </template>
+</div>
+</div>
 </template>
