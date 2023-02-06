@@ -1164,6 +1164,7 @@
 }
 .titlename{
     display: flex;
+    width: 100%;
 }
 .right{
     width: 24px;
@@ -1473,7 +1474,7 @@ button:after {
     display: flex;
   }
   lightning-menu-item{
-    --lwc-colorTextDefault:#6699CC;
+    --lwc-colorTextDefault:black;
     --sds-c-icon-color-foreground-default: #6699CC;
   }
   .content{
