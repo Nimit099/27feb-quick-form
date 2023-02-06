@@ -1,0 +1,75 @@
+<template>
+    <template for:each={MainList} for:item="page">
+        <div class="page" id={page.pageId} key={page.pageId}>
+            <div class="pagetitle">
+                <div style="display: flex;align-items: center;">
+                    <div>
+                        <template if:true={page.pageName}>
+                            <div class="pagetitle1">{page.pageName}</div>
+                        </template>
+
+                    </div>
+                </div>
+                        <!-- <lightning-button-menu class="pageButtonMenu slds-dropdown_left"
+                            alternative-text="Show menu" onselect={handleSelectPage} name={page.pageName}>
+                    <lightning-menu-item id={page.pageId} value="edit" label="Edit Page"
+                                onclick={onEdit} prefix-icon-name="utility:edit"></lightning-menu-item>
+                    <lightning-menu-item id={page.pageId} value="delete" label="Delete Page"
+                                onclick={ondelete} prefix-icon-name="utility:delete"></lightning-menu-item>
+                        </lightning-button-menu> -->
+                        <!-- <div class="PageButtonMenu">
+                            <button class="pageIconButton"><img class="pageIcons" src={editpageIcon} alt="Edit page"></button>
+                            <button class="pageIconButton"><img class="pageIcons" src={DeleteIcon} alt="Delete Page"></button>
+                        </div> -->
+            </div>
+                    <div class="example-dropzone" ondragover={onDragOver} ondrop={onDrop}
+                        ondragleave={dragLeave} ondragenter={dragEnter} data-page-record={page.pageId}>
+
+                <template for:each={page.FieldData} for:item="field">
+
+                            <div id={field.Id} class="field" draggable="true"
+                                data-order-id={field.Field_Order__c} data-page-record={field.Form_Page__c}
+                                data-record={field.Id} data-ref="inner" ondragstart={onDragStart} data-record-count={fieldcount}
+                                onclick={handleid} key={field.Id} data-field-name={field.Name}>
+                                <c-quickformfieldcomponent formid={ParentMessage} t-view={field.Name} compview="Full"
+                                    disable-field="true" field-attribute="" field-attribute-value=""
+                                    field-id={field.Id} page-id={page.Id}></c-quickformfieldcomponent>
+
+                    </div>
+                </template>
+            </div>
+                    <div class="footer">
+
+                <template if:true={isIndexZero}>
+
+                            <lightning-button class="nextbutton " variant="brand" label="Next" title="Next"
+                                disabled onclick={onaddpage1}></lightning-button>
+                </template>
+                <template if:false={isIndexZero}>
+                        <template if:true={isIndexIsNotLast}>
+
+                                <lightning-button id={previousButton} variant="brand" label="Previous"
+                                    title="Previous" disabled onclick={onaddpage1}
+                                class="btn"></lightning-button>
+                                <lightning-button id={nextButton} variant="brand" label="Next" title="Next"
+                                    disabled onclick={onaddpage1} class="btn"></lightning-button>
+
+                        </template>
+                    <template if:false={isIndexIsNotLast}>
+                        <template if:true={isIndexLast}>
+                            
+                                    <lightning-button variant="brand" label="Previous" title="Previous"
+                                        disabled onclick={onaddpage1} class="btn"></lightning-button>
+                                    <lightning-button variant="brand" label="Submit" title="Submit" disabled
+                                        onclick={onaddpage1} class="btn"></lightning-button>
+                            
+                        </template>
+                    </template>
+                </template>
+
+
+                    </div>
+        </div>
+
+    </template>
+</template>

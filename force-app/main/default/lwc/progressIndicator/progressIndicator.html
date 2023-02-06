@@ -1,0 +1,24 @@
+<template>
+    <!-- <input value={getprogreshbar} onchange={tesmethod}> -->
+    <div if:true={Progress_Bar}>
+        <lightning-progress-bar value={progress_bar_value} size="large"></lightning-progress-bar>
+        <div class="show_progress_bar_value"><b>{progress_bar_value}% completed</b></div>
+    </div>
+    <div if:true={Standard_Steps} >
+        <lightning-progress-indicator current-step="2" type="path" variant="base">
+            <lightning-progress-step label="Page 1" value="1"></lightning-progress-step>
+            <lightning-progress-step label="Page 2" value="2"></lightning-progress-step>
+        </lightning-progress-indicator>
+    </div>
+    <div if:true={Custom_Steps}>
+        <lightning-progress-indicator current-step="2">
+            <lightning-progress-step label="Page 1" value="1"></lightning-progress-step>
+            <lightning-progress-step label="Page 2" value="2"></lightning-progress-step>
+        </lightning-progress-indicator>
+    </div>
+    <div class="page_number" if:true={Page_Count}>
+        <p><b>{currentpage}</b> of <b>{totalpage}</b></p>
+    </div>
+    
+    
+</template>

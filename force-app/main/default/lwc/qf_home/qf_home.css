@@ -845,7 +845,7 @@
     background: #f2f2f2;
 }
 
-.dataTableMain .tabletr {
+ .dataTableMain .tabletr {
     border: 1px solid lightgray;
     height: 50px;
 }
@@ -1339,6 +1339,7 @@ lightning-button{
 .help{
     width: 160px;
     height: 35px;
+    cursor: none;
     gap: 7px;
     border-radius: 28px;
     color: white;      /* Remove comment once button is working*/
@@ -1465,7 +1466,7 @@ button:after {
   }
   .penicon{
     height: 19px;
-    width: 16px;
+    width: 19px;
   }
   .helpicon{
     width: 11px;
