@@ -127,7 +127,7 @@
                                         <div class="tableActionCol">
                                             <lightning-button-menu class="buttonMenu" variant="container"
                                                 name={obj.Id} value={obj.Name} data-id={obj.Id} data-name={obj.Name}
-                                                onselect={handleSelectAction} menu-alignment="auto-left">
+                                                onselect={handleSelectAction} menu-alignment="top-left">
                                                 <lightning-menu-item value="Edit" label="Edit"
                                                     prefix-icon-name="utility:edit_form"></lightning-menu-item> 
                                                 <lightning-menu-item value="Delete" label="Delete"
@@ -220,7 +220,4 @@
     <template if:true={isModalOpen}>
         <c-new-form-details onpopupclose={modalpopupclose}></c-new-form-details>
     </template>
-    <template if:true={activepreview}>
-        <c-preview-form-cmp formid={id} onpopupclose={modalpopupclose}></c-preview-form-cmp>
-    </template> 
 </template>

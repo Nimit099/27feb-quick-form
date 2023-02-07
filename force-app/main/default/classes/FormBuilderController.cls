@@ -389,6 +389,25 @@ public with sharing class FormBuilderController {
             return nform.Label_CSS__c;
         }
 
+        @AuraEnabled
+        public static string getprogressbar(String id){
+            try {
+                Form__c nform = [SELECT Id,Progress_Indicator__c FROM Form__c WHERE Id =: id];
+                return nform.Progress_Indicator__c;
+            } catch (Exception e) {
+                throw new AuraHandledException(e.getMessage());
+            }
+        }
+        @AuraEnabled
+        public static string getcaptcha(String id){
+            try {
+                Form__c nform = [SELECT Id, Captcha_Type__c FROM Form__c WHERE Id =: id];
+                return nform.Captcha_Type__c;
+            } catch (Exception e) {
+                throw new AuraHandledException(e.getMessage());
+            }
+        }
+
         //Method to get Field's Data
         @Auraenabled
         public static List<List<String>> getFields(String id){

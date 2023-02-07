@@ -1,8 +1,8 @@
 import { LightningElement,api, track } from 'lwc';
 
 export default class ProgressIndicator extends LightningElement {
-    @track currentpage=1;
-    @track totalpage=2;
+    @api currentpage = 0;
+    @api totalpage=2;
     @track getprogreshbar = 'Select';
     
     @track Progress_Bar = false;
@@ -14,9 +14,11 @@ export default class ProgressIndicator extends LightningElement {
     connectedCallback(){
         this.tesmethod(this.progress);
     }
+
+    calculation(pageindex, totalpages){
+
+    }
     
-
-
     @api tesmethod(strString){
         // alert('hello');
         this.getprogreshbar = strString;

@@ -1,8 +1,27 @@
 <template>
+
+    <template if:true={spinnerDataTable}>
+        <div data-id="spinnerId" class="slds-spinner_container"
+            style="overflow: hidden;">
+            <div class="spinner-main-div">
+                <div class="loader--ripple">
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+    </template> 
+    <template if:false={activepreview}>
+    <lightning-button label="back" onclick={backhome}></lightning-button>
+    </template>
     <div class="fieldDiv1">
 <div class="myform" id="mainformid">
-    <template for:each={MainList} for:item="page">
-        <div class="page" id={page.pageId} key={page.pageId}>
+    <div class="progressindicator">
+        <template if:true={Progressbarvalue}>
+            <c-progress-indicator progress={Progressbarvalue} currentpage = {pageindex} totalpage = {PageList.length}></c-progress-indicator>
+        </template>
+    </div>
+        <div class="page" id={page.pageId}>
             <div class="pagetitle">
                 <div style="display: flex;align-items: center;">
                     <div>
@@ -12,17 +31,7 @@
 
                     </div>
                 </div>
-                        <!-- <lightning-button-menu class="pageButtonMenu slds-dropdown_left"
-                            alternative-text="Show menu" onselect={handleSelectPage} name={page.pageName}>
-                    <lightning-menu-item id={page.pageId} value="edit" label="Edit Page"
-                                onclick={onEdit} prefix-icon-name="utility:edit"></lightning-menu-item>
-                    <lightning-menu-item id={page.pageId} value="delete" label="Delete Page"
-                                onclick={ondelete} prefix-icon-name="utility:delete"></lightning-menu-item>
-                        </lightning-button-menu> -->
-                        <!-- <div class="PageButtonMenu">
-                            <button class="pageIconButton"><img class="pageIcons" src={editpageIcon} alt="Edit page"></button>
-                            <button class="pageIconButton"><img class="pageIcons" src={DeleteIcon} alt="Delete Page"></button>
-                        </div> -->
+
             </div>
                     <div class="example-dropzone" data-page-record={page.pageId}>
 
@@ -41,37 +50,30 @@
                     <div class="footer">
 
                 <template if:true={isIndexZero}>
-
-                            <lightning-button class="nextbutton " variant="brand" label="Next" title="Next"
-                                disabled onclick={onaddpage1}></lightning-button>
+                            <lightning-button data-name = "next" class="nextbutton " variant="brand" label="Next" title="Next"
+                                 onclick={onaddpage1}></lightning-button>
                 </template>
+
                 <template if:false={isIndexZero}>
-                        <template if:true={isIndexIsNotLast}>
-
-                                <lightning-button id={previousButton} variant="brand" label="Previous"
-                                    title="Previous" disabled onclick={onaddpage1}
-                                class="btn"></lightning-button>
-                                <lightning-button id={nextButton} variant="brand" label="Next" title="Next"
-                                    disabled onclick={onaddpage1} class="btn"></lightning-button>
-
-                        </template>
-                    <template if:false={isIndexIsNotLast}>
-                        <template if:true={isIndexLast}>
-                            
-                                    <lightning-button variant="brand" label="Previous" title="Previous"
-                                        disabled onclick={onaddpage1} class="btn"></lightning-button>
-                                    <lightning-button variant="brand" label="Submit" title="Submit" disabled
-                                        onclick={onaddpage1} class="btn"></lightning-button>
-                            
-                        </template>
-                    </template>
+                            <lightning-button data-name = "previous" variant="brand" label="Previous"
+                                title="Previous"  onclick={onaddpage1} class="btn"></lightning-button>  
+                        
+                            <template if:false={isIndexLast}>
+                            <lightning-button data-name = "next" variant="brand" label="Next" title="Next"
+                            onclick={onaddpage1} class="btn"></lightning-button>
+                            </template>
+                            <template if:true={isIndexLast}>
+                                <lightning-button variant="brand" label="Submit" title="Submit" 
+                                onclick={onaddpage1} class="btn" data-name = "submit"></lightning-button>
+                            </template>
                 </template>
 
-
-                    </div>
+                <!-- <template if:true={isIndexLast}>
+                    <lightning-button variant="brand" label="Submit" title="Submit" 
+                    onclick={onaddpage1} class="btn" data-name = "submit"></lightning-button>
+                </template> -->
+            </div>
         </div>
-
-    </template>
-</div>
+    </div>
 </div>
 </template>

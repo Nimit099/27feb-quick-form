@@ -1,80 +1,44 @@
 import { LightningElement,track,api } from 'lwc';
 
 import GetFormPage from '@salesforce/apex/FormBuilderController.GetFormPage';
-import HomeIcon from '@salesforce/resourceUrl/leftbar_home';
-import FieldIcon from '@salesforce/resourceUrl/leftbar_fieldmapping';
-import DesignIcon from '@salesforce/resourceUrl/leftbar_design';
-import notificationIcon from '@salesforce/resourceUrl/leftbar_notification';
-import ThankyouIcon from '@salesforce/resourceUrl/leftbar_thankyou';
-import object from '@salesforce/resourceUrl/leftbar_objectmapping';
-import PreviewIcon from '@salesforce/resourceUrl/leftbar_preview';
-import PublishIcon from '@salesforce/resourceUrl/leftbar_publish';
 import getFieldsRecords from '@salesforce/apex/FormBuilderController.getFieldsRecords';
-// import CreateFieldRecord from '@salesforce/apex/FormBuilderController.CreateFieldRecord';
-import Add_icon from '@salesforce/resourceUrl/Add_icon';
-import Edit_page_icon from '@salesforce/resourceUrl/Edit_page_icon';
-import Edit_icon from '@salesforce/resourceUrl/Edit_icon';
-import Delete_icon from '@salesforce/resourceUrl/Delete_icon';
 import getFormCSS from '@salesforce/apex/FormBuilderController.getFormCSS';
 import getPageCSS from '@salesforce/apex/FormBuilderController.getPageCSS';
+import getprogressbar from '@salesforce/apex/FormBuilderController.getprogressbar';
+import getcaptcha from '@salesforce/apex/FormBuilderController.getcaptcha';
+
 import { NavigationMixin } from "lightning/navigation";
 
 export default class PreviewFormCmp extends LightningElement {
 
-       
-    @track spinnerDataTable = true;
-    //     icons        // 
-    @track homeIcon = HomeIcon;
-    designIcon = DesignIcon;
-    DeleteIcon = Delete_icon;
-    thankyouicon = ThankyouIcon;
-    publishIcon = PublishIcon;
-    editpageIcon = Edit_page_icon;
-    addIcon = Add_icon;
-    EditIcon = Edit_icon;
-    object =object;
-    fieldicon = FieldIcon;
-    notificationicon = notificationIcon;
-    previewIcon = PreviewIcon;
-   
-
-
-
-    @api ParentMessage = '';
-    @api FormName = '';
-    
-  
-    WieredResult;
-    imageSpinner = false;
-    pageImageSpinner = false;
-    notShowField = true;
-    showField = false;
-    @track activeDropZone = true;
     @api formid ='';
-    //dropzone variables
-     count=0;
     @track getFieldCSS;
-    @track activeDesignsidebar = false;
-    @track activesidebar = false;
-    @track activeNotification = false;
-    @track activethankyou = false;
-    @track FormTitle = 'tempvlaue';
-   // Id = this.ParentMessage;// Change When LMS Service Starts
-    // Id='a0B1y00000013pXEAQ'
-    EditButtonName = "Edit"//"{!'form:::'+v.FormId}"
-    nextButton = 'NextButton';
-    previousButton = 'previousButton';
-    @track index = 0;
-    @track newCSS;
-    fieldcount  = 0;
     removeObjFields = [];
-
-
-    @track MainList = [];
+    @track page = [];
     @track PageList = [];
     @track FieldList = [];
+    @track Mainlist = [];
+    @track pageindex = 1;
+    @api activepreview = false;
+    @track spinnerDataTable = false;
+    @track isIndexZero = true;
+    @track isIndexLast = false;
+    @track Progressbarvalue;
+
 
     connectedCallback() {
+
+        getprogressbar({id:this.formid})
+        .then(result =>{
+            this.Progressbarvalue = result;
+            });
+
+            // getcaptcha({id:this.formid})
+            // .then(result =>{
+            //     console.log(result);
+            //     this.Progressbarvalue = result;
+            //     console.log('progress -- ' +this.Progressbarvalue);
+            //     });
 
         GetFormPage({ Form_Id: this.formid})
         .then(result => {
@@ -89,7 +53,8 @@ export default class PreviewFormCmp extends LightningElement {
         getFieldsRecords()
             .then(result => {
                 this.FieldList = result;
-                this.setPageField(result);
+                console.log('FieldList ====>'+ JSON.stringify(this.FieldList));
+                this.setPageField(this.FieldList);
             })
             .catch(error => {
                 console.log(error);
@@ -118,8 +83,10 @@ export default class PreviewFormCmp extends LightningElement {
 
             outerlist.push(temp);
         }
-        this.MainList = outerlist;
-
+        console.log('outerlist ----->'+ JSON.stringify(outerlist));
+        this.Mainlist = outerlist;
+        this.page = outerlist[0];
+        console.log('MainList ----->'+ JSON.stringify(this.page.pageId))
 
         getFormCSS({id:this.formid})
         .then(result=>{
@@ -145,18 +112,77 @@ export default class PreviewFormCmp extends LightningElement {
         })
     }
 
-    get isIndexIsNotLast() {
-
-        if (this.index != this.PageList.length - 1) {
-            this.index += 1;
-            return true;
-        }
-        return false;
+    backhome(event){
+        console.log('back home');
+        this.spinnerDataTable = true;
+        let cmpDef = {
+            componentDef: "c:qf_home"
+        };
+        let encodedDef = btoa(JSON.stringify(cmpDef));
+        this.spinnerDataTable = false;
+        this[NavigationMixin.Navigate]({
+            type: "standard__webPage",
+            attributes: {
+                url: "/one/one.app#" + encodedDef
+            }
+        });
     }
-    get isIndexLast() {
-        if (this.index == this.PageList.length - 1) {
-            return true;
+
+    onaddpage1(event){
+        if(event.currentTarget.dataset.name == 'previous'){
+            
+            if(this.pageindex == 1){ 
+                this.isIndexZero = true;              
+            }
+            else if(this.PageList.length  > this.pageindex){
+                this.pageindex--;  
+                if(this.pageindex == 1){
+                    this.isIndexLast = false;
+                    this.isIndexZero = true;
+                }
+            }
+            else if(this.PageList.length  == this.pageindex){
+                console.log('lastindex');
+                this.pageindex--;               
+                this.isIndexLast = false;
+            }
+            this.template.querySelector('c-progressIndicator').calculation(this.pageindex, this.PageList.length);
+            this.page = this.Mainlist[this.pageindex-1]; 
         }
-        return false;
+
+        else if(event.currentTarget.dataset.name == 'next'){
+            if(this.pageindex == 1){ 
+                // if(this.pageindex == this.PageList.length - 1){
+                //     this.isIndexZero = false;
+                //     this.isIndexLast = true;
+                // }
+                
+                // this.isIndexZero = false;
+
+                if(this.pageindex == this.PageList.length){
+                    this.isIndexZero = false;
+                    this.isIndexLast = true;
+                }
+                else{
+                    this.pageindex++;
+                    this.isIndexZero = false;
+                    this.isIndexLast = false;
+                }              
+            }
+            else if(this.PageList.length  > this.pageindex){
+                this.pageindex++;               
+                if(this.pageindex == this.PageList.length ){
+                    this.isIndexLast = true;
+                }
+                else{
+                    this.isIndexLast = false;
+                }
+            }
+            else if(this.PageList.length == this.pageindex){
+            }
+            this.page = this.Mainlist[this.pageindex - 1]; 
+        }
+
+        else if(event.currentTarget.dataset.name == 'submit'){}
     }
 }

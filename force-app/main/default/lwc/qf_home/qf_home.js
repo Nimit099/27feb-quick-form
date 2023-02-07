@@ -54,7 +54,7 @@ export default class Qf extends NavigationMixin(LightningElement) {
     pencheck = false;
     count;                              // COUNT OF FORMS
     searchkey;                          // SEARCH FORMS
-    id;                                 // ID OF FORM WHILE DOING SOME ACTION
+    @track id;                                 // ID OF FORM WHILE DOING SOME ACTION
     formname;                           // OLD NAME OF FORM
     newFormName = '';                        // NEW NAME OF FORM
     isOpenRenameForm;                   // BOOLEAN OPEN TEMPLATE OF RENAME
@@ -272,7 +272,7 @@ export default class Qf extends NavigationMixin(LightningElement) {
   }
 }
 new_rename(event){
-  this.id = event.currentTarget.dataset.id;
+      this.id = event.currentTarget.dataset.id;
       this.newFormName = event.currentTarget.dataset.name;
       this.pencheck = true;
       this.renamediv = true;
@@ -353,7 +353,21 @@ new_rename(event){
 
       onpreview(event){
         this.id = event.currentTarget.dataset.id;
-        this.activepreview = true;
-        this.activehome = false;
+        // this.activepreview = true;
+        // this.activehome = false;
+
+        let cmpDef = {
+          componentDef: "c:previewFormCmp",
+          attributes:{
+              formid:this.id!=""?this.id:"No Record Created",
+          }
+        };
+        let encodedDef = btoa(JSON.stringify(cmpDef));
+        this[NavigationMixin.Navigate]({
+          type: "standard__webPage",
+          attributes: {
+            url: "/one/one.app#" + encodedDef
+          }
+        });
       }
 }
