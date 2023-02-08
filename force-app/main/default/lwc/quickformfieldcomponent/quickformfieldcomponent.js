@@ -371,4 +371,9 @@ if(this.FieldType!=undefined && this.FieldType!='undefined' && this.FieldType!='
 }
     renderedCallback(){
     } 
+    fieldvalue(event){
+        console.log('Nimit');
+        console.log(event.target.dataset.name);
+        console.log(event.details.value);
+    }
 }

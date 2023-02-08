@@ -247,8 +247,8 @@
                 </label>
                         <lightning-helptext class="helptxt" content={fieldHelpText}></lightning-helptext>
                 <div class="slds-form-element__control">
-                            <input onmouseenter={handlehover} onmouseleave={handleblur} placeholder={placeHolder} type={FieldType} value=""
-                            onclick={OnFieldClick} class="slds-input" />
+                            <input onmouseenter={handlehover} onmouseleave={handleblur} placeholder={placeHolder} type={FieldType} value="" onchange={fieldvalue}
+                            onclick={OnFieldClick} class="slds-input" data-name={FieldLabel} />
                   </div>
                         <!-- <lightning-input class={fieldId} ></lightning-input> -->
              </label>
