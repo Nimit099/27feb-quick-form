@@ -50,8 +50,14 @@
                     <div class="footer">
 
                 <template if:true={isIndexZero}>
-                            <lightning-button data-name = "next" class="nextbutton " variant="brand" label="Next" title="Next"
-                                 onclick={onaddpage1}></lightning-button>
+                    <template if:false={isIndexLast}>
+                        <lightning-button data-name = "next" variant="brand" label="Next" title="Next"
+                        onclick={onaddpage1} class="btn"></lightning-button>
+                        </template>
+                        <template if:true={isIndexLast}>
+                            <lightning-button variant="brand" label="Submit" title="Submit" 
+                            onclick={onaddpage1} class="btn" data-name = "submit"></lightning-button>
+                        </template>
                 </template>
 
                 <template if:false={isIndexZero}>

@@ -9,7 +9,7 @@ import getcaptcha from '@salesforce/apex/FormBuilderController.getcaptcha';
 
 import { NavigationMixin } from "lightning/navigation";
 
-export default class PreviewFormCmp extends LightningElement {
+export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
 
     @api formid ='';
     @track getFieldCSS;
@@ -110,11 +110,14 @@ export default class PreviewFormCmp extends LightningElement {
         }).catch(error=>{
             console.log({error});
         })
+        if(this.pageindex == this.PageList.length){
+            this.isIndexZero = true;
+            this.isIndexLast = true;
+        }
         this.template.querySelector('c-progress-indicator').calculation(this.Progressbarvalue,this.pageindex, this.PageList.length);
     }
 
     backhome(event){
-        console.log('back home');
         this.spinnerDataTable = true;
         let cmpDef = {
             componentDef: "c:qf_home"
