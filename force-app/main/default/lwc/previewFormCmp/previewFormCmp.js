@@ -110,6 +110,7 @@ export default class PreviewFormCmp extends LightningElement {
         }).catch(error=>{
             console.log({error});
         })
+        this.template.querySelector('c-progress-indicator').calculation(this.Progressbarvalue,this.pageindex, this.PageList.length);
     }
 
     backhome(event){
@@ -146,18 +147,13 @@ export default class PreviewFormCmp extends LightningElement {
                 this.pageindex--;               
                 this.isIndexLast = false;
             }
-            this.template.querySelector('c-progressIndicator').calculation(this.pageindex, this.PageList.length);
-            this.page = this.Mainlist[this.pageindex-1]; 
+            this.page = this.Mainlist[this.pageindex - 1]; 
+            this.template.querySelector('c-progress-indicator').calculation(this.Progressbarvalue,this.pageindex, this.PageList.length);
+            
         }
 
         else if(event.currentTarget.dataset.name == 'next'){
             if(this.pageindex == 1){ 
-                // if(this.pageindex == this.PageList.length - 1){
-                //     this.isIndexZero = false;
-                //     this.isIndexLast = true;
-                // }
-                
-                // this.isIndexZero = false;
 
                 if(this.pageindex == this.PageList.length){
                     this.isIndexZero = false;
@@ -181,6 +177,7 @@ export default class PreviewFormCmp extends LightningElement {
             else if(this.PageList.length == this.pageindex){
             }
             this.page = this.Mainlist[this.pageindex - 1]; 
+            this.template.querySelector('c-progress-indicator').calculation(this.Progressbarvalue,this.pageindex, this.PageList.length);
         }
 
         else if(event.currentTarget.dataset.name == 'submit'){}
