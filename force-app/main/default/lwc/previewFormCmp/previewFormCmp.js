@@ -24,7 +24,6 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
     @track spinnerDataTable = false;
     @track isIndexZero = true;
     @track isIndexLast = false;
-    @track error_toast = false;
     @track Progressbarvalue;
     @track captchavalue;
     BackButton = BackButton;
@@ -199,13 +198,13 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
             if(this.verify == true){
             }
             else if(this.verify == false){
-                this.error_toast = true;
+               
                 let toast_error_msg = 'Invalid Captcha';
                 this.template.querySelector('c-toast-component').showToast('error',toast_error_msg,3000);
             }
             else {
                 console.log(this.verify);
-                this.error_toast = true;
+               
                 let toast_error_msg = 'Please Verify Captcha';
                 this.template.querySelector('c-toast-component').showToast('error',toast_error_msg,3000);
             }
