@@ -474,6 +474,13 @@ border-radius: 28px;
    margin-bottom: 4%;
    margin-right: 18%;
    margin-left:4%;
+}
+.fieldvalidationdiv{
    
-
+        background-color: #F5F5F5;
+        height: 100%;
+        overflow-y: scroll;
+}
+.fieldvalidationdiv::-webkit-scrollbar {
+    display: none;
 }

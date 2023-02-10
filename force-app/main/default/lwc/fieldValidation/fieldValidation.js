@@ -1,4 +1,4 @@
-import { LightningElement, track } from 'lwc';
+import { api, LightningElement, track } from 'lwc';
 
 export default class FieldValidation extends LightningElement {
     mainbody = true;
@@ -15,15 +15,15 @@ export default class FieldValidation extends LightningElement {
     number = false;
     numberoptions = false;
     numberprefix= false;
-    email= false;
+    qfemail= false;
     emailoptions= true;
     price = false;
     priceoption = false;
-    fullname = false;
-    name = false;
+    qffullname = true;
+    qfname = false;
     nameoptions = false;
-    address = false;
-    phone= false;
+    qfaddress = false;
+    qfphone= false;
     phoneoptions = false;
     date = false;
     time = false;
@@ -43,11 +43,13 @@ export default class FieldValidation extends LightningElement {
     lookup= false;
     captcha= false;
     formedit= false;
-    pageedit= true;
+    pageedit= false;
     d43 = false;
+    @api tab;
 
 
     connectedCallback(){
         let a = 0;
+        console.log(this.tab + 'from field validation');
     }
 }

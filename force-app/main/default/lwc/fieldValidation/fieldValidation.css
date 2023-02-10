@@ -17,7 +17,7 @@
 }
 
 .textlabel {
-    background-color: #f1f2f5;
+    background-color: #d5d5d5;
     color: black;
     font-size: 14px;
     text-align: center;
@@ -137,7 +137,11 @@
     margin: 2% 5%;
 }
 .fieldvalidationbody{
-    width: 21%;
+    /* width: 21%; */
     background-color: #F5F5F5;
     height: 100%;
+    overflow-y: scroll;
+}
+.fieldvalidationbody::-webkit-scrollbar {
+    display: none;
 }

@@ -13,7 +13,7 @@
             <div class="fieldLabel">
                 <h1>Short Text</h1>
             </div>
-            <!-- <c:FieldAttributeButtons WrapperList={WrapperList}> -->
+           <c-field-validationbtn  ></c-field-validationbtn>
             <div class="plaintext">
                 <lightning-select label="Field Validation" value={}>
                     <option value="None">None</option>
@@ -64,7 +64,7 @@
             <div class="fieldLabel">
                 Long Text
             </div>
-            <!-- <c:FieldAttributeButtons WrapperList={WrapperList}> -->
+           <c-field-validationbtn  ></c-field-validationbtn>
             <div class="slider">
                 <lightning-slider label="Min no of character" value={} min="0" max={} ></lightning-slider>
             </div>
@@ -96,7 +96,7 @@
             <div class="fieldLabel">
                 DropDown
             </div>
-            <!-- <c:FieldAttributeButtons WrapperList={WrapperList}> -->
+           <c-field-validationbtn  ></c-field-validationbtn>
             <div class="textlabel">Options</div>
             <div class="togglebox">
                 <lightning-accordion type="toggle" label="Add Placeholder text:" checked={} message-toggle-active="" message-toggle-inactive="" ></lightning-accordion>
@@ -128,7 +128,7 @@
             <div class="fieldLabel">
                 Radio Button
             </div>
-            <!-- <c:FieldAttributeButtons WrapperList={WrapperList}> -->
+           <c-field-validationbtn  ></c-field-validationbtn>
             <div class="textlabel">Options</div>
             <div class="togglebox">
                 <lightning-input type="toggle" label="Disable Field" checked={} message-toggle-active="" message-toggle-inactive="" ></lightning-input>
@@ -151,7 +151,7 @@
             <div class="fieldLabel">
                 CheckBox
             </div>
-            <!-- <c:FieldAttributeButtons WrapperList={WrapperList}> -->
+           <c-field-validationbtn  ></c-field-validationbtn>
             <div class="textlabel">Options</div>
             <div class="togglebox">
                 <lightning-input type="toggle" label="Disable Field" checked={} message-toggle-active="" message-toggle-inactive="" ></lightning-input><br/>
@@ -174,7 +174,7 @@
             <div class="fieldLabel">
                 File Upload
             </div>
-            <!-- <c:FieldAttributeButtons WrapperList={WrapperList}> -->
+           <c-field-validationbtn  ></c-field-validationbtn>
             <div class="textlabel">Options</div>
             <div class="togglebox">
                 <lightning-input type="toggle" label="Disable Field" checked={} message-toggle-active="" message-toggle-inactive="" ></lightning-input>
@@ -187,7 +187,7 @@
             <div class="fieldLabel">
                 Number
             </div>
-            <!-- <c:FieldAttributeButtons WrapperList={WrapperList}> -->
+           <c-field-validationbtn  ></c-field-validationbtn>
             <div class="slider">
                 <lightning-slider label="Min value" value={} min="0" max={} ></lightning-slider>
             </div>
@@ -223,12 +223,11 @@
         </template>
 
         <!-- Email-Id -->
-        <!-- <aura:if isTrue={WrapperList.AttributeList.Form_Field__r.Data_Record_Id__c == 'QFEMAILID'}> -->
-        <template if:true={email}>
+        <template if:true={qfemail}>
             <div class="fieldLabel">
                 Email-Id
             </div>
-            <!-- <c:FieldAttributeButtons WrapperList={WrapperList}> -->
+           <c-field-validationbtn  ></c-field-validationbtn>
             <div class="slider">
                 <lightning-slider label="Min no of character" value={} min="0" max={} ></lightning-slider>
             </div>
@@ -260,7 +259,7 @@
             <div class="fieldLabel">
                 Price
             </div>
-            <!-- <c:FieldAttributeButtons WrapperList={WrapperList}> -->
+           <c-field-validationbtn  ></c-field-validationbtn>
             <div class="plaintext">
                 <lightning-select label="Show Decimal Places" value={}>
                     <option value="0">0</option>
@@ -285,12 +284,11 @@
         </template>
 
         <!-- FULL NAME -->
-        <!-- <aura:if isTrue={WrapperList.AttributeList.Form_Field__r.Data_Record_Id__c == 'QFFULLNAME'}> -->
-        <template if:true={fullname}>
+        <template if:true={qffullname}>
             <div class="fieldLabel">
                 Full Name
             </div>
-            <!-- <c:FieldAttributeButtons WrapperList={WrapperList}> -->
+           <c-field-validationbtn  ></c-field-validationbtn>
             <div class="textlabel">Options</div>
             <div class="togglebox">
                 <lightning-input type="toggle" label="Disable Field" checked={} message-toggle-active="" message-toggle-inactive=""></lightning-input>
@@ -309,11 +307,11 @@
 
         <!-- NAME -->
         <!-- <aura:if isTrue={WrapperList.AttributeList.Form_Field__r.Data_Record_Id__c == 'QFNAME'}> -->
-        <template if:true={name}>
+        <template if:true={qfname}>
             <div class="fieldLabel">
                 Name
             </div>
-            <!-- <c:FieldAttributeButtons WrapperList={WrapperList}> -->
+           <c-field-validationbtn  ></c-field-validationbtn>
             <div class="textlabel">Options</div>
             <div class="togglebox">
                             <lightning-input type="toggle" label="Add Placeholder text:" checked= {} message-toggle-active="" message-toggle-inactive=""></lightning-input>
@@ -330,12 +328,11 @@
         </template>
 
         <!-- ADDRESS -->
-        <!-- <aura:if isTrue={WrapperList.AttributeList.Form_Field__r.Data_Record_Id__c == 'QFADDRESS'}> -->
-        <template if:true={address}>
+        <template if:true={qfaddress}>
             <div class="fieldLabel">
                 Address
             </div>
-            <!-- <c:FieldAttributeButtons WrapperList={WrapperList}> -->
+           <c-field-validationbtn  ></c-field-validationbtn>
             <div class="textlabel">Options</div>
             <div class="togglebox">
                 <lightning-input type="toggle" label="Disable Field" checked={} message-toggle-active="" message-toggle-inactive=""></lightning-input>
@@ -346,17 +343,15 @@
         </template>
 
         <!-- PHONE -->
-        <!-- <aura:if isTrue={WrapperList.AttributeList.Form_Field__r.Data_Record_Id__c == 'QFPHONE'}> -->
-        <template if:true={phone}>
+        <template if:true={qfphone}>
             <div class="fieldLabel">
                 Phone
             </div>
-            <!-- <c:FieldAttributeButtons WrapperList={WrapperList}> -->
+           <c-field-validationbtn  ></c-field-validationbtn>
             <div class="textlabel">Options</div>
             <div class="togglebox">
                 <lightning-input type="toggle" label="Add Placeholder text:" checked= {} message-toggle-active="" message-toggle-inactive=""></lightning-input>
             </div>
-            <!-- <aura:if isTrue= {}> -->
             <template if:true={phoneoptions}>
                 <div class="plaintext">
                     <lightning-input variant="label-hidden" value={}></lightning-input>
@@ -376,7 +371,7 @@
             <div class="fieldLabel">
                 Date
             </div>
-            <!-- <c:FieldAttributeButtons WrapperList={WrapperList}> -->
+           <c-field-validationbtn  ></c-field-validationbtn>
             <div class="plaintext">
                 <lightning-select label="Date Format" value={}>
                     <option value="None">None</option>
@@ -399,7 +394,7 @@
             <div class="fieldLabel">
                 Time
             </div>
-            <!-- <c:FieldAttributeButtons WrapperList={WrapperList}> -->
+           <c-field-validationbtn  ></c-field-validationbtn>
             <div class="textlabel">Options</div>
             <div class="togglebox">
                                 <lightning-input type="toggle" label="Disable Field" checked={} message-toggle-active="" message-toggle-inactive="" ></lightning-input>
@@ -570,7 +565,7 @@
             <div class="fieldLabel">
                 Link
             </div>
-            <!-- <c:FieldAttributeButtons WrapperList={WrapperList}> -->
+           <c-field-validationbtn  ></c-field-validationbtn>
             <div class="slider">
                 <lightning-slider label="Min no of character" value={} min="0" max={}></lightning-slider>
             </div>
@@ -602,7 +597,7 @@
             <div class="fieldLabel">
                 Signature
             </div>
-            <!-- <c:FieldAttributeButtons WrapperList={WrapperList}> -->
+           <c-field-validationbtn  ></c-field-validationbtn>
         </template>
 
         <!-- RichText -->
@@ -654,7 +649,7 @@
             <div class="fieldLabel">
                 Look Up Field
             </div>
-            <!-- <c:FieldAttributeButtons WrapperList={WrapperList}> -->
+           <c-field-validationbtn  ></c-field-validationbtn>
             <div class="textlabel">Object Selection</div>
             <div class="styletext">
                 <lightning-select data-id="SobjectList" label="Select Object" name="SobjectList" value={defvalue} onchange={selectObject}>
@@ -672,7 +667,7 @@
             <div class="fieldLabel">
                 Captcha
             </div>
-            <!-- <c:FieldAttributeButtons WrapperList={WrapperList}> -->
+           <c-field-validationbtn  ></c-field-validationbtn>
         </template>
 
     </template>

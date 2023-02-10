@@ -16,7 +16,8 @@ import Edit_page_icon from '@salesforce/resourceUrl/Edit_page_icon';
 import Edit_icon from '@salesforce/resourceUrl/Edit_icon';
 import Delete_icon from '@salesforce/resourceUrl/Delete_icon';
 import getFormCSS from '@salesforce/apex/FormBuilderController.getFormCSS';
-import getPageCSS from '@salesforce/apex/FormBuilderController.getPageCSS';
+import getPageCSS from '@salesforce/apex/FormBuilderController.getPageCSS'
+
 import { NavigationMixin } from "lightning/navigation";
 
 export default class FormBuilder extends NavigationMixin(LightningElement) {
@@ -70,6 +71,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
     @track newCSS;
     fieldcount  = 0;
     removeObjFields = [];
+    fieldvalidationdiv = false;
 
     renderedCallback(){
         console.log('inside the renderedcallBack--->>>');
@@ -213,8 +215,6 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
         this.secondmethod();
         this.spinnerDataTable = false;
         this.activesidebar = true;
-        
-        
 
     }
     //  @wire(getFieldsRecords)
@@ -276,6 +276,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
         //     this.activeDesignsidebar = false;
 
         // }
+        
         console.log(event.currentTarget.dataset.title);
         console.log('inside onclick');
         var allDiv  = this.template.querySelectorAll('.sidebar');
@@ -293,7 +294,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
         }
         
          console.log(event.currentTarget.title);
-         console.log('check if condition-=->');
+         console.log(this.message + 'messsage');
        if (event.currentTarget.dataset.title == 'tab-1'){
         let cmpDef = {
             componentDef: "c:qf_home"
@@ -314,6 +315,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
                this.activeDesignsidebar = false;
                this.activeNotification = false;
                this.activethankyou = false;
+               this.fieldvalidationdiv = false;
              
            }
 
@@ -322,7 +324,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
                this.activesidebar = false;
                this.activeNotification = false;
                this.activethankyou = false;
-             
+               this.fieldvalidationdiv = false;
            }
            console.log('in the if condition');
            this.activepreview = false;
@@ -338,6 +340,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
            this.activeNotification = true;
            this.activethankyou = false;
            this.activepreview = false;
+           this.fieldvalidationdiv = false;
        }
 
        else if (event.currentTarget.dataset.title == 'tab-5') {
@@ -347,6 +350,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
            this.activeNotification = false;
            this.activethankyou = true;
            this.activepreview = false;
+           this.fieldvalidationdiv = false;
        }
        else if (event.currentTarget.dataset.title == 'tab-6') {
         this.activeDesignsidebar = false;
@@ -355,6 +359,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
         this.activeNotification = false;
         this.activethankyou = false;
         this.activepreview = false;
+        this.fieldvalidationdiv = false;
     }
     else if (event.currentTarget.dataset.title == 'tab-7') {
         this.activepreview = true
@@ -364,6 +369,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
         this.activeNotification = false;
         this.activethankyou = false;
         this.activepreview = true
+        this.fieldvalidationdiv = false;
     }
     else if (event.currentTarget.dataset.title == 'tab-8') {
         this.activeDesignsidebar = false;
@@ -372,13 +378,14 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
         this.activeNotification = false;
         this.activethankyou = false;
         this.activepreview = false;
+        this.fieldvalidationdiv = false;
     }
 
        else {
            this.activesidebar = false;
            this.activeDropZone = false;
            this.activeDesignsidebar = false;
-
+           this.fieldvalidationdiv = false;
        }
     }
 
@@ -618,5 +625,12 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
       console.log('after for loop-->');
          this.count=count1 ;
     }
-    
+    openfieldvalidation(event){
+        this.activesidebar = false;
+        this.activeDesignsidebar = false
+        this.fieldvalidationdiv = true;
+        
+        var ans = event.currentTarget.dataset.fieldName.slice(0, event.currentTarget.dataset.fieldName.indexOf(','));
+        console.log(ans);
+    }
 }

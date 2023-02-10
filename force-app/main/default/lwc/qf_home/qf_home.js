@@ -92,25 +92,23 @@ export default class Qf extends NavigationMixin(LightningElement) {
 // # Create Date: 09/01/2023
 // # Description: Used to Read All Forms record
 // =================================== -->
-    connectedCallback(){
-      this.spinnerDataTable = true;
-        records().then(result => {
-          
-            for (let key in result) {
-                this.count = key;
-                if(this.count > 0){
-                this.PaginationList = result[key];
-                this.data = true;
-                this.bNoRecordsFound = true;
-                }
-                else{
-                  this.bNoRecordsFound = false;
-                }
-             }
-             this.spinnerDataTable = false;
-
-  })
-    }
+    connectedCallback(){ 
+      records().then(result => {
+        this.spinnerDataTable = true;
+          for (let key in result) {
+              this.count = key;
+              if(this.count > 0){
+              this.PaginationList = result[key];
+              this.data = true;
+              this.bNoRecordsFound = true;
+              }
+              else{
+                this.bNoRecordsFound = false;
+              }
+           }
+           this.spinnerDataTable = false;
+      })
+  }
 
 // <!-- ===================================
 // # MV Clouds Private Limited

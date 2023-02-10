@@ -508,3 +508,8 @@ border-radius: 28px;
     gap: 10px;
     border-color: #6699CC;
 }
+.mainbody{
+    width: 60%;
+    display: flex;
+    justify-content: center;
+}
