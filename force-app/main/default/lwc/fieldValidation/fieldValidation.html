@@ -15,7 +15,7 @@
                         <div class="btnDiv" data-title="Delete" title="Delete" onclick={validatingbtnhandle}>
                             <img src={fielddelete} alt="" class="validationicon">
                         </div>
-                        <div class="btnDiv" data-title="Save" title="Save" onclick={validatingbtnhandle}>
+                        <div class="btnDiv" data-title="Save" data-name={fieldName} title="Save" onclick={validatingbtnhandle}>
                             <img src={fieldsave} alt="" class="validationicon">
                         </div>
                         <div class="btnDiv" data-title="Copy" title="Copy" onclick={validatingbtnhandle}>
@@ -30,7 +30,7 @@
                         value={labelcheck}
                         placeholder="Label"
                         options={showlabel}
-                        onchange={handleChange}
+                        onchange={handlevalidation}
                         data-title="Label" ></lightning-combobox>
                     </div>
                     <template if:true={d}>
@@ -45,7 +45,7 @@
                         value={helptextcheck}
                         placeholder="Help Text"
                         options={showlabel}
-                        onchange={handleChange}
+                        onchange={handlevalidation}
                         data-title="HelpText" ></lightning-combobox>
                     </div>
                     <template if:true={d}>
@@ -55,14 +55,14 @@
                     </template>
                     <div class="textlabel">Validation</div>
                     <div class="togglebox">
-                        <lightning-input type="toggle" label="Required Field" checked={} message-toggle-active="" message-toggle-inactive="" ></lightning-input>
+                        <lightning-input type="toggle" label="Required Field" checked={isRequiredcheck} message-toggle-active="" message-toggle-inactive="" onchange={isRequired} ></lightning-input>
                     </div>
                 </div>
             </div>
         </template>
 
     <template for:each={field.data} for:item="fields">
-        <div key={fields.Nme}>
+        <div key={fields.Name} title={fields.Name}>
         <template if:true={fields.QFSHORTTEXT}>
             <div class="plaintext">
                 <lightning-select label="Field Validation" value={}>
@@ -75,59 +75,59 @@
                 </lightning-select>
             </div>
             <div class="slider">
-                <lightning-slider label="Min no of character" value={} min="0" max={} ></lightning-slider>
+                <lightning-slider label="Min no of character" value={minimumvalue} min="0" max="256" onchange={slider} data-title="Minimum"></lightning-slider>
             </div>
             <div class="slider">
-                <lightning-slider label="Max no of character" value={} min={} max="256" ></lightning-slider>
+                <lightning-slider label="Max no of character" value={maximumvalue} min="0" max="256" onchange={slider} data-title="Maximum"></lightning-slider>
             </div>
-            <lightning-button class="resetcharacter" label="Reset Character Limit" variant="brand-outline" onclick={resetCharacter} ></lightning-button><br/>
+            <lightning-button class="resetcharacter" label="Reset Character Limit" variant="brand-outline" onclick={slider} data-title="Reset" ></lightning-button><br/>
             <div class="textlabel">Options</div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Add Placeholder text:" checked= {} message-toggle-active="" message-toggle-inactive="" ></lightning-input>
+                <lightning-input type="toggle" label="Add Placeholder text:" checked={placeholdercheck} onchange={handlevalidation} data-title="PlaceHolder" message-toggle-active="" message-toggle-inactive="" ></lightning-input>
             </div>
-            <template if:true={shorttextoptions}>
+            <template if:true={placeholdercheck}>
                 <div class="plaintext">
-                    <lightning-input variant="label-hidden" value={}></lightning-input>
+                    <lightning-input label = "Place Holder" data-title="PlaceHolder" value={placeholdervalue} onchange={validatingvalue} placeholder="Place Holder"></lightning-input>
                 </div>
             </template>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Disable Field" checked={} message-toggle-active="" message-toggle-inactive="" ></lightning-input>
+                <lightning-input type="toggle" label="Disable Field" checked={isdisabledcheck} message-toggle-active="" message-toggle-inactive="" onchange={isdisabled}></lightning-input>
             </div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Read only" checked={} message-toggle-active="" message-toggle-inactive="" ></lightning-input>
+                <lightning-input type="toggle" label="Read only" data-title="ReadOnly" checked={readonlycheck} onchange={handlevalidation} message-toggle-active="" message-toggle-inactive=""></lightning-input>
             </div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Add prefix Inside the Field" checked={} message-toggle-active="" message-toggle-inactive="" ></lightning-input>
+                <lightning-input type="toggle" label="Add prefix Inside the Field" checked={prefixcheck} onchange={handlevalidation} data-title="Prefix" message-toggle-active="" message-toggle-inactive="" ></lightning-input>
             </div>
-            <template if:true={shorttextprefix}>
+            <template if:true={prefixcheck}>
                 <div class="plaintext">
-                    <lightning-input label="prefix value" value={} placeholder="enter Prefix value"></lightning-input>
+                    <lightning-input label="Prefix value" data-title="Prefix" value={prefixvalue} onchange={validatingvalue} placeholder="enter Prefix value"></lightning-input>
                 </div>
             </template>
         </template>
 
         <template if:true={fields.QFLONGTEXT}>
             <div class="slider">
-                <lightning-slider label="Min no of character" value={} min="0" max={} ></lightning-slider>
+                <lightning-slider label="Min no of character" value={minimumvalue} min="0" max="256" onchange={slider} data-title="Minimum"></lightning-slider>
             </div>
             <div class="slider">
-                <lightning-slider label="Max no of character" value={} min={} max="256" ></lightning-slider><br/>
+                <lightning-slider label="Max no of character" value={maximumvalue} min="0" max="256" onchange={slider} data-title="Maximum"></lightning-slider>
             </div>
-            <lightning-button class="resetcharacter" label="Reset Character Limit" variant="brand-outline" onclick={resetCharacter} ></lightning-button><br/>
+            <lightning-button class="resetcharacter" label="Reset Character Limit" variant="brand-outline" onclick={slider} data-title="Reset" ></lightning-button><br/>
             <div class="textlabel">Options</div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Add Placeholder text:" checked= {} message-toggle-active="" message-toggle-inactive="" ></lightning-input>
+                <lightning-input type="toggle" label="Add Placeholder text:" checked={placeholdercheck} onchange={handlevalidation} data-title="PlaceHolder" message-toggle-active="" message-toggle-inactive="" ></lightning-input>
             </div>
-            <template if:true={longtextoptions}>
+            <template if:true={placeholdercheck}>
                 <div class="plaintext">
-                    <lightning-input variant="label-hidden" value={}></lightning-input>
+                    <lightning-input data-title="PlaceHolder" value={placeholdervalue} onchange={validatingvalue} placeholder="Place Holder"></lightning-input>
                 </div>
             </template>
             <div class="togglebox">
-                <lightning-input message-toggle-active="" message-toggle-inactive="" type="toggle" label="Disable Field" checked={} ></lightning-input>
+                <lightning-input type="toggle" label="Disable Field" checked={isdisabledcheck} message-toggle-active="" message-toggle-inactive="" onchange={isdisabled}></lightning-input>
             </div>
             <div class="togglebox">
-                <lightning-input message-toggle-active="" message-toggle-inactive="" type="toggle" label="Read only" checked={} ></lightning-input>
+                <lightning-input type="toggle" label="Read only" data-title="ReadOnly" checked={readonlycheck} onchange={handlevalidation} message-toggle-active="" message-toggle-inactive=""></lightning-input>
             </div>
         </template>
 
@@ -165,17 +165,17 @@
         <template if:true={fields.QFRADIOBUTTON}>
             <div class="textlabel">Options</div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Disable Field" checked={} message-toggle-active="" message-toggle-inactive="" ></lightning-input>
+                <lightning-input type="toggle" label="Disable Field" checked={isdisabledcheck} message-toggle-active="" message-toggle-inactive="" onchange={isdisabled}></lightning-input>
             </div>
             <div class="textlabel">Choices</div>
-            <!-- <aura:iteration items={WrapperList.FieldList} var="item"> -->
-                <div class="Item">
-                    <lightning-input class="slds-size_5-of-6" variant="label-hidden" value={} ></lightning-input>
-                    <lightning-button-icon class="slds-size_1-of-6" icon-name="utility:delete" size="medium" name={} onclick={handledelete} ></lightning-button-icon>
+            <template for:each={salutations} for:item="fields">
+                <div class="Item" key={fields.id}>
+                    <lightning-input class="slds-size_5-of-6" variant="label-hidden" data-id={fields.id} value={fields.salutation} onchange={salutationvalues}></lightning-input>
+                    <lightning-button-icon class="slds-size_1-of-6" icon-name="utility:delete" size="medium" data-id={fields.id}  onclick={deletesalutation}></lightning-button-icon>
                 </div>
-            <!-- </aura:iteration> -->
+            </template>
             <div class="Itembutton">
-                <lightning-button icon-name="utility:add" title="Add" onclick={addvalue}></lightning-button>
+                <lightning-button icon-name="utility:add" title="Add" onclick={addsalutation}></lightning-button>
             </div>
         </template>
 
@@ -183,17 +183,17 @@
         <template if:true={fields.QFCHECKBOX}>
             <div class="textlabel">Options</div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Disable Field" checked={} message-toggle-active="" message-toggle-inactive="" ></lightning-input><br/>
+                <lightning-input type="toggle" label="Disable Field" checked={isdisabledcheck} message-toggle-active="" message-toggle-inactive="" onchange={isdisabled}></lightning-input>
             </div>
             <div class="textlabel">Choices</div>
-            <!-- <aura:iteration items={WrapperList.FieldList} var="item"> -->
-                <div class="Item">
-                    <lightning-input class="slds-size_5-of-6" variant="label-hidden"  value={} ></lightning-input>
-                    <lightning-button-icon class="slds-size_1-of-6" icon-name="utility:delete" size="medium"  name={} onclick={handledelete} ></lightning-button-icon>
+            <template for:each={salutations} for:item="fields">
+                <div class="Item" key={fields.id}>
+                    <lightning-input class="slds-size_5-of-6" variant="label-hidden" data-id={fields.id} value={fields.salutation} onchange={salutationvalues}></lightning-input>
+                    <lightning-button-icon class="slds-size_1-of-6" icon-name="utility:delete" size="medium" data-id={fields.id}  onclick={deletesalutation}></lightning-button-icon>
                 </div>
-            <!-- </aura:iteration> -->
+            </template>
             <div class="Itembutton">
-                <lightning-button icon-name="utility:add" title="Add" onclick={addvalue}></lightning-button>
+                <lightning-button icon-name="utility:add" title="Add" onclick={addsalutation}></lightning-button>
             </div>
         </template>
 
@@ -201,40 +201,40 @@
         <template if:true={fields.QFFILEUPLOAD}>
             <div class="textlabel">Options</div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Disable Field" checked={} message-toggle-active="" message-toggle-inactive="" ></lightning-input>
+                <lightning-input type="toggle" label="Disable Field" checked={isdisabledcheck} message-toggle-active="" message-toggle-inactive="" onchange={isdisabled}></lightning-input>
             </div>
         </template>
 
             <!-- Number -->
         <template if:true={fields.QFNUMBER}>
             <div class="slider">
-                <lightning-slider label="Min value" value={} min="0" max={} ></lightning-slider>
+                <lightning-slider label="Min no of character" value={minimumvalue} min="0" max="256" onchange={slider} data-title="Minimum"></lightning-slider>
             </div>
             <div class="slider">
-                <lightning-slider label="Max value" value={} min={} max="256" ></lightning-slider><br/>
+                <lightning-slider label="Max no of character" value={maximumvalue} min="0" max="256" onchange={slider} data-title="Maximum"></lightning-slider>
             </div>
-            <lightning-button class="resetcharacter" label="Reset Character Limit" variant="brand-outline" onclick={resetCharacter} ></lightning-button><br/>
+            <lightning-button class="resetcharacter" label="Reset Character Limit" variant="brand-outline" onclick={slider} data-title="Reset" ></lightning-button><br/>
             <div class="textlabel">Options</div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Add Placeholder text:" checked={} message-toggle-active="" message-toggle-inactive="" ></lightning-input>
+                <lightning-input type="toggle" label="Add Placeholder text:" checked={placeholdercheck} onchange={handlevalidation} data-title="PlaceHolder" message-toggle-active="" message-toggle-inactive="" ></lightning-input>
             </div>
-            <template if:true={numberoptions}>
+            <template if:true={placeholdercheck}>
                 <div class="plaintext">
-                    <lightning-input variant="label-hidden" value={}></lightning-input>
+                    <lightning-input data-title="PlaceHolder" value={placeholdervalue} onchange={validatingvalue} placeholder="Place Holder"></lightning-input>
                 </div>
             </template>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Disable Field" checked={} message-toggle-active="" message-toggle-inactive="" ></lightning-input>
+                <lightning-input type="toggle" label="Disable Field" checked={isdisabledcheck} message-toggle-active="" message-toggle-inactive="" onchange={isdisabled}></lightning-input>
             </div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Read only" checked={} message-toggle-active="" message-toggle-inactive="" ></lightning-input>
+                <lightning-input type="toggle" label="Read only" data-title="ReadOnly" checked={readonlycheck} onchange={handlevalidation} message-toggle-active="" message-toggle-inactive=""></lightning-input>
             </div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Add prefix Inside the Field" checked={} message-toggle-active="" message-toggle-inactive="" ></lightning-input>
+                <lightning-input type="toggle" label="Add prefix Inside the Field" checked={prefixcheck} onchange={handlevalidation} data-title="Prefix" message-toggle-active="" message-toggle-inactive="" ></lightning-input>
             </div>
-            <template if:true={numberprefix}>
+            <template if:true={prefixcheck}>
                 <div class="plaintext">
-                    <lightning-input label="Prefix value" value={} placeholder="enter Prefix value"></lightning-input>
+                    <lightning-input label="Prefix value" data-title="Prefix" value={prefixvalue} onchange={validatingvalue} placeholder="enter Prefix value"></lightning-input>
                 </div>
             </template>
         </template>
@@ -242,50 +242,52 @@
             <!-- Email-Id -->
         <template if:true={fields.QFEMAILID}>
             <div class="slider">
-                <lightning-slider label="Min no of character" value={} min="0" max={} ></lightning-slider>
+                <lightning-slider label="Min no of character" value={minimumvalue} min="0" max="256" onchange={slider} data-title="Minimum"></lightning-slider>
             </div>
             <div class="slider">
-                <lightning-slider label="Max no of character" value={} min={} max="256" ></lightning-slider>
+                <lightning-slider label="Max no of character" value={maximumvalue} min="0" max="256" onchange={slider} data-title="Maximum"></lightning-slider>
             </div>
-            <lightning-button class="resetcharacter" label="Reset Character Limit" variant="brand-outline" onclick={resetCharacter} ></lightning-button><br/>
+            <lightning-button class="resetcharacter" label="Reset Character Limit" variant="brand-outline" onclick={slider} data-title="Reset" ></lightning-button><br/>
             <div class="textlabel">Options</div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Add Placeholder text:" checked= {} message-toggle-active="" message-toggle-inactive="" ></lightning-input>
+                <lightning-input type="toggle" label="Add Placeholder text:" checked={placeholdercheck} onchange={handlevalidation} data-title="PlaceHolder" message-toggle-active="" message-toggle-inactive="" ></lightning-input>
             </div>
-            <template if:true={emailoptions}>
+            <template if:true={placeholdercheck}>
                 <div class="plaintext">
-                    <lightning-input variant="label-hidden" value={}></lightning-input>
+                    <lightning-input variant="label-hidden" value={placeholdervalue} onchange={validatingvalue} data-title="PlaceHolder" placeholder="Place Holder"></lightning-input>
                 </div>
             </template>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Disable Field" checked={} message-toggle-active="" message-toggle-inactive="" ></lightning-input>
+                <lightning-input type="toggle" label="Disable Field" checked={isdisabledcheck} message-toggle-active="" message-toggle-inactive="" onchange={isdisabled}></lightning-input>
             </div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Read only" checked={} message-toggle-active="" message-toggle-inactive=""></lightning-input>
+                <lightning-input type="toggle" label="Read only" data-title="ReadOnly" checked={readonlycheck} onchange={handlevalidation} message-toggle-active="" message-toggle-inactive=""></lightning-input>
             </div>
         </template>
 
             <!-- PRICE -->
         <template if:true={fields.QFPRICE}>
             <div class="plaintext">
-                <lightning-select label="Show Decimal Places" value={}>
-                    <option value="0">0</option>
-                    <option value="0.01">0.00</option>
-                    <option value="0.001">0.000</option>
-                    <option value="0.0001">0.0000</option>
-                </lightning-select>
+                <lightning-combobox
+                        name="progress"
+                        label="Decimal"
+                        value={decimal}
+                        placeholder="Decimal"
+                        options={showdecimal}
+                        onchange={handlevalidation}
+                        data-title="Decimal" ></lightning-combobox>
             </div>
             <div class="textlabel">Options</div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Add Placeholder text:" checked={} message-toggle-active="" message-toggle-inactive=""></lightning-input>
+                <lightning-input type="toggle" label="Add Placeholder text:" checked={placeholdercheck} data-title="PlaceHolder" message-toggle-inactive="" message-toggle-active="" onchange={handlevalidation} placeholder="Place Holder"></lightning-input>
             </div>
-            <template if:true={priceoptions}>
+            <template if:true={placeholdercheck}>
                 <div class="plaintext">
-                    <lightning-input variant="label-hidden" value={}></lightning-input>
+                    <lightning-input variant="label-hidden" value={placeholdervalue} data-title="PlaceHolder" onchange={validatingvalue} placeholder="Place Holder"></lightning-input>
                 </div>
             </template>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Disable Field" checked={} message-toggle-active="" message-toggle-inactive=""></lightning-input>
+                <lightning-input type="toggle" label="Disable Field" checked={isdisabledcheck} message-toggle-active="" message-toggle-inactive="" onchange={isdisabled}></lightning-input>
             </div>
         </template>
 
@@ -293,17 +295,17 @@
         <template if:true={fields.QFFULLNAME}>
             <div class="textlabel">Options</div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Disable Field" checked={} message-toggle-active="" message-toggle-inactive=""></lightning-input>
+                <lightning-input type="toggle" label="Disable Field" checked={isdisabledcheck} message-toggle-active="" message-toggle-inactive="" onchange={isdisabled}></lightning-input>
             </div>
             <div class="textlabel">Salutation</div>
-            <!-- <aura:iteration items={WrapperList.FieldList} var="item"> -->
-                <div class="Item">
-                    <lightning-input class="slds-size_5-of-6" variant="label-hidden"  value={}></lightning-input>
-                    <lightning-button-icon class="slds-size_1-of-6" icon-name="utility:delete" size="medium"  name={} onclick={handledelete}></lightning-button-icon>
+            <template for:each={salutations} for:item="fields">
+                <div class="Item" key={fields.id}>
+                    <lightning-input class="slds-size_5-of-6" variant="label-hidden" data-id={fields.id} value={fields.salutation} onchange={salutationvalues}></lightning-input>
+                    <lightning-button-icon class="slds-size_1-of-6" icon-name="utility:delete" size="medium" data-id={fields.id}  onclick={deletesalutation}></lightning-button-icon>
                 </div>
-            <!-- </aura:iteration> -->
+            </template>
             <div class="Itembutton">
-                <lightning-button icon-name="utility:add" title="Add" onclick={addvalue}></lightning-button>
+                <lightning-button icon-name="utility:add" title="Add" onclick={addsalutation}></lightning-button>
             </div>
         </template>
 
@@ -311,15 +313,15 @@
         <template if:true={fields.QFNAME}>
             <div class="textlabel">Options</div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Add Placeholder text:" checked= {} message-toggle-active="" message-toggle-inactive=""></lightning-input>
+                <lightning-input type="toggle" label="Add Placeholder text:" checked={placeholdercheck} data-title="PlaceHolder" message-toggle-inactive="" message-toggle-active="" onchange={handlevalidation} placeholder="Place Holder"></lightning-input>
             </div>
-            <template if:true={nameoptions}>
+            <template if:true={placeholdercheck}>
                 <div class="plaintext">
-                    <lightning-input variant="label-hidden" value={}></lightning-input>
+                    <lightning-input variant="label-hidden" value={placeholdervalue} data-title="PlaceHolder" onchange={validatingvalue} placeholder="Place Holder"></lightning-input>
                 </div>
             </template>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Disable Field" checked={} message-toggle-active="" message-toggle-inactive=""></lightning-input>
+                <lightning-input type="toggle" label="Disable Field" checked={isdisabledcheck} message-toggle-active="" message-toggle-inactive="" onchange={isdisabled}></lightning-input>
             </div>
         </template>
 
@@ -327,10 +329,10 @@
         <template if:true={fields.QFADDRESS}>
             <div class="textlabel">Options</div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Disable Field" checked={} message-toggle-active="" message-toggle-inactive=""></lightning-input>
+                <lightning-input type="toggle" label="Disable Field" checked={isdisabledcheck} message-toggle-active="" message-toggle-inactive="" onchange={isdisabled}></lightning-input>
             </div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Read only" checked={} message-toggle-active="" message-toggle-inactive=""></lightning-input>
+                <lightning-input type="toggle" label="Read only" checked={readonlycheck} onchange={handlevalidation} data-title="ReadOnly" message-toggle-active="" message-toggle-inactive=""></lightning-input>
             </div>
         </template>
 
@@ -338,36 +340,36 @@
         <template if:true={fields.QFPHONE}>
             <div class="textlabel">Options</div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Add Placeholder text:" checked= {} message-toggle-active="" message-toggle-inactive=""></lightning-input>
+                <lightning-input type="toggle" label="Add Placeholder text:" checked={placeholdercheck} message-toggle-active="" message-toggle-inactive="" onchange={handlevalidation} data-title="PlaceHolder"></lightning-input>
             </div>
-            <template if:true={phoneoptions}>
+            <template if:true={placeholdercheck}>
                 <div class="plaintext">
-                    <lightning-input variant="label-hidden" value={}></lightning-input>
+                    <lightning-input variant="label-hidden" value={placeholdervalue} onchange={validatingvalue} data-title="PlaceHolder" placeholder="Place Holder"></lightning-input>
                 </div>
             </template>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Disable Field" checked={} message-toggle-active="" message-toggle-inactive=""></lightning-input>
+                <lightning-input type="toggle" label="Disable Field" checked={isdisabledcheck} message-toggle-active="" message-toggle-inactive="" onchange={isdisabled}></lightning-input>
             </div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Read only" checked={} message-toggle-active="" message-toggle-inactive=""></lightning-input>
+                <lightning-input type="toggle" label="Read only" checked={readonlycheck} onchange={handlevalidation} data-title="ReadOnly" message-toggle-active="" message-toggle-inactive=""></lightning-input>
             </div>
         </template>
 
             <!-- DATE -->
         <template if:true={fields.QFDATE}>
-            <div class="plaintext">
+            <!-- <div class="plaintext">
                 <lightning-select label="Date Format" value={}>
                     <option value="None">None</option>
                     <option value="Short">Short</option>
                     <option value="Long">Long</option>
                 </lightning-select>
-            </div>
+            </div> -->
             <div class="textlabel">Options</div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Disable Field" checked={} message-toggle-active="" message-toggle-inactive=""></lightning-input>
+                <lightning-input type="toggle" label="Disable Field" checked={isdisabledcheck} message-toggle-active="" message-toggle-inactive="" onchange={isdisabled}></lightning-input>
             </div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Read only" checked={} message-toggle-active="" message-toggle-inactive=""></lightning-input>
+                <lightning-input type="toggle" label="Read only" data-title="ReadOnly" checked={readonlycheck} onchange={handlevalidation} message-toggle-active="" message-toggle-inactive=""></lightning-input>
             </div>
         </template>
 
@@ -375,25 +377,21 @@
         <template if:true={fields.QFTIME}>
             <div class="textlabel">Options</div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Disable Field" checked={} message-toggle-active="" message-toggle-inactive="" ></lightning-input>
+                <lightning-input type="toggle" label="Disable Field" checked={isdisabledcheck} message-toggle-active="" message-toggle-inactive="" onchange={isdisabled}></lightning-input>
             </div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Read only" checked={} message-toggle-active="" message-toggle-inactive="" ></lightning-input>
+                <lightning-input type="toggle" label="Read only" data-title="ReadOnly" checked={readonlycheck} onchange={handlevalidation} message-toggle-active="" message-toggle-inactive=""></lightning-input>
             </div>
         </template>
 
             <!-- DATE/TIME -->
         <template if:true={fields.QFDATETIME}>
-            <div class="textlabel">Validation</div>
-            <div class="toggle">
-                <lightning-input type="toggle" label="Required Field" checked={WrapperList.AttributeList.Required_Field__c} message-toggle-active="" message-toggle-inactive="" ></lightning-input>
-            </div>
             <div class="textlabel">Options</div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Disable Field" checked={} message-toggle-active="" message-toggle-inactive="" ></lightning-input>
+                <lightning-input type="toggle" label="Disable Field" checked={isdisabledcheck} message-toggle-active="" message-toggle-inactive="" onchange={isdisabled}></lightning-input>
             </div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Read only" checked={} message-toggle-active="" message-toggle-inactive="" ></lightning-input>
+                <lightning-input type="toggle" label="Read only" data-title="ReadOnly" checked={readonlycheck} onchange={handlevalidation} message-toggle-active="" message-toggle-inactive=""></lightning-input>
             </div>
         </template>
 
@@ -451,35 +449,34 @@
         <template if:true={fields.QFTERMSOFSERVICE}>
             <div class="textlabel">Options</div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Disable Field" checked={} message-toggle-active="" message-toggle-inactive="" ></lightning-input>
+                <lightning-input type="toggle" label="Disable Field" checked={isdisabledcheck} message-toggle-active="" message-toggle-inactive="" onchange={isdisabled}></lightning-input>
             </div>
             <div class="richstyle">
-                <lightning-button class="richbutton" label="Edit Agreement Text" onclick={openRichText} ></lightning-button>
+                <lightning-button class="richbutton" label="Edit Agreement Text" onclick={handlevalidation} data-title="RichText" ></lightning-button>
             </div>
-            <template if:true={editterms}>
+            <template if:true={richtextinput}>
                 <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
                     <div class="slds-modal__container">
                         <header class="slds-modal__header">
-                            <lightning-button-icon icon-name="utility:close" onclick={c} alternative-text="close" variant="bare-inverse" class="slds-modal__close" ></lightning-button-icon>
-                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Agreement Text Block</h2>
+                            <lightning-button-icon icon-name="utility:close" onclick={closerichtext} alternative-text="close" variant="bare-inverse" class="slds-modal__close"></lightning-button-icon>
+                            <h2 data-id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">HTML Block</h2>
                         </header>
 
                         <lightning-tabset variant="scoped">
                             <lightning-tab label="Edit Rich Text">
                                 <lightning-input-rich-text formats="['font', 'size', 'bold', 'italic', 'underline', 'strike', 'list', 'indent', 'align', 'link', 'clean', 'table', 
-                                'header', 'color', 'background']" value={} data-id="textEditor" placeholder="Type something" ></lightning-input-rich-text>
+                                'header', 'color', 'background']" value={Richtextvalue} data-id="editor" placeholder="Type something" onchange={RichTextData}></lightning-input-rich-text>
                             </lightning-tab>
-                            <lightning-tab label="Edit HTML Text" onactive={d}>
-                                <lightning-textarea label="HTML Text" value={} name="Html" onchange={RichTextC} ></lightning-textarea>
+                            <lightning-tab label="Edit HTML Text">
+                                <lightning-textarea label="HTML Text" value={Richtextvalue} name="Html" onchange={RichTextData}></lightning-textarea>
                             </lightning-tab>
                             <lightning-tab label="Output">
-                                <!-- <ui-output-rich-text class="slds-text-longform" value={WrapperList.AttributeList.Agreement_Text__c} ></ui-output-rich-text> -->
+                                <lightning-formatted-rich-text value={Richtextvalue}></lightning-formatted-rich-text>
                             </lightning-tab>
                         </lightning-tabset>
-
                         <footer class="slds-modal__footer">
-                            <lightning-button variant="neutral" label="Cancel" title="Cancel" onclick={c}></lightning-button>
-                            <lightning-button variant="brand" label="OK" title="OK" onclick={OutRichC}></lightning-button>
+                            <lightning-button variant="neutral" label="Cancel" title="Cancel" onclick={closerichtext}></lightning-button>
+                            <lightning-button variant="brand" label="OK" title="OK" onclick={closerichtext}></lightning-button>
                         </footer>
                     </div>
                 </section>
@@ -488,29 +485,28 @@
         </template>
 
             <!-- LINK -->
-            <!-- <aura:if isTrue={WrapperList.AttributeList.Form_Field__r.Data_Record_Id__c ==  'QFLINK'}> -->
         <template if:true={fields.QFLINK}>
             <div class="slider">
-                <lightning-slider label="Min no of character" value={} min="0" max={}></lightning-slider>
+                <lightning-slider label="Min no of character" value={minimumvalue} min="0" max="256" onchange={slider} data-title="Minimum"></lightning-slider>
             </div>
             <div class="slider">
-                <lightning-slider label="Max no of character" value={} min={} max="256"></lightning-slider>
+                <lightning-slider label="Max no of character" value={maximumvalue} min="0" max="256" onchange={slider} data-title="Maximum"></lightning-slider>
             </div>
-            <lightning-button class="resetcharacter" label="Reset Character Limit" variant="brand-outline" onclick={resetCharacter}></lightning-button><br/>
+            <lightning-button class="resetcharacter" label="Reset Character Limit" variant="brand-outline" onclick={slider} data-title="Reset" ></lightning-button><br/>
             <div class="textlabel">Options</div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Add Placeholder text:" checked= {} message-toggle-active="" message-toggle-inactive=""></lightning-input>
+                <lightning-input type="toggle" label="Add Placeholder text:" checked={placeholdercheck} onchange={handlevalidation} data-title="PlaceHolder" message-toggle-active="" message-toggle-inactive="" ></lightning-input>
             </div>
-            <template if:true={linkoptions}>
+            <template if:true={placeholdercheck}>
                 <div class="plaintext">
-                    <lightning-input variant="label-hidden" value={}></lightning-input>
+                    <lightning-input label = "Place Holder" data-title="PlaceHolder" value={placeholdervalue} onchange={validatingvalue} placeholder="Place Holder"></lightning-input>
                 </div>
             </template>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Disable Field" checked={} message-toggle-active="" message-toggle-inactive=""></lightning-input>
+                <lightning-input type="toggle" label="Disable Field" checked={isdisabledcheck} message-toggle-active="" message-toggle-inactive="" onchange={isdisabled}></lightning-input>
             </div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Read only" checked={} message-toggle-active="" message-toggle-inactive=""></lightning-input>
+                <lightning-input type="toggle" label="Read only" data-title="ReadOnly" checked={readonlycheck} onchange={handlevalidation} message-toggle-active="" message-toggle-inactive=""></lightning-input>
             </div>
         </template>
 
@@ -521,31 +517,31 @@
             <!-- RichText -->
         <template if:true={fields.QFRICHTEXT}>
             <div class="richstyle">
-                <lightning-button  label="Edit RichText" onclick={openRichText}></lightning-button>
+                <lightning-button  label="Edit RichText" onclick={handlevalidation} data-title="RichText"></lightning-button>
             </div>
             <template if:true={richtextinput}>
                 <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
                     <div class="slds-modal__container">
                         <header class="slds-modal__header">
-                            <lightning-button-icon icon-name="utility:close" onclick={c} alternative-text="close" variant="bare-inverse" class="slds-modal__close"></lightning-button-icon>
+                            <lightning-button-icon icon-name="utility:close" onclick={closerichtext} alternative-text="close" variant="bare-inverse" class="slds-modal__close"></lightning-button-icon>
                             <h2 data-id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">HTML Block</h2>
                         </header>
 
                         <lightning-tabset variant="scoped">
                             <lightning-tab label="Edit Rich Text">
                                 <lightning-input-rich-text formats="['font', 'size', 'bold', 'italic', 'underline', 'strike', 'list', 'indent', 'align', 'link', 'clean', 'table', 
-                                'header', 'color', 'background']" value={} data-id="editor" placeholder="Type something"></lightning-input-rich-text>
+                                'header', 'color', 'background']" value={Richtextvalue} data-id="editor" placeholder="Type something" onchange={RichTextData}></lightning-input-rich-text>
                             </lightning-tab>
-                            <lightning-tab label="Edit HTML Text" onactive={c}>
-                                <lightning-textarea label="HTML Text" value={} name="Html" onchange={RichTextC}></lightning-textarea>
+                            <lightning-tab label="Edit HTML Text">
+                                <lightning-textarea label="HTML Text" value={Richtextvalue} name="Html" onchange={RichTextData}></lightning-textarea>
                             </lightning-tab>
                             <lightning-tab label="Output">
-                                <!-- <ui-output-rich-text class="slds-text-longform" value={WrapperList.AttributeList.RichText__c}></ui-output-rich-text> -->
+                                <lightning-formatted-rich-text value={Richtextvalue}></lightning-formatted-rich-text>
                             </lightning-tab>
                         </lightning-tabset>
                         <footer class="slds-modal__footer">
-                            <lightning-button variant="neutral" label="Cancel" title="Cancel" onclick={c}></lightning-button>
-                            <lightning-button variant="brand" label="OK" title="OK" onclick={OutRichC}></lightning-button>
+                            <lightning-button variant="neutral" label="Cancel" title="Cancel" onclick={closerichtext}></lightning-button>
+                            <lightning-button variant="brand" label="OK" title="OK" onclick={closerichtext}></lightning-button>
                         </footer>
                     </div>
                 </section>
