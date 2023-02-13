@@ -28,6 +28,8 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
     @track captchavalue;
     BackButton = BackButton;
     @track verify;
+    @track thankyou = false;
+    previewactive = true;
 
 
     connectedCallback() {
@@ -53,7 +55,7 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
         });
     }
     secondmethod(){
-        getFieldsRecords()
+        getFieldsRecords({id:this.formid})
             .then(result => {
                 this.FieldList = result;
                 console.log('FieldList ====>'+ JSON.stringify(this.FieldList));
@@ -196,15 +198,15 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
         else if(event.currentTarget.dataset.name == 'submit'){
             
             if(this.verify == true){
+                this.previewactive = false;
+                this.thankyou = true;
             }
             else if(this.verify == false){
-               
                 let toast_error_msg = 'Invalid Captcha';
                 this.template.querySelector('c-toast-component').showToast('error',toast_error_msg,3000);
             }
             else {
                 console.log(this.verify);
-               
                 let toast_error_msg = 'Please Verify Captcha';
                 this.template.querySelector('c-toast-component').showToast('error',toast_error_msg,3000);
             }
