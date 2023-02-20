@@ -77,11 +77,8 @@ export default class NewFormDetails extends NavigationMixin(LightningElement) {
     @track tep3_sec_obj_error_2 = false;
     
     connectedCallback() {
-        
         this.global_options = [];
         this.getParentObject();
-        this.spinnerDataTable = false;
-       
     }
     renderedCallback(){
         // console.log('print to list',this.listto);
@@ -645,7 +642,7 @@ save(event){
                 this.objecterror = false;
                 this.saveerror = true;
                 this.errorModal = true;
-                let toast_error_msg_object = 'Please Select Object';
+                let toast_error_msg_object = 'pls select object first';
                 this.template.querySelector('c-toast-component').showToast('error',toast_error_msg_object,3000); 
             }
         }
@@ -685,7 +682,7 @@ save(event){
                 this.objecterror = false;
                 this.saveerror = true;
                 this.errorModal = true;
-                let toast_error_msg_object = 'Please Select Object';
+                let toast_error_msg_object = 'pls select object first';
                 this.template.querySelector('c-toast-component').showToast('error',toast_error_msg_object,3000); 
             }
     
@@ -725,7 +722,7 @@ save(event){
                 this.objecterror = false;
                 this.saveerror = true;
                 this.errorModal = true;
-                let toast_error_msg_object = 'Please Select Object';
+                let toast_error_msg_object = 'pls select object first';
                 this.template.querySelector('c-toast-component').showToast('error',toast_error_msg_object,3000); 
             }
         }
@@ -733,7 +730,7 @@ save(event){
     else{
         console.log('y r in save else');
         this.isModalOpen_3 = true;
-        let toast_error_msg_object = 'Please Select Template';
+        let toast_error_msg_object = 'pls select template first';
         this.template.querySelector('c-toast-component').showToast('error',toast_error_msg_object,3000); 
     }
 

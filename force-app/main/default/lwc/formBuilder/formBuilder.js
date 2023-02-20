@@ -21,6 +21,7 @@ import Edit_icon from '@salesforce/resourceUrl/Edit_icon';
 import Delete_icon from '@salesforce/resourceUrl/Delete_icon';
 import getFormCSS from '@salesforce/apex/FormBuilderController.getFormCSS';
 import getPageCSS from '@salesforce/apex/FormBuilderController.getPageCSS';
+import getButtonCSS from '@salesforce/apex/FormBuilderController.getButtonCSS';
 import StoreFormStyles from '@salesforce/apex/FormBuilderController.StoreFormStyles';
 import StoreStyles from '@salesforce/apex/FormBuilderController.StoreStyles';
 import right from '@salesforce/resourceUrl/right';
@@ -29,10 +30,21 @@ import dropHere from '@salesforce/resourceUrl/dropHere'
 import deletePage from '@salesforce/apex/FormBuilderController.deletePage';
 import { NavigationMixin } from "lightning/navigation";
 
-export default class FormBuilder extends NavigationMixin(LightningElement) {
+// edit form part imports 
+import Objects_Type from "@salesforce/apex/customMetadata.f_Get_Types";
+import getCaptchatype from '@salesforce/apex/customMetadata.getCaptchatype'; //import get getCaptchatype method from custom Metadata apex class
+import Objects_Type_2 from "@salesforce/apex/customMetadata.Get_Captcha_Types";
+import getProgressindicator from '@salesforce/apex/customMetadata.getProgressindicator'; //import get getProgressindicator method from custom Metadata apex class
+import formDetails from '@salesforce/apex/FormBuilderController.formDetails';
+import pageDetails from '@salesforce/apex/FormBuilderController.pageDetails';
+import updatePage from '@salesforce/apex/FormBuilderController.updatePage';
+import editFormSubmit from '@salesforce/apex/FormBuilderController.editFormSubmit';
+
+
+export default class FormBuilder extends NavigationMixin(LightningElement)  {
 
     
-    @track spinnerDataTable = true;
+    @track spinnerDataTable = false;
     //     icons        // 
     @track homeIcon = HomeIcon;
     designIcon = DesignIcon;
@@ -53,6 +65,8 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
    @track  newFormName = '';
    
     isModalOpen = false;
+    isModalOpen1 = false;
+    isModalOpen2 = false;
 
     @api ParentMessage = '';
     @api FormName = '';
@@ -71,9 +85,10 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
     @track activesidebar = false;
     @track activeNotification = false;
     @track activethankyou = false;
-     activepreview = false;
+    @track activepreview = false;
+    @track activeqf_publish = false;
     @track PageList = [];
-    @track FormTitle = 'tempvlaue';
+    @track FormTitle;
     @track FieldList = [];
    Id = this.ParentMessage;// Change When LMS Service Starts
     // Id='a0B1y00000013pXEAQ'
@@ -83,7 +98,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
     @track index = 0;
     @track newCSS;
     newPageId;
-    @track FormName=this.FormName;
+    @track newMainFormName;
     fieldcount  = 0;
     removeObjFields = [];
     fieldvalidationdiv = false;
@@ -108,9 +123,19 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
             console.log({error});
         })
 
+        getButtonCSS({id:this.ParentMessage})
+        .then(result=>{
+            console.log(result);
+            let str = result;
+            let arr = this.template.querySelectorAll('.btn1');
+            for (let i = 0; i < arr.length; i++){
+                const element = arr[i];
+                element.style = str; 
+            }
+        })
+
         getPageCSS({id:this.ParentMessage})
         .then(result=>{
-            console.log('PAGECSS??');
             console.log(result);
             this.getFieldCSS = result;
             console.log('PageCSS->> '+this.getFieldCSS);
@@ -121,12 +146,13 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
                 console.log(i+'--'+element);
                 element.style = str;
             }
+            this.spinnerDataTable = false;
         }).catch(error=>{
             console.log({error});
+            this.spinnerDataTable = false;
         })
-        this.handlepagecss();
-        var allDiv  = this.template.querySelector('.fieldtab');
-        allDiv.style = 'background-color:#b3cce6';
+
+        
     }
 
     get isIndexZero() {
@@ -180,8 +206,10 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
                 console.log(i+'--'+element);
                 element.style = str;
             }
+            // this.spinnerDataTable = false;
         }).catch(error=>{
             console.log({error});
+            // this.spinnerDataTable = false;
         })
     }
 
@@ -197,6 +225,31 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
         }).catch(error=>{
             console.log({error});
         })
+        // this.spinnerDataTable = false;
+    }
+
+    handlebtnpos(event){
+        var str = event.detail;
+        console.log('btnpost :- '+str);  
+        let Arr = this.template.querySelectorAll(".footer");
+        console.log('Arr btn pos:- '+Arr.length);
+        for (let i = 0; i < Arr.length; i++) {
+            const element = Arr[i];
+            console.log(i+'--'+{element});
+            element.style = str;
+        }
+    }
+
+    handlebtncss(event){
+        var str = event.detail;
+        console.log('btnpost :- '+str);  
+        let Arr = this.template.querySelectorAll(".btn1");
+        console.log('Arr btn pos:- '+Arr.length);
+        for (let i = 0; i < Arr.length; i++) {
+            const element = Arr[i];
+            console.log(i+'--'+{element});
+            element.style = str;
+        }
     }
 
     handlenewCSS(event){
@@ -215,6 +268,8 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
     }
 
     connectedCallback() {
+
+        this.spinnerDataTable = true;
         console.log('Parent Massage :- '+this.ParentMessage);
         console.log('FormId :- '+this.FormId);
         console.log('FormName :- '+this.FormName);
@@ -237,14 +292,15 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
                 this.setPageField(result);
                  
                 console.log(this.FieldList.length);
+                var allDiv  = this.template.querySelector('.fieldtab');
+                allDiv.style = 'background-color:#b3cce6;';
             })
             .catch(error => {
                 console.log(error);
+                var allDiv  = this.template.querySelector('.fieldtab');
+                allDiv.style = 'background-color:#b3cce6;';
             });
-        this.spinnerDataTable = false;
         this.activesidebar = true;
-
-        
 
     }
     //  @wire(getFieldsRecords)
@@ -261,28 +317,26 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
 
         this.tab = event.currentTarget.dataset.title;
         console.log('inside onclick'); 
-
+        var divid = '.'+event.currentTarget.dataset.title;
 
         var allDiv  = this.template.querySelectorAll('.sidebar');
         var temp111 = this.template.querySelectorAll('.pageButtonMenu');
         console.log(temp111.length);
         console.log(allDiv.length);
         for(var i=0;i<allDiv.length;i++){
-            if( event.currentTarget.id==allDiv[i].id){
-                console.log(allDiv[i].id);
-             allDiv[i].style = 'background-color:#b3cce6';
-            }
-            else{
                 allDiv[i].style  = 'background-color:none';
             }
-        }
+        var Div = this.template.querySelector(divid);
+        console.log(Div);
+        Div.style = 'background-color:#b3cce6'
         
-         console.log(event.currentTarget.title);
+         console.log(event.currentTarget.dataset.title);
+         console.log('check if condition-=->');
        if (event.currentTarget.dataset.title == 'tab-1'){
+        console.log('tab-1 if ..');
         let cmpDef = {
-            componentDef: "c:qf_home"
+            componentDef: "c:qf_home",
         };
-        
         let encodedDef = btoa(JSON.stringify(cmpDef));
         this[NavigationMixin.Navigate]({
             type: "standard__webPage",
@@ -313,6 +367,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
 
            console.log('in the if condition');
            this.activepreview = false;
+           this.activeqf_publish = false;
            this.activeDropZone = true;
            console.log(this.activeDropZone);
        }
@@ -325,6 +380,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
            this.activeNotification = true;
            this.activethankyou = false;
            this.activepreview = false;
+           this.activeqf_publish = false;
            this.fieldvalidationdiv = false;
        }
 
@@ -335,6 +391,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
            this.activeNotification = false;
            this.activethankyou = true;
            this.activepreview = false;
+           this.activeqf_publish = false;
            this.fieldvalidationdiv = false;
        }
        else if (event.currentTarget.dataset.title == 'tab-6') {
@@ -344,10 +401,12 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
         this.activeNotification = false;
         this.activethankyou = false;
         this.activepreview = false;
+        this.activeqf_publish = false;
         this.fieldvalidationdiv = false;
     }
     else if (event.currentTarget.dataset.title == 'tab-7') {
-        this.activepreview = true
+        this.activepreview = true;
+        this.activeqf_publish = false;
         this.activeDesignsidebar = false;
         this.activesidebar = false;
         this.activeDropZone = false;
@@ -363,6 +422,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
         this.activeNotification = false;
         this.activethankyou = false;
         this.activepreview = false;
+        this.activeqf_publish = true;
         this.fieldvalidationdiv = false;
     }
 
@@ -665,65 +725,6 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
       console.log('after for loop-->');
          this.count=count1 ;
     }
-         
-
-    handleFormCss2(event){
-        let Name = event.target.dataset.name;
-        let value = event.target.value;
-        if(Name == 'width:' || Name == 'padding-top:' || Name == 'padding-bottom:' || Name == 'padding-left:' || Name == 'padding-right:'){
-          value += '%';
-        }
-        console.log('Name->'+Name);
-        console.log('value->'+value);
-        let str = Name+value+';';
-        StoreFormStyles({Value: str, id:this.ParentMessage})
-        .then(result=>{
-          console.log(result);
-          let array = this.template.querySelector('.myform');
-        let str = result;
-        array.style=str;
-          console.log('after queryselector');
-        }).catch(error=>{
-          console.log(error);
-        })
-      }
-
-      handleFieldCss(event){
-        let Name = event.target.dataset.name;
-        let value = event.target.value;
-        let str='';
-        if(Name == 'padding1'){
-          str = 'padding-left:'+value+';padding-right'+value+';'; 
-        }
-        else if(Name == 'padding2'){
-          str = 'padding-bottom:'+value+';padding-top'+value+';';
-        }
-        else{
-          if(Name == 'font-size:' || Name == 'border-width:' || Name == 'border-radius:'){
-            value += 'px';
-          }
-          console.log('Name->'+Name);
-          console.log('value->'+value);
-          str = Name+value+';';
-        }
-        console.log('OUTPUT : ',str);
-        StoreStyles({Value: str, id:this.ParentMessage})
-        .then(result=>{
-          console.log(result);
-          console.log(this.template.querySelectorAll('input'));
-            let array = this.template.querySelectorAll('input');
-            console.log(array.length);
-            let str = result;
-            for (let i = 0; i < array.length; i++) {
-                const element = array[i];
-                element.style=str;
-            }
-            this.template.querySelector('select').style = str;
-          console.log('after queryselector');
-        }).catch(error=>{
-          console.log(error);
-        })
-      }
     editPageName(event){
         this.newFormName = event.currentTarget.dataset.record;
         console.log(event.target.dataset.record);
@@ -776,50 +777,76 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
   }
 
     handleeditForm(event){
-        this.newFormName = event.currentTarget.dataset.record;
-        console.log(event.target.dataset.record);
+        // this.newFormName = event.currentTarget.dataset.record;
+        // console.log(event.target.dataset.record);
         console.log('inside the editpage-->');
+        console.log('id----------------->' + this.ParentMessage);
+         this.isModalOpen = true;
+         console.log('method calles');
+         formDetails({id:this.ParentMessage}).then(result=>{
+             console.log('handleeditForm-------->' + result);
+             this.FormDetails = result;
+             console.log('formDetails called');
+             if(this.FormDetails.Name!=null){
+                this.formtitle = this.FormDetails.Name;
+                this.FormName = this.FormDetails.Name;
+             }
+             if(this.FormDetails.hasOwnProperty("Captcha_Type__c")){
+                console.log(this.FormDetails.Captcha_Type__c);
 
-        this.template.querySelector("div[data-record-id ="+event.currentTarget.dataset.id+"]").style.display='none';   
-        this.template.querySelector("div[data-name ="+event.currentTarget.dataset.id+"]").style.display='flex';
-        // document.addEventListener('click', this.outsideClick = this.cancleRenameForm.bind(this));
-        event.stopPropagation();
-        return false;
+                this.captchTypeparent = this.FormDetails.Captcha_Type__c;
+                this.template.querySelector('c-captcha-type').preview_chptchatype(this.captchTypeparent);
     }
-
-
-    renameMainForm(event){
-        // console.log(String.fromCharCode(event.keyCode));
-        console.log('inside the rename Form--->>>');
-        this.template.querySelector("div[data-record-id ="+event.currentTarget.dataset.id+"]").style.display='block';   
-        console.log('qury selectro one =>>>');
-        this.template.querySelector("div[data-name ="+event.currentTarget.dataset.id+"]").style.display='none';
-       console.log('query selector executed suc=>>>');
-        if(this.newFormName.length > 0 && this.newFormName.replaceAll(' ', '').length > 0){
-        renameMainform({rename : this.FormName,FormId:this.ParentMessage}).then(result => {
-          this.FormName = result;
+             else{
+                console.log('in none');
+                this.captchTypeparent = 'None';
+             }
+             if(this.FormDetails.hasOwnProperty("Progress_Indicator__c")){
+                console.log('inside the hasownPorperty');
+              this.Progressbarvalue =  this.FormDetails.Progress_Indicator__c;
+              this.template.querySelector('c-progress-indicator').tesmethod(this.Progressbarvalue);
+             }
+             else{
+                this.Progressbarvalue = 'None';
+             }
         }).catch(err=>{
             console.log(err);
         })
-      
-      
     }
-  }
-  renamemain(event){
-    console.log('inside on change-->');
-    console.log(event.target.value);
-    this.FormName = event.target.value;
-  }
+      
+      
+//     renameMainForm(event){
+//         // console.log(String.fromCharCode(event.keyCode));
+//         console.log('inside the rename Form--->>>');
+//         this.template.querySelector("div[data-record-id ="+event.currentTarget.dataset.id+"]").style.display='block';   
+//         console.log('qury selectro one =>>>');
+//         this.template.querySelector("div[data-name ="+event.currentTarget.dataset.id+"]").style.display='none';
+//        console.log('query selector executed suc=>>>');
+//         if(this.newFormName.length > 0 && this.newFormName.replaceAll(' ', '').length > 0){
+//         renameMainform({rename : this.newMainFormName,FormId:this.ParentMessage}).then(result => {
+//           this.newMainFormName = result;
+//         }).catch(err=>{
+//             console.log(err);
+//         })
 
-  cancleRenameMainForm(event){
 
-//this.pencheck = false;
-    //document.removeEventListener('click', this.outsideClick);
-    console.log('inside canleRenameForm');
-    this.template.querySelector("div[data-record-id ="+event.currentTarget.dataset.id+"]").style.display='block';   
-    this.template.querySelector("div[data-name ="+event.currentTarget.dataset.id+"]").style.display='none';
+//     }
+//   }
+//   renamemain(event){
+//     console.log('inside on change-->');
+//     console.log(event.target.value);
+//     this.newMainFormName = event.target.value;
+//   }
 
-  }
+//   cancleRenameMainForm(event){
+
+// //this.pencheck = false;
+//     //document.removeEventListener('click', this.outsideClick);
+//     console.log('inside canleRenameForm');
+//     this.template.querySelector("div[data-record-id ="+event.currentTarget.dataset.id+"]").style.display='block';   
+//     this.template.querySelector("div[data-name ="+event.currentTarget.dataset.id+"]").style.display='none';
+
+//   }
 
 
 
@@ -827,7 +854,91 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
 
 
     handleAddPage(){
-        createPage({totalPages:this.PageList.length, formId:this.ParentMessage}).then(result=>{
+        console.log('total pages--------->' + this.PageList.length);
+        console.log('handle add page............');
+        this.isModalOpen1 = true;
+        // createPage({totalPages:this.PageList.length, formId:this.ParentMessage}).then(result=>{
+        //     this.FieldList = result.fieldList;
+        //     console.log('inside the result in page break-->');
+        //     console.log(result);
+        //     this.PageList = result.pageList;
+        //     this.setPageField(result.fieldList);
+        //     this.showToast('Form Page create Successfully','success');
+        // }).catch(err=>{
+        //     console.log({err});
+        // })
+    }
+    pageeeee
+    @track pagetitle ;
+    @track pagenumber ;
+    @track pagetitle2 ;
+    @track pagenumber2 ;
+    openmodal2(event){
+        console.log('openmodel2 is called...............');
+        this.isModalOpen2 = true;
+        console.log('form id---------->' + this.ParentMessage);
+        console.log('page id----------->' + event.currentTarget.dataset.id);
+        this.IdId = event.currentTarget.dataset.id;
+        pageDetails({FormId: this.ParentMessage, PageId:event.currentTarget.dataset.id}).then(result=>{
+            console.log('page detail result ---------->' + result);
+            this.PageDetails = result;
+          
+            if(this.PageDetails.Name!=null){
+               this.pagetitle2 = this.PageDetails.Name;
+               console.log('pagetitle2------------->' + this.pagetitle2);
+            }
+            if(this.PageDetails.hasOwnProperty("Page_Number__c")){
+              
+              
+               this.pagenumber2 = this.PageDetails.Page_Number__c;
+               this.pageeeee = this.PageDetails.Page_Number__c;
+               console.log('pagenumber2------------>' + this.pagenumber2);
+              
+            }
+        }).catch(err=>{
+           console.log(err);
+        })
+    }
+    changePageTitle(event){
+        this.pagetitle = event.target.value;
+        console.log('Page Title :- '+this.pagetitle);
+    }
+    changePageTitle2(event){
+        // this.IdId = event.currentTarget.dataset.id
+        this.pagetitle2 = event.target.value;
+        console.log('Page Title2 :- '+this.pagetitle2);
+        // console.log('IdId :- '+this.IdId);
+    }
+    changePageNo(event){
+        this.pagenumber = event.target.value;
+        console.log('Page Number :- '+this.pagenumber);
+    }
+    changePageNo2(event){
+        this.pagenumber2 = event.target.value;
+        console.log('Page Number2 :- '+this.pagenumber2);
+    }
+    handleeditPage(event){
+        console.log('page id----------->' + this.IdId);
+        console.log('pageTitle2----------->' + this.pagetitle2);
+        console.log('pageNumber2----------->' + this.pagenumber2);
+        if (this.pagenumber2 < this.pageeeee) {
+            this.pagenumber2 = this.pagenumber2 - 1;
+        }
+        updatePage({formId:this.ParentMessage, pageId:this.IdId , pageTitle:this.pagetitle2, pageNumber:this.pagenumber2}).then(result=>{
+            this.FieldList = result.fieldList;
+            console.log('inside the result in page break-->');
+            console.log(result);
+            this.PageList = result.pageList;
+            this.setPageField(result.fieldList);
+            this.showToast('Form Page updated Successfully','success');
+        }).catch(err=>{
+            console.log({err});
+        })
+        this.isModalOpen2 = false;
+    }
+    handlecreatePage(){
+        console.log('total pages--------->' + this.PageList.length);
+        createPage({pageNumber:this.pagenumber, totalPages:this.PageList.length, formId:this.ParentMessage, pagename:this.pagetitle}).then(result=>{
             this.FieldList = result.fieldList;
             console.log('inside the result in page break-->');
             console.log(result);
@@ -837,8 +948,23 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
         }).catch(err=>{
             console.log({err});
         })
+        this.isModalOpen1 = false;
+        this.handleModalClose();
     }
+    handleModalClose() {
+        this.pagetitle = '';
+        this.pagenumber = null;
+    }
+    closeModal1(){
+        this.isModalOpen1 = false;
+    }
+    closeModal2(){
+        this.isModalOpen2 = false;
+    }
+    
+
     deletePage(event){
+        console.log('deleting---------------->' + event.currentTarget.dataset.record);
       deletePage({FormId:this.ParentMessage,PageId:event.currentTarget.dataset.record}).then(result=>{
         this.FieldList = result.fieldList;
         console.log('inside the result in page break-->');
@@ -861,23 +987,203 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
         });
         this.dispatchEvent(event);
     }
-    renderedCallback() {
-        console.log('inside the renderedcallBack--->>>');
-        console.log(this.removeObjFields.length);
-        this.tempararyfun();
    
+    startspinner(event){
+        this.spinnerDataTable = true;
+        console.log('Spinner Start');
     }
     
-    openfieldvalidation(event){
+    @track formtitle ; 
+    @track description;
+    @track ispreview_show_msg_captcha = true;
+    @track ispreview_show_msg = false;
+    @track pi = true;
+    @track ct = true;
+    @track l_All_Types;
+    @track TypeOptions;
+    @track FormDetails;
+    @track PageDetails;
+    @wire(getProgressindicator) records;
+    @wire(getCaptchatype) captcharecords;
+    @track l_All_Types_2;
+    @track TypeOptions_2;
+    @track Progressbarvalue;
+    @track captchTypeparent;
+  
+    @track global_options
+    changeFormTitle(event){
+        this.formtitle = event.target.value;
+        console.log('Form Title :- '+this.formtitle);
+        this.isModalOpen_2 = false;
+        // alert('hiiii :- '+this.formtitle);
+    }
+    
 
-        if(this.fieldvalidationdiv == false){
+    changeDescription(event){
+        this.description = event.target.value;
+        console.log('Form Title :- '+this.description);
+
+    }
+    
+    changeProgressIndicator(event){
+        try{
+        this.Progressbarvalue = event.detail.value; 
+        if (this.Progressbarvalue == 'None') {
+            this.ispreview_show_msg = true;
+            this.pi = false; 
+            // console.log('test :- ',event.target.value);
+        }
+        else{   
+            console.log('you are in Progressbar component');
+            this.ispreview_show_msg = false;
+            this.pi = true;
+            // alert('hiii');
+            // console.log('test :- ',event.target.value);
+            this.template.querySelector('c-progress-indicator').tesmethod(this.Progressbarvalue);
+        }
+    
+    } catch (error) {
+            console.error('check error here', error);
+            console.log({error});
+        }
+        
+        
+      
+    }
+
+    changeCaptchaType(event){
+        try{
+            this.captchTypeparent = event.detail.value; 
+            console.log(this.captchTypeparent);
+            if (this.captchTypeparent == 'None') {
+                this.testtest = true;
+                this.ct = false; 
+                // console.log('test :- ',event.target.value);
+                // this.template.querySelector('c-captcha-type').preview_chptchatype(this.captchTypeparent);
+            }
+            else{   
+                console.log('you are in Progressbar component');
+                this.testtest = false;
+                this.ct = true;
+                // alert('hiii');
+                // console.log('test :- ',event.target.value);
+                console.log("loggggggggg of query---->"+this.template.querySelector('c-captcha-type'));
+                this.template.querySelector('c-captcha-type').preview_chptchatype(this.captchTypeparent);
+            }
+        
+        } catch (error) {
+                console.error('check error here', error);
+                console.log({error});
+            }
+       
+    } 
+
+    @wire(Objects_Type, {})
+    WiredObjects_Type_2({ error, data }) {
+ 
+        if (data) {
+            console.log('test :- ', data);
+            try {
+                this.l_All_Types = data; 
+                let options = [];
+                 
+                for (var key in data) {
+                    // Here key will have index of list of records starting from 0,1,2,....
+                    options.push({ sr: data[key].sr__c, label: data[key].Label, value: data[key].DeveloperName  });
+ 
+                    // Here Name and Id are fields from sObject list.
+                }
+                // this.TypeOptions = options;
+                this.TypeOptions = options.sort(
+                    (teamA, teamB) => teamA.sr - teamB.sr,
+                  )
+
+                console.log('sort > ',this.TypeOptions);
+                 
+            } catch (error) {
+                console.error('check error here', error);
+            }
+        } else if (error) {
+            console.error('check error here', error);
+        }
+ 
+    }
+
+    @wire(Objects_Type_2, {})
+    WiredObjects_Type({ error, data }) {
+ 
+        if (data) {
+            
+            console.log('ch test :- ', data);
+            try {
+                this.l_All_Types_2 = data; 
+                 
+                let options_2 = [];
+                 
+                for (var key in data) {
+                    // Here key will have index of list of records starting from 0,1,2,....
+                    options_2.push({ sr: data[key].sr__c, label: data[key].Label, value: data[key].DeveloperName  });
+ 
+                    // Here Name and Id are fields from sObject list.
+                }
+                // this.TypeOptions_2 = options_2;
+                console.log('before sort > ',this.TypeOptions_2);
+                this.TypeOptions_2 = options_2.sort(
+                    (teamA, teamB) => teamA.sr - teamB.sr,
+                  )
+                console.log('sort > ',this.TypeOptions_2);
+                // console.log('TypeOptions_2:- ',this.TypeOptions_2);
+                 
+            } catch (error) {
+                console.error('check error here', error);
+            }
+        } else if (error) {
+            console.error('check error here', error);
+        }
+ 
+    }
+
+    closeModal() {
+        // to close modal set isModalOpen tarck value as false
+        // this.isModalOpen = false;
+        // alert('you in close Modal');
+this.isModalOpen  = false;
+    }
+    submitDetails() {
+        // to close modal set isModalOpen tarck value as false
+        //Add your code to call apex method or do some processing
+        console.log('submit edit form ..........');
+        console.log('form id------->' + this.ParentMessage);
+        console.log('form name------->' + this.formtitle);
+        console.log('form progressIn------->' + this.Progressbarvalue);
+        console.log('form captcha------->' + this.captchTypeparent);
+        this.FormName = this.formtitle;
+        editFormSubmit({ id:this.ParentMessage, name:this.formtitle, progressIn : this.Progressbarvalue, captcha : this.captchTypeparent}).then(result=>{
+            console.log('editformsubmit result ------->' + result);
+            const event = new ShowToastEvent({
+                title: 'Form Changes Done Successfully',
+                variant: 'success',
+                mode: 'dismissable'
+            });
+            this.dispatchEvent(event);
+        
+        }).catch(err=>{
+            console.log('editformsubmit error' + err);
+        });
+       this.isModalOpen = false;        
+    }
+
+    openfieldvalidation(event){
+    
         this.fieldId = event.currentTarget.dataset.id;
         this.fieldName = event.currentTarget.dataset.fieldName;
         this.activesidebar = false;
         this.activeDesignsidebar = false
         this.fieldvalidationdiv = true;
-        }
-    // this.template.querySelector('c-field-validation').fieldvalidation(this.tab,this.fieldId,fieldName);
+        this.template.querySelector('.fieldvalidationdiv').style="display:block;";
+        this.template.querySelector('c-field-validation').openvalidation(this.tab,this.fieldId,this.fieldName);
+        
+    // this.template.querySelector('c-field-validation').openvalidation(this.tab,this.fieldId,fieldName);
     }
     closevalidation(event){
         if(event.detail == 'tab-2'){
@@ -885,14 +1191,14 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
             this.activeDesignsidebar = false;
             this.activeNotification = false;
             this.activethankyou = false;
-            this.fieldvalidationdiv = false;
+            this.template.querySelector('.fieldvalidationdiv').style="display:none;";
         }
         else if(event.detail == 'tab-3'){
             this.activeDesignsidebar = true;
             this.activesidebar = false;
             this.activeNotification = false;
             this.activethankyou = false;
-            this.fieldvalidationdiv = false;
+            this.template.querySelector('.fieldvalidationdiv').style="display:none;";
         }
     }
 }

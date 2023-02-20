@@ -7,7 +7,6 @@
 -->
 <template>
     <div class="main">
-        <!-- spinner -->
         <template if:true={spinnerDataTable}>
             <div data-id="spinnerId" class="slds-spinner_container"
                 style="overflow: hidden;">
@@ -19,7 +18,6 @@
                 </div>
             </div>
         </template>
-        <!-- spinner -->
         <c-toast-component></c-toast-component>
         <div class="notification_titel">
             <div class="titel">NOTIFICATION</div>
@@ -29,26 +27,110 @@
                 <div class="slds-grid slds-wrap">
                     <div class="slds-col slds-size_2-of-12">
                         <!-- <div class="input_label"></div> -->
-                        <label class="input_label"><abbr>*</abbr>TO</label>
+                        <label class="input_label"><abbr>*</abbr>To</label>
+                        <!-- <div if:true={open_addcc_label} class="addcc_addbcc" onclick={open_add_cc}><img class="puls_icon" src={pulsicon_img}> Add Cc</div>
+                        <div if:true={open_addbcc_label} class="addcc_addbcc" onclick={open_add_bcc}><img class="puls_icon" src={pulsicon_img}> Add bcc</div> -->
                     </div>
                     <div class="slds-col slds-size_10-of-12">
                         <div class="">
                             <!-- <input class="input_box" type="text" onfocusout={emailto}> -->
                             <!-- <lightning-input variant="label-hidden" class="input_box" type="text"></lightning-input> -->
-                            <c-email-input onselection={handleToAddressChange}
-                                        onremoveerrormessage={remove_error_msg} ></c-email-input>
+                            <!-- <c-email-input onselection={handleToAddressChange}
+                                        onremoveerrormessage={remove_error_msg} ></c-email-input> -->
+                                        <div class="slds-combobox_container">
+                                            <div class={boxClass}>
+                                                <div class="slds-combobox__form-element slds-has-focus">
+                                                    <lightning-input class="input2" variant="label-hidden" id="to" type="text" placeholder="Enter Email" 
+                                                        onkeyup={handleInputChange}
+                                                        onfocusout={handleKeyPress}
+                                                        onkeypress={handleKeyPress}
+                                                        onblur={handleKeyPress}></lightning-input>
+                                                        <div class="email_error_msg" if:true={email_msg}>Please Enter Valid Email Details..!</div>
+                                                    <template for:each={selectedValues} for:item="selectedValue" for:index="index">
+                                                        <lightning-pill class="pill" id={pillid} 
+                                                            key={selectedValue}
+                                                            label={selectedValue}
+                                                            onremove={handleRemove}
+                                                            data-index={index}
+                                                        ></lightning-pill>
+                                                    </template>
+                                                </div>
+                                                <!-- <div class="addcc_addbcc_main">
+                                                    <div if:true={open_addcc_label} class="addcc_addbcc" onclick={open_add_cc}><img class="puls_icon" src={pulsicon_img}> Add Cc</div>
+                                                    <div if:true={open_addbcc_label} class="addcc_addbcc" onclick={open_add_bcc}><img class="puls_icon" src={pulsicon_img}> Add bcc</div>
+                                                </div> -->
+                                            </div>
+                                        </div>
                             <div class="error_msg" if:true={required_to}>Please Enter Email</div>
                         </div>
                     </div>
                 </div>
-                <div class="slds-grid slds-wrap">
+                <div if:true={open_addcc} class="slds-grid slds-wrap">
                     <div class="slds-col slds-size_2-of-12">
                         <div class="input_label">Add CC</div>
                     </div>
                     <div class="slds-col slds-size_10-of-12">
                         <div class="">
-                            <c-email-input-c-c onselection={handleCcAddressChange}></c-email-input-c-c>
+                            <!-- <c-email-input-c-c onselection={handleCcAddressChange}></c-email-input-c-c> -->
+                            <div class="slds-combobox_container">
+                                <div class={boxClass}>
+                                    <div class="slds-combobox__form-element slds-has-focus">
+                                        <lightning-input class="input3" variant="label-hidden"  type="text" placeholder="Enter Email" 
+                                            onfocusout={handleKeyPress_2}
+                                            onkeypress={handleKeyPress_2}
+                                             ></lightning-input>
+                                            <div class="email_error_msg" if:true={email_msg_cc}>Please Enter Valid Email Details..!</div>
+                                        <template for:each={selectedValues_2} for:item="selectedValue" for:index="index">
+                                            <lightning-pill class="pill" id={pillid} 
+                                                key={selectedValue}
+                                                label={selectedValue}
+                                                onremove={handleRemove_2}
+                                                data-index={index}
+                                            ></lightning-pill>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                </div>
+                <div if:true={open_addbcc}   class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_2-of-12">
+                        <div class="input_label">Add Bcc</div>
+                    </div>
+                    <div class="slds-col slds-size_10-of-12">
+                        <div class="">
+                            <!-- <c-email-input-c-c onselection={handleCcAddressChange}></c-email-input-c-c> -->
+                            <div class="slds-combobox_container">
+                                <div class={boxClass}>
+                                    <div class="slds-combobox__form-element slds-has-focus">
+                                        <lightning-input class="input4" variant="label-hidden"  type="text" placeholder="Enter Email" 
+                                            onfocusout={handleKeyPress_3}
+                                            onkeypress={handleKeyPress_3}
+                                             ></lightning-input>
+                                            <div class="email_error_msg" if:true={email_msg_bcc}>Please Enter Valid Email Details..!</div>
+                                        <template for:each={selectedValues_3} for:item="selectedValue" for:index="index">
+                                            <lightning-pill class="pill" id={pillid} 
+                                                key={selectedValue}
+                                                label={selectedValue}
+                                                onremove={handleRemove_3}
+                                                data-index={index}
+                                            ></lightning-pill>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div if:true={open_addcc_and_addbcc} class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_2-of-12">
+                        <div class="addcc_addbcc_main">
+                            <div if:true={open_addcc_label} class="addcc_addbcc" onclick={open_add_cc}><img class="puls_icon" src={pulsicon_img}> Add Cc</div>
+                            <div if:true={open_addbcc_label} class="addcc_addbcc" onclick={open_add_bcc}><img class="puls_icon" src={pulsicon_img}> Add bcc</div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_10-of-12">
                     </div>
                 </div>
                 <div class="slds-grid slds-wrap">

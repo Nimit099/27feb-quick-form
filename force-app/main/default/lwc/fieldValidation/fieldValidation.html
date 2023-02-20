@@ -293,9 +293,13 @@
 
             <!-- FULL NAME -->
         <template if:true={fields.QFFULLNAME}>
-            <div class="textlabel">Options</div>
+            <!-- <template for:each={validatios} for:item="valid"> -->
+                <!-- <div key={valid.isRequired}> -->
+
+              
+            <div class="textlabel" >Options</div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Disable Field" checked={isdisabledcheck} message-toggle-active="" message-toggle-inactive="" onchange={isdisabled}></lightning-input>
+                <lightning-input type="toggle" label="Disable Field" checked ={validation.isRequired} message-toggle-active="" message-toggle-inactive="" onchange={isdisabled}></lightning-input>
             </div>
             <div class="textlabel">Salutation</div>
             <template for:each={salutations} for:item="fields">
@@ -307,6 +311,8 @@
             <div class="Itembutton">
                 <lightning-button icon-name="utility:add" title="Add" onclick={addsalutation}></lightning-button>
             </div>
+        <!-- </div>
+    </template> -->
         </template>
 
             <!-- NAME -->

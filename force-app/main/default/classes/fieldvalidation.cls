@@ -6,6 +6,8 @@ public with sharing class fieldvalidation {
     public static String getfieldvalidation(Id fieldId){
         try {
             Form_Fields__c fieldvalidation = [SELECT Id,Field_Validations__c FROM Form_Fields__c WHERE Id =: fieldId ];
+            System.debug(fieldvalidation);
+         
             return fieldvalidation.Field_Validations__c;
 
         } catch (Exception e) {

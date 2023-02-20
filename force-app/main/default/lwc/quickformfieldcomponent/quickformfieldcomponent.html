@@ -165,7 +165,7 @@
             <!--RATING-->
     <template if:true={isTrueRating}>
         <template if:true={isFieldCompView}>
-            <div class="slds-box_xx-small fieldOutlines">
+            <div class="slds-box_xx-small">
                 <lightning-icon class="icon" icon-name="utility:rating" alternative-text="Rating" title="Rating"
                     size="small"></lightning-icon> Star Rating
             </div>
@@ -246,26 +246,28 @@
 
     <template if:true={hasType}>
         <div onmouseenter={FieldCSSUpdate}>
-        <template if:true={FieldShown}>
-            <template if:true={LabelShown}>
-                <template if:true={isReqired}>
-            <label>
-             <label class="slds-form-element_label">
-                <abbr class="slds-required" title="required">* </abbr>
-             </label>
-                            <label class="slds-form-element__label flabel">
-                 {FieldLabel}
-                </label>
-                        <lightning-helptext class="helptxt" content={fieldHelpText}></lightning-helptext>
-                            <div onmouseover={handlehover} onmouseout={handleblur} onfocus={handlefocus} onfocusout={handleblur1} class="slds-form-element__control">
-                                <input  placeholder={placeHolder} type={FieldType} value=""
-                            onclick={OnFieldClick} class="slds-input" />
-                  </div>
-                        <!-- <lightning-input class={fieldId} ></lightning-input> -->
-             </label>
+            <template if:true={FieldShown}>
+                <template if:true={LabelShown}>
+                    <template if:true={isReqired}>
+                        <label>
+                            <div class="flabel">
+                                <label class="slds-form-element_label">
+                                    <abbr class="slds-required" title="required">* </abbr>
+                                </label>
+                                <label class="slds-form-element__label">
+                                    {FieldLabel}
+                                </label>
+                                <lightning-helptext class="helptxt slds-popover--tooltip " content={fieldHelpText}></lightning-helptext>
+                            </div>
+                            <div  class="slds-form-element__control">
+                                <input onmousemove={handlehover} onmouseout={handleblur} onfocusin={handlefocus} onblur={handleblur1} placeholder={placeHolder} type={FieldType} value=""
+                                onclick={OnFieldClick} class="slds-input" />
+                            </div>
+                            <!-- <lightning-input class={fieldId} ></lightning-input> -->
+                        </label>
+                    </template>
                 </template>
             </template>
-        </template>
         </div>
     </template>
  <template if:false={hasType}>
@@ -281,7 +283,7 @@
                 </label>
                 </template>
                 
-                    <label class="slds-form-element__label flabel">
+                    <label class="slds-form-element__label ">
                             Email {count}
                     </label>
               </template>  
@@ -290,7 +292,7 @@
                     <!-- <lightning-input class={fieldId} ></lightning-input> -->
                         <div class="slds-form-element__control">
                             <input placeholder={placeHolder} type="email"
-                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" disabled
+                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" 
                            onclick={OnFieldClick} class="slds-input" />
                           </div>
       </template>
@@ -308,16 +310,16 @@
                         </label>
                         </template>
                         
-                            <label class="slds-form-element__label flabel">
+                            <label class="slds-form-element__label ">
                             Full Name {count}
                             </label>
                       </template>  
                 
                     <lightning-helptext class="helptxt" content={fieldHelpText}></lightning-helptext>
                     <div class="fullname" id={PageId}>
-                        <div class="slds-form-element__control">
+                        <div class="slds-form-element__control fullnamewidth">
                             <div class="slds-select_container">
-                              <select class="slds-select" id="select-01" disabled onchange={salutationValue}>
+                              <select class="slds-select" id="select-01" onchange={salutationValue}>
                             <option value=""> --None-- </option>
                                 <!-- <template for:each={dropOptions} for:item="value">
                                 <option value={value.Id} key={value.Id}>{value.label}</option>
@@ -326,21 +328,21 @@
                         </select>
                             </div>
                           </div>
-                        <!-- <lightning-select disabled onchange={salutationValue}>
+                        <!-- <lightning-select onchange={salutationValue}>
                             
                         </lightning-select> -->
-                        <div class="slds-form-element__control">
-                            <input  placeholder="First Name" disabled
+                        <div class="slds-form-element__control fullnamewidth">
+                            <input  placeholder="First Name"
               
                             onclick={OnFieldClick} class="slds-input" />
                           </div>
-                          <div class="slds-form-element__control">
-                            <input placeholder="Last Name" disabled
+                          <div class="slds-form-element__control fullnamewidth">
+                            <input placeholder="Last Name"
                       
                             onclick={OnFieldClick} class="slds-input" />
                           </div>
                         <!-- <lightning-input aura:id="FirstName"</lightning-input> -->
-                        <!-- <lightning-input aura:id="LastName" placeholder="Last Name" disabled
+                        <!-- <lightning-input aura:id="LastName" placeholder="Last Name"
                             onclick={OnFieldClick}></lightning-input> -->
                     </div>
         
@@ -360,17 +362,17 @@
                     </label>
                     </template>
                     
-                        <label class="slds-form-element__label flabel">
+                        <label class="slds-form-element__label ">
                             Name {count}
                         </label>
                   </template>  
             
                     <lightning-helptext class="helptxt" content={fieldHelpText}></lightning-helptext>
    <div class="slds-form-element__control">
-            <input placeholder="Name" disabled
+            <input placeholder="Name"
             onclick={OnFieldClick} class="slds-input" ></input>
           </div>
-                    <!-- <lightning-input placeholder="Name" disabled onclick={OnFieldClick}></lightning-input> -->
+                    <!-- <lightning-input placeholder="Name" onclick={OnFieldClick}></lightning-input> -->
        
           </template>
           </template>
@@ -387,15 +389,17 @@
                             </label>
                         </template>
 
-                        <label class="slds-form-element__label flabel">
+                        <label class="slds-form-element__label ">
                             {Address} {count}
+                        </label>
+                        <label>
+                            <lightning-helptext class="helptxt" content={fieldHelpText}></lightning-helptext>
                         </label>
                     </template>
 
-                    <lightning-helptext class="helptxt" content={fieldHelpText}></lightning-helptext>
                     <lightning-input-address street-placeholder="Street" city-placeholder="City"
                         country-placeholder="Country" province-placeholder="Region" postal-code-placeholder="PostalCode"
-                        disabled onclick={OnFieldClick}></lightning-input-address>
+                         onclick={OnFieldClick}></lightning-input-address>
 
                 </template>
             </template>
@@ -413,15 +417,15 @@
                             </label>
                         </template>
 
-                        <label class="slds-form-element__label flabel">
+                        <label class="slds-form-element__label ">
                             Short Text {count}
                         </label>
                     </template>
 
                     <lightning-helptext class="helptxt" content={fieldHelpText}></lightning-helptext>
-                    <lightning-input class={fieldId} placeholder={placeHolder} type="text" value=""
-                        pattern={fieldValidations} disabled message-when-pattern-mismatch={fieldAttributeValue}
-                        onclick={OnFieldClick}></lightning-input>
+                    <input class={fieldId} placeholder={placeHolder} type="text" value=""
+                        pattern={fieldValidations}  message-when-pattern-mismatch={fieldAttributeValue}
+                        onclick={OnFieldClick}></input>
 
                 </template>
             </template>
@@ -440,15 +444,15 @@
                             </label>
                         </template>
 
-                        <label class="slds-form-element__label flabel">
+                        <label class="slds-form-element__label ">
                             Long Text {count}
                         </label>
                     </template>
 
                     <lightning-helptext class="helptxt" content={fieldHelpText}></lightning-helptext>
-                    <lightning-textarea class={fieldId} placeholder={placeHolder} type="text" value=""
-                        pattern={fieldValidations} disabled message-when-pattern-mismatch={fieldAttributeValue}
-                        onclick={OnFieldClick}></lightning-textarea>
+                    <textarea class={fieldId} placeholder={placeHolder} value=""
+                        pattern={fieldValidations} message-when-pattern-mismatch={fieldAttributeValue}
+                        onclick={OnFieldClick}></textarea>
 
                 </template>
             </template>
@@ -466,18 +470,18 @@
                             </label>
                         </template>
 
-                        <label class="slds-form-element__label flabel">
+                        <label class="slds-form-element__label ">
                             DropDown {count}
                         </label>
                     </template>
 
                     <lightning-helptext class="helptxt" content={fieldHelpText}></lightning-helptext>
-                    <lightning-select disabled class="dropdown-menu" value={tView} onclick={OnFieldClick}>
+                    <select class="dropdown-menu" value={tView} onclick={OnFieldClick}>
                         <option value={dropdownOp}>Select Option </option>
                         <!-- <template for:each={dropOptions} for:item="value">
                             <option value={value.Id} key={value.Id}>{value.label}</option>
                         </template> -->
-                    </lightning-select>
+                    </select>
 
                 </template>
             </template>
@@ -493,16 +497,16 @@
                             </label>
                         </template>
 
-                        <label class="slds-form-element__label flabel">
+                        <label class="slds-form-element__label ">
                             CheckBox {count}
                         </label>
                     </template>
 
                     <lightning-helptext class="helptxt" content={fieldHelpText}></lightning-helptext>
-                    <lightning-checkbox-group class={fieldId} placeholder={placeHolder} type="text" value="" name={tView}
-                        options={CheckBoxOp} pattern={fieldValidations} disabled
+                    <input class={fieldId} placeholder={placeHolder} type="checkbox" value="" name={tView}
+                        options={CheckBoxOp} pattern={fieldValidations}
                         message-when-pattern-mismatch={fieldAttributeValue}
-                        onclick={OnFieldClick}></lightning-checkbox-group>
+                        onclick={OnFieldClick}></input>
 
                 </template>
             </template>
@@ -517,16 +521,16 @@
                             </label>
                         </template>
 
-                        <label class="slds-form-element__label flabel">
+                        <label class="slds-form-element__label ">
                             Radio Button {count}
                         </label>
                     </template>
 
                     <lightning-helptext class="helptxt" content={fieldHelpText}></lightning-helptext>
-                    <lightning-radio-group class={fieldId} placeholder={placeHolder} type="text" value="" name={tView}
-                        options={CheckBoxOp} pattern={fieldValidations} disabled
+                    <input class={fieldId} placeholder={placeHolder} type="radio" value="" name={tView}
+                        options={CheckBoxOp} pattern={fieldValidations}
                         message-when-pattern-mismatch={fieldAttributeValue}
-                        onclick={OnFieldClick}></lightning-radio-group>
+                        onclick={OnFieldClick}></input>
 
                 </template>
             </template>
@@ -542,15 +546,15 @@
                             </label>
                         </template>
 
-                        <label class="slds-form-element__label flabel">
+                        <label class="slds-form-element__label ">
                             File Upload {count}
                         </label>
                     </template>
 
 
                     <lightning-helptext class="helptxt" content={fieldHelpText}></lightning-helptext>
-                    <lightning-input class={fieldId} type="file" name="file" label="Upload File" disabled
-                        onclick={OnFieldClick} data-id="username"></lightning-input>
+                    <input class={fieldId} type="file" name="file" label="Upload File"
+                        onclick={OnFieldClick} data-id="username"></input>
 
                 </template>
             </template>
@@ -566,15 +570,20 @@
                             </label>
                         </template>
 
-                        <label class="slds-form-element__label flabel">
+                        <label class="slds-form-element__label ">
                             Number {count}
                         </label>
                     </template>
 
                     <lightning-helptext class="helptxt" content={fieldHelpText}></lightning-helptext>
-                    <lightning-input class={fieldId} placeholder={placeHolder} type="number" format="#,##0,000.00#"
+                    <div class="slds-form-element__control">
+                        <input class='slds-input' placeholder={placeHolder} type="number" format="#,##0,000.00#"
+                        value="" message-when-pattern-mismatch={fieldAttributeValue}
+                        onclick={OnFieldClick}></input>
+                    </div>
+                    <!-- <lightning-input class={fieldId} placeholder={placeHolder} type="number" format="#,##0,000.00#"
                         value="" pattern={fieldValidations} disabled message-when-pattern-mismatch={fieldAttributeValue}
-                        onclick={OnFieldClick}></lightning-input>
+                        onclick={OnFieldClick}></lightning-input> -->                    
 
                 </template>
             </template>
@@ -591,15 +600,15 @@
                             </label>
                         </template>
 
-                        <label class="slds-form-element__label flabel">
+                        <label class="slds-form-element__label ">
                             Price {count}
                         </label>
                     </template>
 
                     <lightning-helptext class="helptxt" content={fieldHelpText}></lightning-helptext>
-                    <lightning-input class={fieldId} placeholder={placeHolder} type="number" formatter="currency"
-                        value="" pattern={fieldValidations} disabled message-when-pattern-mismatch={fieldAttributeValue}
-                        onclick={OnFieldClick}></lightning-input>
+                    <input class={fieldId} placeholder={placeHolder} type="number" formatter="currency"
+                        value="" pattern={fieldValidations}
+                        onclick={OnFieldClick}></input>
 
                 </template>
             </template>
@@ -622,9 +631,11 @@
                     </template>
 
                     <lightning-helptext class="helptxt" content={fieldHelpText}></lightning-helptext>
-                    <input class={fieldId} placeholder={placeHolder} type="number" 
-                        value="" disabled 
+                    <div class="slds-form-element__control">
+                    <input class='slds-input' placeholder={placeHolder} type="number" 
+                        value="" 
                         onclick={OnFieldClick}></input>
+                    </div>
 
                 </template>
             </template>
@@ -641,14 +652,14 @@
                             </label>
                         </template>
 
-                        <label class="slds-form-element__label flabel">
+                        <label class="slds-form-element__label ">
                             Date
                         </label>
                     </template>
 
                     <lightning-helptext class="helptxt" content={fieldHelpText}></lightning-helptext>
                     <lightning-input class={fieldId} placeholder={placeHolder} formatter="currency" value=""
-                        pattern={fieldValidations} disabled type="date" display-date-picker="true"
+                        pattern={fieldValidations} type="date" display-date-picker="true"
                         message-when-pattern-mismatch={fieldAttributeValue} onclick={OnFieldClick}></lightning-input>
 
                 </template>
@@ -664,14 +675,14 @@
                             </label>
                         </template>
 
-                        <label class="slds-form-element__label flabel">
+                        <label class="slds-form-element__label ">
                             Time
                         </label>
                     </template>
 
                     <lightning-helptext class="helptxt" content={fieldHelpText}></lightning-helptext>
                     <lightning-input class={fieldId} placeholder={placeHolder} value="" pattern={fieldValidations}
-                        disabled type="time" message-when-pattern-mismatch={fieldAttributeValue}
+                        type="time" message-when-pattern-mismatch={fieldAttributeValue}
                         onclick={OnFieldClick}></lightning-input>
 
                 </template>
@@ -687,14 +698,14 @@
                             </label>
                         </template>
 
-                        <label class="slds-form-element__label flabel">
+                        <label class="slds-form-element__label ">
                             Date-Time
                         </label>
                     </template>
 
                     <lightning-helptext class="helptxt" content={fieldHelpText}></lightning-helptext>
                     <lightning-input class={fieldId} placeholder={placeHolder} value="" pattern={fieldValidations}
-                        disabled type="datetime" display-date-picker="true"
+                         type="datetime" display-date-picker="true"
                         message-when-pattern-mismatch={fieldAttributeValue} onclick={OnFieldClick}></lightning-input>
 
                 </template>
@@ -710,21 +721,21 @@
                     </label>
                     </template>
                     
-                        <label class="slds-form-element__label flabel">
+                        <label class="slds-form-element__label ">
                              Rating
                         </label>
-                  </template>  
-                    <div class="fieldOutlines">
+                    </template>  
+                    <div class="starrating">
                     <div class="rate"  id={PageId}>
-                        <input type="radio" id={ratingfirst} disabled name={ratingfirst} value="5" onclick={ratingvalue} checked={checkedRating} />
+                        <input type="radio" id={ratingfirst} name={ratingfirst} value="5" onclick={ratingvalue} checked={checkedRating} />
                         <label  class="ratingfield" for={ratingfirst} title="5 stars">5 stars</label>
-                        <input type="radio" id={ratingtwo} disabled name={ratingtwo} value="4" onclick={ratingvalue} checked={checkRating} />
+                        <input type="radio" id={ratingtwo} name={ratingtwo} value="4" onclick={ratingvalue} checked={checkRating} />
                         <label  class="ratingfield" for={ratingtwo} title="4 stars">4 stars</label>
-                        <input type="radio" id={ratingthree} disabled name={ratingthree} value="3" onclick={ratingvalue} checked={checkRating} />
+                        <input type="radio" id={ratingthree} name={ratingthree} value="3" onclick={ratingvalue} checked={checkRating} />
                         <label  class="ratingfield" for={ratingthree} title="3 stars">3 stars</label>
-                        <input type="radio" id={ratingfour} disabled name={ratingfour} value="2" onclick={ratingvalue} checked={checkRating} />
+                        <input type="radio" id={ratingfour} name={ratingfour} value="2" onclick={ratingvalue} checked={checkRating} />
                         <label  class="ratingfield" for={ratingfour} title="2 stars">2 stars</label>
-                        <input type="radio" id={ratingfive} disabled name={ratingfive} value="1" onclick={ratingvalue} checked={checkRating} />
+                        <input type="radio" id={ratingfive} name={ratingfive} value="1" onclick={ratingvalue} checked={checkRating} />
                         <label  class="ratingfield" for={ratingfive} title="1 stars">1 star</label>
                     </div>
                     </div>
@@ -742,21 +753,21 @@
                            </label>
                         </template>
                         
-                        <label class="slds-form-element__label flabel">
+                        <label class="slds-form-element__label ">
                             Emoji Rating
                         </label>
                     </template>  
-   
+                
                     <div class="rateEmoji1"  id={PageId}>
-                        <input class="emoji-input-box" type="radio" id="emoji-1" disabled={isFieldDesabled} name="emoji-1" value="1" onclick={emojiRatingValue} checked={checkRating} />
+                        <input class="emoji-input-box" type="radio" id="emoji-1"  name="emoji-1" value="1" onclick={emojiRatingValue} checked={checkRating} />
                         <label class="emoji-ratingfield" for="emoji-1" title="emoji-1"><img class="rating-Emoji-icons" src={emojiRating1}></label>
-                        <input class="emoji-input-box" type="radio" id="emoji-2" disabled={isFieldDesabled} name="emoji-2" value="2" onclick={emojiRatingValue} checked={checkRating} />
+                        <input class="emoji-input-box" type="radio" id="emoji-2" name="emoji-2" value="2" onclick={emojiRatingValue} checked={checkRating} />
                         <label class="emoji-ratingfield" for="emoji-2" title="emoji-2"><img class="rating-Emoji-icons" src={emojiRating2}></label>
-                        <input class="emoji-input-box" type="radio" id="emoji-3" disabled={isFieldDesabled} name="emoji-3" value="3" onclick={emojiRatingValue} checked={checkRating} />
+                        <input class="emoji-input-box" type="radio" id="emoji-3"  name="emoji-3" value="3" onclick={emojiRatingValue} checked={checkRating} />
                         <label class="emoji-ratingfield" for="emoji-3" title="emoji-3"><img class="rating-Emoji-icons" src={emojiRating3}></label>
-                        <input class="emoji-input-box" type="radio" id="emoji-4" disabled={isFieldDesabled} name="emoji-4" value="4" onclick={emojiRatingValue} checked={checkRating} />
+                        <input class="emoji-input-box" type="radio" id="emoji-4"  name="emoji-4" value="4" onclick={emojiRatingValue} checked={checkRating} />
                         <label class="emoji-ratingfield" for="emoji-4" title="emoji-4"><img class="rating-Emoji-icons" src={emojiRating4}></label>
-                        <input class="emoji-input-box" type="radio" id="emoji-5" disabled={isFieldDesabled} name="emoji-5" value="5" onclick={emojiRatingValue} checked={checkedRating} />
+                        <input class="emoji-input-box" type="radio" id="emoji-5"  name="emoji-5" value="5" onclick={emojiRatingValue} checked={checkedRating} />
                         <label class="emoji-ratingfield" for="emoji-5" title="emoji-5"><img class="rating-Emoji-icons" src={emojiRating5}></label>
                     </div>
               </template>
@@ -773,7 +784,7 @@
                            </label>
                         </template>
                         
-                        <label class="slds-form-element__label flabel">
+                        <label class="slds-form-element__label ">
                           Scale Rating
                         </label>
                     </template>  
@@ -794,7 +805,7 @@
                         <td>FeedBack</td>
                             <template for:each={scaleRating} for:item="rating">
                                 <td key={rating}>
-                                 <input  type="radio" class="radio" id={rating} disabled name={rating} value="5" onclick={ratingvalue} checked={checkedRating}  style="display:block;margin:auto;width:8rem"/>
+                                 <input  type="radio" class="radio" id={rating} name={rating} value="5" onclick={ratingvalue} checked={checkedRating}  style="display:block;margin:auto;width:8rem"/>
                                 </td>
                                 </template>
                     </tr>
@@ -815,13 +826,13 @@
                                </label>
                             </template>
                             
-                            <label class="slds-form-element__label flabel">
+                            <label class="slds-form-element__label ">
                                 TermsAndCondition
                             </label>
                         </template>  
                     
                         <div  id={PageId} style="display: flex;">
-                            <lightning-input type="checkbox" variant="standard" disabled onchange={checkboxValue} checked={isTermsAndConditionChecked} ></lightning-input>
+                            <input type="checkbox" variant="standard" onchange={checkboxValue} checked={isTermsAndConditionChecked} ></input>
                             <lightning-formatted-rich-text class="slds-cell-wrap" value={termsAndConditionValue} ></lightning-formatted-rich-text>
                         </div>
                   </template>
@@ -838,14 +849,14 @@
                                </label>
                             </template>
                             
-                            <label class="slds-form-element__label flabel">
+                            <label class="slds-form-element__label ">
                                  Link
                             </label>
                         </template>  
                     
-                        <lightning-input type="url" placeholder={placeHolder} pattern="(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})"
-                        readonly={isReadOnly} disabled message-when-too-short="Value is too short"
-                        onclick={showOnClick} onblur={linkValue} value={fieldValue} onchange={blankValueCheck} ></lightning-input>
+                        <input type="url" placeholder={placeHolder} pattern="(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})"
+                        readonly={isReadOnly}
+                        onclick={showOnClick} onblur={linkValue} value={fieldValue} onchange={blankValueCheck} ></input>
                   </template>
                   </template>
         </template>
@@ -860,7 +871,7 @@
                        </label>
                     </template>
                     
-                    <label class="slds-form-element__label flabel">
+                    <label class="slds-form-element__label ">
                         Signature
                     </label>
                 </template>  
@@ -892,7 +903,7 @@
                            </label>
                         </template>
 
-                        <label class="slds-form-element__label flabel">
+                        <label class="slds-form-element__label ">
                              RichText
                         </label>
                     </template>  

@@ -28,8 +28,6 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
     @track captchavalue;
     BackButton = BackButton;
     @track verify;
-    @track thankyou = false;
-    previewactive = true;
 
 
     connectedCallback() {
@@ -198,8 +196,6 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
         else if(event.currentTarget.dataset.name == 'submit'){
             
             if(this.verify == true){
-                this.previewactive = false;
-                this.thankyou = true;
             }
             else if(this.verify == false){
                 let toast_error_msg = 'Invalid Captcha';

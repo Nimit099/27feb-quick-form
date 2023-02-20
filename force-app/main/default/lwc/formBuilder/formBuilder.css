@@ -518,3 +518,6 @@ border-radius: 28px;
     align-items: center;
     justify-content: center;
 }
+.fieldvalidationdiv{
+    display: none;
+}

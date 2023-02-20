@@ -14,6 +14,25 @@
     align-items: center;
     border-bottom: 1px solid rgba(0, 0, 0, 0.39);
 }
+.puls_icon{
+    height: 16px;
+    width: 16px;
+}
+.addcc_addbcc{
+    font-weight: 400;
+    margin: 5px 10px 0px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+        
+
+.addcc_addbcc:hover{
+     cursor: pointer;
+}
+.addcc_addbcc_main{
+    display: flex;
+}
 c-email-input {
     border-top-style: hidden;
     border-right-style: hidden;
@@ -280,3 +299,45 @@ lightning-button{
     position: absolute;
 }
 /* =========================     Spinner Sarts      =========================== */
+
+
+
+
+.input {
+    /* border-top-style: hidden;
+    border-right-style: hidden;
+    border-left-style: hidden;
+    border-bottom-style: solid; */
+    height: 1.875rem;
+    border: 1px solid;
+    border-color: #dddbda;
+    background-color: hidden;
+    width: 100%;
+}
+.pill{
+    border-radius: 4px !important;
+    /* margin: 5px !important; */
+   --sds-c-pill-color-background : #6699CC !important;
+   --sds-c-pill-top-margin: 5px;
+    color: white;
+}
+
+.email_error_msg{
+    color: #ff0000;
+}
+/* .slds-pill{
+    border-radius: 4px !important;
+    margin: 5px !important;
+   --sds-c-pill-color-background : #6699CC !important;
+    color: white;
+}
+.slds-pill_container{
+    border-radius: 4px !important;
+    margin: 5px !important;
+    --sds-c-pill-color-background : #6699CC !important;
+    color: white;
+
+} */
+.input:focus {
+    outline-width: 0;
+}

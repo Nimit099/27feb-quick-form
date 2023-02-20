@@ -1,18 +1,14 @@
 import { LightningElement,api,track } from 'lwc';
-// import Notification_obj from '@salesforce/schema/Notification__c';
-// import toadd from '@salesforce/schema/Notification__c.To_Recipients__c';
-// import ccadd from '@salesforce/schema/Notification__c.	CC_Recipients__c';
-// // import replyto from '@salesforce/schema/Notification__c.To_Recipients__c';
-// import subject from '@salesforce/schema/Notification__c.Subject__c';
-// import message from '@salesforce/schema/Notification__c.Attachment__c';
-// import attachment from '@salesforce/schema/Notification__c.To_Recipients__c';
-// import create from '@salesforce/apex/notificationInsertData.createNotification';
 import getContactList from '@salesforce/apex/notificationInsertData.getContactList';
 import create from '@salesforce/apex/notificationInsertData.create';
 import updated from '@salesforce/apex/notificationInsertData.updated';
+import { loadStyle } from 'lightning/platformResourceLoader';
+import notification_css from '@salesforce/resourceUrl/notification_css';
+import pulsicon from '@salesforce/resourceUrl/Puls_icon';
 //import add from '@salesforce/resourceUrl/Puls_icon';
 
 export default class NotificationComponent extends LightningElement {
+    pulsicon_img = pulsicon;   
     @api myVal = "";
     @api errorMessage = "You haven't composed anything yet." ;
     testval = false;
@@ -21,13 +17,15 @@ export default class NotificationComponent extends LightningElement {
     @track Notification__c;
     @track Notification_list=[];
     @track error;
-    @track spinnerDataTable = true;
+    @track spinnerDataTable = false;
     @track required_to = false;
     @track required_Subject = false;
     @track required_Message = false;
     @track toAddress ='';
-    @track ccAddress;
+    @track ccAddress ='';
+    @track bccAddress ='';
     @track text2;
+    @track text3;
     @track Subject= '';
     @track Message= '';
     @track Attachment;
@@ -37,30 +35,213 @@ export default class NotificationComponent extends LightningElement {
     @track list_length;
     @track to;
     @track cc;
+    @track bcc;
     @track to_list = [];
     @track cc_list = [];
+    @track bcc_list = [];
+    @track test45;
+
+    @track textto;
+    @track textcc;
+    @track textbcc;
+
+
+
+
+    @api listto =[];
+    @api pillid = 'cc';
+    @track email_msg = false;
+    @track items = [];
+    @track getprogreshbar;
+    @track to_list;
+    @track cc_list;
+    @track bcc_list;
+    searchTerm = "";
+    blurTimeout;
+    boxClass = "slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-has-focus";
+    _selectedValues = [];
+    selectedValuesMap = new Map();
+
+
+
+
+
+    @track email_msg_cc = false;
+    // @track items = [];
+    @track get_all_cc_emailid;
+    @track cc_list;
+    _selectedValues_2 = [];
+    selectedValues_2Map = new Map();
+
+
+    @track email_msg_bcc = false;
+    // @track items = [];
+    @track get_all_bcc_emailid;
+    @track bcc_list;
+    _selectedValues_3 = [];
+    selectedValues_3Map = new Map();
+
+    @track open_addcc = false;
+    @track open_addbcc = false;
+    @track open_addcc_label = true;
+    @track open_addbcc_label = true;
+    @track open_addcc_and_addbcc = true;
+
+
+
+
+
 
     connectedCallback(){
-        // this.spinnerDataTable = true;
-        // console.log('spinnerDataTable',this.spinnerDataTable);
-        // setTimeout(()=>{
-        this.Cancel();
-        // },200);
+        this.get_records();
     }
+
+    get_records(){
+         getContactList({form_id :this.form_id})
+        .then(result => {
+            // console.log('y r in getcontactlist');
+            // console.log(result);
+            // this.list_length = result.length;
+            // this.to = result[0].To_Recipients__c;
+            // this.to_email(this.to);
+            // this.cc = result[0].CC_Recipients__c;
+            // this.cc_email(this.cc);
+            // this.bcc = result[0].BCC_Recipients__c;
+            // this.bcc_email(this.bcc);
+            // this.Subject = result[0].Subject__c;
+            // this.Message = result[0].Email_Body__c;
+            // this.Attachment = result[0].Attachment__c;
+            // this.Notification_id = result[0].Id;
+            // console.log('noti',this.Notification_id);
+            console.log('y r in getcontactlist');
+            console.log(result);
+            this.list_length = result.length;
+            this.to = result[0].To_Recipients__c;
+            console.log('to :- ',this.to);
+            this.to_email(this.to);
+            this.cc = result[0].CC_Recipients__c;
+            console.log('cc',this.cc);
+            this.cc_email(this.cc);
+            this.bcc = result[0].BCC_Recipients__c;
+            console.log('bcc',this.bcc);
+            this.bcc_email(this.bcc);
+            this.Subject = result[0].Subject__c;
+            console.log('Subject in get : ',this.Subject);
+            this.Message = result[0].Email_Body__c;
+            console.log('Message : ',this.Message);
+            this.Attachment = result[0].Attachment__c;
+            console.log('Message : ',this.Message);
+            this.Attachment = result[0].Id;
+            console.log('noti',this.Attachment);
+            this.Notification_id = result[0].Id;
+            if(this.cc =='' || this.cc ==null || this.bcc =='' || this.bcc ==null){
+                this.open_addcc_and_addbcc = true;
+            }
+            else{
+                this.open_addcc_and_addbcc = false;
+            }
+            if(this.cc !='' && this.cc !=null){
+                this.open_addcc = true;
+                this.open_addcc_label = false;
+            }
+            else{
+                this.open_addcc = false;
+                this.open_addcc_label = true;
+            }
+            if(this.bcc !='' && this.bcc !=null){
+                this.open_addbcc = true;
+                this.open_addbcc_label = false;
+            }
+            else{
+                this.open_addbcc = false;
+                this.open_addbcc_label = true;
+            }
+        })
+        .catch(error => {
+            this.error = error;
+        });
+
+    }
+
+
+    renderedCallback(){
+        // console.log('print to list',this.listto);
+    
+        Promise.all([
+            loadStyle( this, notification_css )
+            ]).then(() => {
+                // console.log( 'icon' );
+            })
+            .catch(error => {
+                // console.log( error.body.message );
+        });
+    }
+
+
+    get selectedValues() {
+        // console.log('selectedValues :- ',this.selectedValues.To_Recipients__c);
+        return this._selectedValues;
+    }
+    set selectedValues(value) {
+        this._selectedValues = value;
+        this.handleToAddressChange({ detail: { selectedValues: this._selectedValues} })
+        // const selectedValuesEvent = new CustomEvent("selection", { detail: { selectedValues: this._selectedValues} });
+        // this.dispatchEvent(selectedValuesEvent);
+    }
+
+
+    get selectedValues_2() {
+        // console.log('print to list',this.listto);
+        // this.to_email(this.listto);
+        return this._selectedValues_2;
+    }
+    set selectedValues_2(value) {
+        this._selectedValues_2 = value;
+        this.handleCcAddressChange({ detail: { selectedValues_2: this._selectedValues_2} })
+        console.log('selectedValues_2 :- ',this.selectedValues_2);
+        // const selectedValuesEvent = new CustomEvent("selection", { detail: { selectedValues_2: this._selectedValues_2} });
+        // this.dispatchEvent(selectedValuesEvent);
+    }
+
+
+    get selectedValues_3() {
+        // console.log('print to list',this.listto);
+        // this.to_email(this.listto);
+        return this._selectedValues_3;
+    }
+    set selectedValues_3(value) {
+        this._selectedValues_3 = value;
+        this.handleBccAddressChange({ detail: { selectedValues_3: this._selectedValues_3} })
+        console.log('selectedValues_3 :- ',this.selectedValues_3);
+        // const selectedValuesEvent = new CustomEvent("selection", { detail: { selectedValues_3: this._selectedValues_3} });
+        // this.dispatchEvent(selectedValuesEvent);
+    }
+
     handleToAddressChange(event) {
         console.log('in to add');
         console.log({event});
         this.required_to = false;
         this.toAddress = event.detail.selectedValues;
-        // console.log('this.toAddress>>>',this.toAddress);
+        this.getprogreshbar =+','+this.toAddress;
+        console.log('this.toAddress   >    getprogreshbar>>',this.toAddress);
     }
 
     handleCcAddressChange(event) {
+        console.log('in to add');
         console.log({event});
-        // console.log('in to cc');
-        this.ccAddress = event.detail.selectedValues;
-        // console.log('this.ccAddress>>>',this.ccAddress);
-        // console.log(this.ccAddress);
+        this.required_to = false;
+        this.ccAddress = event.detail.selectedValues_2;
+        this.getprogreshbar =+','+this.ccAddress;
+        console.log('this.Address   >    getprogreshbar>>',this.ccAddress);
+    }
+
+    handleBccAddressChange(event) {
+        console.log('in to add');
+        console.log({event});
+        this.required_to = false;
+        this.bccAddress = event.detail.selectedValues_3;
+        this.getprogreshbar =+','+this.bccAddress;
+        console.log('this.Address   >    getprogreshbar>>',this.bccAddress);
     }
     // handleReplyTo(event) {
     //     this.replyto = event.target.value;
@@ -91,28 +272,7 @@ export default class NotificationComponent extends LightningElement {
             this.validity = true;
         }
     }
-    // handleValidation() {
-    //     console.log('you r in save');
-    //     let nameCmp = this.template.querySelector(".sub");
-    //     console.log({nameCmp});
-    //     let dateCmp = this.template.querySelector(".msg1");
-    //     console.log({dateCmp});
-    //     // let emailCmp = this.template.querySelector(".emailCls");
-        
-    //     if (!nameCmp.value) {
-    //         nameCmp.setCustomValidity("Name value is required");
-    //     } else {
-    //         nameCmp.setCustomValidity(""); // clear previous value
-    //     }
-    //     nameCmp.reportValidity();
- 
-    //     if (!dateCmp.value) {
-    //         dateCmp.setCustomValidity("Date value is required");
-    //     } else {
-    //         dateCmp.setCustomValidity(""); // clear previous value
-    //     }
-    //     dateCmp.reportValidity();
-    // }
+    
     handleValidation() {
         console.log('y r in hand');
         this.template.querySelector('c-email-input').handleValidationtest();
@@ -128,31 +288,34 @@ export default class NotificationComponent extends LightningElement {
             nameCmp.setCustomValidity(""); // clear previous value
             
         }
-        // msge.reportValidity();
-        // if (!msge.value) {
-        //     console.log('test for form titel');
-        //     msge.setCustomValidity("Form Title is required for msg");
-        // } else {
-        //     msge.setCustomValidity(""); // clear previous value
-            
-        // }
-        // msge.reportValidity();
     }
-    // handleFocus(event) {
-    //     // event.target.className = event.target.className.replace('slds-has-error', '');
-    //     let nameCmp = this.template.querySelector(".nameCls");
-    //     let msge = this.template.querySelector(".msge");
-    //     nameCmp.setCustomValidity("");
-    //     msge.setCustomValidity("");
-    // }
+    open_add_cc(){
+        this.open_addcc = true;
+        this.open_addcc_label = false;
+    }
+    open_add_bcc(){
+         this.open_addbcc = true;
+         this.open_addbcc_label = false;
+         
+    }
     save(){
         console.log('you r in save');
-        let text = this.toAddress.toString();
+        const testmap = this.selectedValuesMap.keys();
+        console.log('yash ;-',testmap);
+        console.log('to add ',this.to);
+        this.textto = this.toAddress.toString();
+        console.log('to add str ',this.textto);
+        console.log('cc add ',this.ccAddress);
         if(this.ccAddress != null && this.ccAddress != ''){
-            this.text2 = this.ccAddress.toString();
+            console.log('u r in cc add is not null ', this.ccAddress);
+            this.textcc = this.ccAddress.toString();
+        }
+        if(this.bccAddress != null && this.bccAddress != ''){
+            console.log('u r in cc add is not null ', this.bccAddress);
+            this.textbcc = this.bccAddress.toString();
         }
         
-        if(text == ''){
+        if(this.textto == ''){
             // alert('pls insert to');
             this.required_to = true;
         }
@@ -167,12 +330,16 @@ export default class NotificationComponent extends LightningElement {
 
         }
         
-        if(text != '' &&this.Subject!='' &&this.Message!=''){
+        if(this.text2 != '' &&this.Subject!='' &&this.Message!=''){
             console.log('you r in req');
+           
             let listObj = { 'sobjectType': 'Notification__c' };
-                listObj.Name = this.form_id;
-                listObj.To_Recipients__c = text;
-                listObj.CC_Recipients__c = this.text2;
+                listObj.To_Recipients__c = this.textto;
+                console.log('in save To_Recipients__c :- ',this.textto);
+                listObj.CC_Recipients__c = this.textcc;
+                console.log('in save CC_Recipients__c :- ',this.textcc);
+                listObj.BCC_Recipients__c = this.textbcc;
+                console.log('in save BCC_Recipients__c :- ',this.textbcc);
                 listObj.Subject__c = this.Subject;
                 listObj.Email_Body__c = this.Message;
                 listObj.Form__c = this.form_id;
@@ -187,7 +354,7 @@ export default class NotificationComponent extends LightningElement {
                     console.log({data});
                     console.log();
                     this.toast_error_msg = 'Successfully Saved';
-                    this.template.querySelector('c-toast-component').showToast('success',this.toast_error_msg,3000000);
+                    this.template.querySelector('c-toast-component').showToast('success',this.toast_error_msg,3000);
                     this.Cancel();
                     this.spinnerDataTable = false;
                     this.getContactList({form_id :this.form_id});
@@ -201,43 +368,51 @@ export default class NotificationComponent extends LightningElement {
                 this.spinnerDataTable = true;
                 updated({ updatelist : listObj})
                 .then(data =>{
-                    console.log({data});
-                    console.log();
+                    console.log(data);
+                    var datatest = [];
+                    datatest = data;
+                    console.log({datatest});
                     this.toast_error_msg = 'Successfully Update';
                     this.template.querySelector('c-toast-component').showToast('success',this.toast_error_msg,3000);
-                    this.Cancel();
+                    // this.Cancel();
                     this.spinnerDataTable = false;
+                    this.get_records();
+                    this.Subject = data.Subject__c;
                    
                 })
                 .catch(error => {
                     console.log({error});
                 })
+                
             }
         }
+        
     }
     Cancel(){
-        this.spinnerDataTable = true;
-    
         getContactList({form_id :this.form_id})
         .then(result => {
             console.log('y r in getcontactlist');
             console.log(result);
             this.list_length = result.length;
-            console.log('list_length',this.list_length);
             this.to = result[0].To_Recipients__c;
-            this.template.querySelector('c-email-input').to_email(this.to);
+            console.log('to :- ',this.to);
+            this.to_email(this.to);
             this.cc = result[0].CC_Recipients__c;
-            this.cc_list = this.cc;
             console.log('cc',this.cc);
-            this.template.querySelector('c-email-input-c-c').to_email(this.cc);
+            this.cc_email(this.cc);
+            this.bcc = result[0].BCC_Recipients__c;
+            console.log('bcc',this.bcc);
+            this.bcc_email(this.bcc);
             this.Subject = result[0].Subject__c;
+            console.log('Subject : ',this.Subject);
             this.Message = result[0].Email_Body__c;
+            console.log('Message : ',this.Message);
             this.Attachment = result[0].Attachment__c;
+            console.log('Message : ',this.Message);
             this.Notification_id = result[0].Id;
             console.log('noti',this.Notification_id);
         })
         .catch(error => {
-            this.spinnerDataTable = false;
             this.error = error;
         });
         if(this.list_length <1){
@@ -248,15 +423,210 @@ export default class NotificationComponent extends LightningElement {
             this.Message = '';
             this.Attachment = false;
         }
-        setTimeout(()=>{
-        this.spinnerDataTable = false;
-        },200);
     }
     remove_error_msg(){
         this.required_to = false;
     }
     
 
+
+
+
+
+
+
+    handleKeyPress(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault(); // Ensure it is only this code that runs
+            const value = this.template.querySelector('lightning-input.input2').value;
+            console.log('to email',value);
+        var pattern =/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        var validation = pattern.test(value);
+
+        if (validation == false) {
+           this.email_msg = true;
+           this.remove_error_msg();
+        //    this.dispatchEvent(new CustomEvent('removeerrormessage'))
+        }
+        else{
+            this.email_msg = false;
+            this.selectedValuesMap.set(value, value);
+            // var map = [];
+            // map = this.selectedValuesMap;
+            // const testmap = this.selectedValuesMap.keys();
+            // this.test45 = testmap.toString();
+            // console.log('text ;-',this.test45);
+            // console.log('yash ;-',testmap);
+            // console.log('this.selectedValuesMap>>',map.keys());
+            // console.log({map});
+            this.selectedValues = [...this.selectedValuesMap.keys()];
+            console.log('selectedValues kvjdfbkdsvj :- ',this.selectedValues);
+        }
+
+            this.template.querySelector('lightning-input.input2').value = "";
+        }
+    }
+
+    handleRemove(event) {
+        const item = event.target.label;
+        console.log('delete :- ',{item});
+        this.selectedValuesMap.delete(item);
+        this.selectedValues = [...this.selectedValuesMap.keys()];
+    }
+
+
+    @api reset() {
+        this.selectedValuesMap = new Map();
+        this.selectedValues = [];
+    }
+
+    @api validate() {
+        this.template.querySelector('input').reportValidity();
+        const isValid = this.template.querySelector('input').checkValidity();
+        return isValid;
+    }
+    to_email(strString){
+        // console.log('hiii');
+        this.getprogreshbar = strString;
+        // console.log('this.getprogreshbar>>',this.getprogreshbar);
+        this.to_list = this.getprogreshbar.split(',');
+            // console.log('to',this.to_list[1]);
+            for(var i=0; i<this.to_list.length; i++){
+                const value = this.to_list[i];
+                // console.log('to :-',value);
+                this.selectedValuesMap.set(value, value);
+                this.selectedValues = [...this.selectedValuesMap.keys()];
+                // this.selectedValues=value;
+            }
+    }
+    @api email_erroe_msg(){
+        this.email_msg = false;
+    }
+    
+
+
+
+    handleKeyPress_2(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault(); // Ensure it is only this code that runs
+            const value = this.template.querySelector('lightning-input.input3').value;
+            console.log('cc value :- ',value);
+        var pattern =/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        var validation = pattern.test(value);
+
+        if (validation == false) {
+           this.email_msg_cc = true;
+        }
+        else{
+            this.email_msg_cc = false;
+            this.selectedValues_2Map.set(value, value);
+            this.selectedValues_2 = [...this.selectedValues_2Map.keys()];
+                    
+
+        }
+
+            this.template.querySelector('lightning-input.input3').value = "";
+        }
+    }
+
+    handleRemove_2(event) {
+        const item = event.target.label;
+        this.selectedValues_2Map.delete(item);
+        this.selectedValues_2 = [...this.selectedValues_2Map.keys()];
+    }
+    @api reset_2() {
+        this.selectedValues_2Map = new Map();
+        this.selectedValues_2 = [];
+    }
+
+    @api validate_2() {
+        this.template.querySelector('input').reportValidity();
+        const isValid = this.template.querySelector('input').checkValidity();
+        return isValid;
+    }
+    @api cc_email(strString){
+        console.log('hiii');
+        this.get_all_cc_emailid = strString;
+        // console.log('this.get_all_cc_emailid in cc >>',this.get_all_cc_emailid);
+        if(this.get_all_cc_emailid != null && this.get_all_cc_emailid !='' ){
+            // console.log('you are in cc if');
+            this.cc_list = this.get_all_cc_emailid.split(',');
+            // console.log('to',this.cc_list[1]);
+            for(var i=0; i<this.cc_list.length; i++){
+                const value = this.cc_list[i];
+                // console.log('to :-',value);
+                this.selectedValues_2Map.set(value, value);
+                this.selectedValues_2 = [...this.selectedValues_2Map.keys()];
+                // this.selectedValues_2=value;
+                }
+        }
+
+        
+    }
+
+
+
+
+
+
+
+    handleKeyPress_3(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault(); // Ensure it is only this code that runs
+            const value = this.template.querySelector('lightning-input.input4').value;
+            console.log('cc value :- ',value);
+        var pattern =/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        var validation = pattern.test(value);
+
+        if (validation == false) {
+           this.email_msg_bcc = true;
+        }
+        else{
+            this.email_msg_bcc = false;
+            this.selectedValues_3Map.set(value, value);
+            this.selectedValues_3 = [...this.selectedValues_3Map.keys()];
+                    
+
+        }
+
+            this.template.querySelector('lightning-input.input4').value = "";
+        }
+    }
+
+    handleRemove_3(event) {
+        const item = event.target.label;
+        this.selectedValues_3Map.delete(item);
+        this.selectedValues_3 = [...this.selectedValues_3Map.keys()];
+    }
+    @api reset_3() {
+        this.selectedValues_3Map = new Map();
+        this.selectedValues_3 = [];
+    }
+
+    @api validate_3() {
+        this.template.querySelector('input').reportValidity();
+        const isValid = this.template.querySelector('input').checkValidity();
+        return isValid;
+    }
+    @api bcc_email(strString){
+        console.log('hiii');
+        this.get_all_bcc_emailid = strString;
+        // console.log('this.get_all_bcc_emailid in cc >>',this.get_all_bcc_emailid);
+        if(this.get_all_bcc_emailid != null && this.get_all_bcc_emailid !='' ){
+            // console.log('you are in cc if');
+            this.bcc_list = this.get_all_bcc_emailid.split(',');
+            // console.log('to',this.bcc_list[1]);
+            for(var i=0; i<this.bcc_list.length; i++){
+                const value = this.bcc_list[i];
+                console.log('bcc :-',value);
+                this.selectedValues_3Map.set(value, value);
+                this.selectedValues_3 = [...this.selectedValues_3Map.keys()];
+                // this.selectedValues_3=value;
+                }
+        }
+
+        
+    }
     
 
 }

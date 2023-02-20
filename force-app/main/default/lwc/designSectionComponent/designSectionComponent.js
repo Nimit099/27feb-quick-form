@@ -14,10 +14,14 @@ import getPageCSS from '@salesforce/apex/FormBuilderController.getPageCSS';
 import getLabelCSS from '@salesforce/apex/FormBuilderController.getLabelCSS';
 import RemoveFormImage from '@salesforce/apex/FormBuilderController.RemoveFormImage';
 import RemovePageImage from '@salesforce/apex/FormBuilderController.RemovePageImage';
+import StoreBtnStyles from '@salesforce/apex/FormBuilderController.StoreBtnStyles';
+import StoreBtnposition from '@salesforce/apex/FormBuilderController.StoreBtnposition';
 import getFocusCSS from '@salesforce/apex/FormBuilderController.getFocusCSS';
 import getHoverCSS from '@salesforce/apex/FormBuilderController.getHoverCSS';
+import getButtonCSS from '@salesforce/apex/FormBuilderController.getButtonCSS';
 import getBGImages from '@salesforce/apex/FormBuilderController.getBGImages';
-import cross from '@salesforce/resourceUrl/cross';
+import imagecross from '@salesforce/resourceUrl/imagecross';
+import plus from '@salesforce/resourceUrl/plusimage';
 
 export default class DesignSectionComponent extends LightningElement {
     @track StylesProp ;
@@ -27,8 +31,11 @@ export default class DesignSectionComponent extends LightningElement {
     @track formimage = false;
     @track pageimageurl;
     @track pageimage = false;
-    cross = cross;
+    @track spinnerdatatable = true;
+    cross = imagecross;
+    plus = plus;
 
+    //Form
     @track formWidth ;
     @track headpadding ;
     @track footpadding ;
@@ -40,6 +47,7 @@ export default class DesignSectionComponent extends LightningElement {
     @track formbackpageRepeat ;
     @track formbackgroundPagefixposition ;
 
+    //Page
     @track toppadding ;
     @track bottompadding ;
     @track pagecolorpicker ;
@@ -52,6 +60,7 @@ export default class DesignSectionComponent extends LightningElement {
     @track formborderwidth ;
     @track formborderradius ;
     
+    //Label
     @track labelalign = 'Left';
     @track labelfontfamily = 'Arial';
     @track labelfontweight = 'Normal';
@@ -62,19 +71,48 @@ export default class DesignSectionComponent extends LightningElement {
     @track labeltopmargin = '0';
     @track labelbottommargin = '0';
 
-    @track inputfontsize ;
-    @track inputlineheight ;
+    //Input
     @track bgInput ;
-    @track optinputfontfamily ;
-    @track inputfontweight ;
-    @track inputfontstyle ;
     @track borderInput ;
     @track borderStyle ;
     @track borderWidth ;
     @track borderRadius ;
+    @track inputfontfamily ;
+    @track inputfontweight ;
+    @track inputfontstyle ;
+    @track inputfontsize ;
+    @track inputlineheight ;
     @track bordertextcolor ;
     @track inputHpadding ;
     @track inputVpadding ;
+
+    //Button
+    @track btnJustify;
+    @track btncolor;
+    @track btnborderstyle;
+    @track btnborderwidth;
+    @track btnborderradius;
+    @track buttonfontfamily;
+    @track buttonfontweight;
+    @track buttonfontstyle;
+    @track buttonfontsize;
+    @track btnWidth;
+    @track btnHeight;
+    @track btnHorizontalPadding;
+    @track btnVerticalPadding;
+    
+    //Hover
+    @track fieldhoverbg;
+    @track fieldhoverborderColor;
+    @track fieldhovercolor;
+    @track hoverlabelcolor;
+    
+    
+    //Focus
+    @track fieldfocusbg;
+    @track fieldfocusborderColor;
+    @track fieldfocuscolor;
+    @track focuslabelcolor;
 
 
     fileData = {};
@@ -150,11 +188,8 @@ export default class DesignSectionComponent extends LightningElement {
         if(this.StylesProp!=null)
         {return this.optionsCreater(this.StylesProp.BorderStylesProp);}
        }
-       get inputfontfamily(){
-        if(this.StylesProp!=null)
-        {return this.optionsCreater(this.StylesProp.FontProp);}
       
-       }
+       
        get optinputfontweight(){
         if(this.StylesProp!=null)
         {return this.optionsCreater(this.StylesProp.FontWeightProp);}
@@ -198,7 +233,18 @@ export default class DesignSectionComponent extends LightningElement {
        }
 
        connectedCallback(){
-       
+        this.spinnerdatatable = true;
+        const cssevent1 = new CustomEvent("getpagecss",{
+          detail: Array[0]
+        });
+        console.log('Event:-- '+cssevent1);
+        this.dispatchEvent(cssevent1);
+
+        const cssevent2 = new CustomEvent("getformcss",{
+          detail: Array[0]
+        });
+        console.log('Event:-- '+cssevent2);
+        this.dispatchEvent(cssevent2);
           //get Styles Metadata
           GetStyles({id:this.recordid})
           .then(result=>{
@@ -228,11 +274,17 @@ export default class DesignSectionComponent extends LightningElement {
             this.pageimageurl = Arr[1];
             this.pageimage=true;
           }
+        this.spinnerdatatable = false;
+        }).catch(error=>{
+          console.log(error);
         })
           this.FormCSS();
-          // this.FieldCSS();
           this.LabelCSS();
           this.PageCSS();
+          this.FieldCSS();
+          this.ButtonCSS();
+          this.HoverCSS();
+          this.FocusCSS();
       }
 
 
@@ -317,17 +369,17 @@ export default class DesignSectionComponent extends LightningElement {
             this.pagecolorpicker = '#FFFFFF';
           }
 
-          this.formborderStyle = (((str.split('border-style:'))[1].split(';'))[0]).slice(0,-1);
+          this.formborderStyle = (((str.split('border-style:'))[1].split(';'))[0]);
           if (this.formborderStyle == null || this.formborderStyle == undefined) {
             this.formborderStyle = 'Solid';
           }
 
-          this.formborderwidth = (((str.split('border-width:'))[1].split(';'))[0]).slice(0,-1);
+          this.formborderwidth = (((str.split('border-width:'))[1].split(';'))[0]).slice(0,-2);
           if (this.formborderwidth == null || this.formborderwidth == undefined) {
             this.formborderwidth = 0;
           }
 
-          this.formborderradius = (((str.split('border-radius:'))[1].split(';'))[0]).slice(0,-1);
+          this.formborderradius = (((str.split('border-radius:'))[1].split(';'))[0]).slice(0,-2);
           if (this.formborderradius == null || this.formborderradius == undefined) {
             this.formborderradius = 0;
           }
@@ -368,12 +420,12 @@ export default class DesignSectionComponent extends LightningElement {
           console.log('getfieldCSS formwidth'+result);
           let str = result;
 
-          this.labeltopmargin = (((str.split('margin-top:'))[1].split(';'))[0]).slice(0,-1);
+          this.labeltopmargin = (((str.split('margin-top:'))[1].split(';'))[0]).slice(0,-2);
           if (this.labeltopmargin == null || this.labeltopmargin == undefined) {
             this.labeltopmargin = 0;
           }
 
-          this.labelbottommargin = (((str.split('margin-bottom:'))[1].split(';'))[0]).slice(0,-1);
+          this.labelbottommargin = (((str.split('margin-bottom:'))[1].split(';'))[0]).slice(0,-2);
           if (this.labelbottommargin == null || this.labelbottommargin == undefined) {
             this.labelbottommargin = 0;
           }
@@ -383,92 +435,263 @@ export default class DesignSectionComponent extends LightningElement {
             this.labelcolor = '#000000';
           }
 
-          this.labelalign = (((str.split('justify-content:'))[1].split(';'))[0]).slice(0,-1);
+          this.labelalign = (((str.split('justify-content:'))[1].split(';'))[0]);
           if (this.labelalign == null || this.labelalign == undefined) {
             this.labelalign = 'Left';
           }
 
-          this.labelfontfamily = (((str.split('font-family:'))[1].split(';'))[0]).slice(0,-1);
+          this.labelfontfamily = (((str.split('font-family:'))[1].split(';'))[0]);
           if (this.labelfontfamily == null || this.labelfontfamily == undefined) {
             this.labelfontfamily = 'Arial';
           }
 
-          this.labelfontweight = (((str.split('font-weight:'))[1].split(';'))[0]).slice(0,-1);
+          this.labelfontweight = (((str.split('font-weight:'))[1].split(';'))[0]);
           if (this.labelfontweight == null || this.labelfontweight == undefined) {
             this.labelfontweight = 'Normal';
           }
 
-          this.labelfontsize = (((str.split('font-size:'))[1].split(';'))[0]);
+          this.labelfontsize = (((str.split('font-size:'))[1].split(';'))[0]).slice(0,2);
           if (this.labelfontsize == null || this.labelfontsize == undefined) {
             this.labelfontsize = 12;
           }
 
-          this.labelineheight = (((str.split('background-position:'))[1].split(';'))[0]);
-          if (this.labelineheight == null || this.labelineheight == undefined) {
-            this.labelineheight = 'Single';
-          }
+          // this.labelineheight = (((str.split('background-position:'))[1].split(';'))[0]);
+          // if (this.labelineheight == null || this.labelineheight == undefined) {
+          //   this.labelineheight = 'Single';
+          // }
 
         }).catch(error=>{
           console.log(error);
         })
       }
 
-      // FieldCSS(){
-      //   getFieldCSS({id:this.recordid})
-      //   .then(result=>{
-      //     let str = result;
+      FieldCSS(){
+        getFieldCSS({id:this.recordid})
+        .then(result=>{
+          let str = result;
 
-      //     this.bgInput = (((str.split('background-color:'))[1].split(';'))[0]);
-      //     if (this.bgInput == null || this.bgInput == undefined) {
-      //       this.bgInput = '#FFFFFF';
-      //     }
+          this.bgInput = (((str.split('background-color:'))[1].split(';'))[0]);
+          if (this.bgInput == null || this.bgInput == undefined) {
+            this.bgInput = '#FFFFFF';
+          }
 
-      //     this.borderInput = (((str.split('border-color:'))[1].split(';'))[0]);
-      //     if (this.borderInput == null || this.borderInput == undefined) {
-      //       this.borderInput = '#000000';
-      //     }
+          this.borderInput = (((str.split('border-color:'))[1].split(';'))[0]);
+          if (this.borderInput == null || this.borderInput == undefined) {
+            this.borderInput = '#000000';
+          }
 
-      //     this.borderStyle = (((str.split('border-style:'))[1].split(';'))[0]);
-      //     if (this.borderStyle == null || this.borderStyle == undefined) {
-      //       this.borderStyle = 'Solid';
-      //     }
+          this.borderStyle = (((str.split('border-style:'))[1].split(';'))[0]);
+          if (this.borderStyle == null || this.borderStyle == undefined) {
+            this.borderStyle = 'Solid';
+          }
+          
+          this.borderWidth = (((str.split('border-width:'))[1].split(';'))[0]).slice(0,-2);
+          if (this.borderWidth == null || this.borderWidth == undefined) {
+            this.borderWidth = 1;
+          }
 
-      //     this.inputfontsize = (((str.split('font-size:'))[1].split(';'))[0]).slice(0,-1);
-      //     if (this.inputfontsize == null || this.inputfontsize == undefined) {
-      //       this.inputfontsize = 12;
-      //     }
+          this.borderRadius = (((str.split('border-radius:'))[1].split(';'))[0]).slice(0,-2);
+          if (this.borderRadius == null || this.borderRadius == undefined) {
+            this.borderRadius = 1;
+          }
 
-      //     this.inputlineheight = (((str.split('margin-bottom:'))[1].split(';'))[0]).slice(0,-1);
-      //     if (this.inputlineheight == null || this.inputlineheight == undefined) {
-      //       this.inputlineheight = 'Single';
-      //     }
+          this.inputfontfamily = (((str.split('font-family:'))[1].split(';'))[0]);
+          if (this.inputfontfamily == null || this.inputfontfamily == undefined) {
+            this.inputfontfamily = 'Arial';
+          }
 
-      //     this.labelalign = (((str.split('justify-content:'))[1].split(';'))[0]).slice(0,-1);
-      //     if (this.labelalign == null || this.labelalign == undefined) {
-      //       this.labelalign = 'Left';
-      //     }
+          this.inputfontweight = (((str.split('font-weight:'))[1].split(';'))[0]).slice(0,-1);
+          if (this.inputfontweight == null || this.inputfontweight == undefined) {
+            this.inputfontweight = 'Normal';
+          }
+          
+          this.inputfontstyle = (((str.split('font-style:'))[1].split(';'))[0]);
+          if (this.inputfontstyle == null || this.inputfontstyle == undefined) {
+            this.inputfontstyle = 'Normal';
+          }
 
-      //     this.optinputfontfamily = (((str.split('font-family:'))[1].split(';'))[0]).slice(0,-1);
-      //     if (this.optinputfontfamily == null || this.optinputfontfamily == undefined) {
-      //       this.optinputfontfamily = 'Arial';
-      //     }
+          this.inputfontsize = (((str.split('font-size:'))[1].split(';'))[0]).slice(0,-2);
+          if (this.inputfontsize == null || this.inputfontsize == undefined) {
+            this.inputfontsize = 12;
+          }
 
-      //     this.inputfontweight = (((str.split('font-weight:'))[1].split(';'))[0]).slice(0,-1);
-      //     if (this.inputfontweight == null || this.inputfontweight == undefined) {
-      //       this.inputfontweight = 'Normal';
-      //     }
+          // this.inputlineheight = (((str.split('margin-bottom:'))[1].split(';'))[0]).slice(0,-1);
+          // if (this.inputlineheight == null || this.inputlineheight == undefined) {
+          //   this.inputlineheight = 'Single';
+          // }
 
-      //     this.inputfontstyle = (((str.split('font-style:'))[1].split(';'))[0]);
-      //     if (this.inputfontstyle == null || this.inputfontstyle == undefined) {
-      //       this.inputfontstyle = 'Normal';
-      //     }
+          this.bordertextcolor = (((str.split(';color:'))[1].split(';'))[0]);
+          if (this.bordertextcolor == null || this.bordertextcolor == undefined) {
+            this.bordertextcolor = '#000000';
+          }
 
-      //   }).catch(error=>{
-      //     console.log(error);
-      //   })
-      // }
+          this.inputHpadding = (((str.split('padding-right:'))[1].split(';'))[0]).slice(0,-2);
+          if (this.inputHpadding == null || this.inputHpadding == undefined) {
+            this.inputHpadding = 12;
+          }
+
+          this.inputVpadding = (((str.split('padding-top:'))[1].split(';'))[0]).slice(0,-2);
+          if (this.inputVpadding == null || this.inputVpadding == undefined) {
+            this.inputVpadding = 12;
+          }
+
+
+        }).catch(error=>{
+          console.log(error);
+        })
+      }
+
+      ButtonCSS(){
+        getButtonCSS({id:this.recordid})
+        .then(result=>{
+          let str = result;
+
+          this.btnJustify = (((str.split('justify-content:'))[1].split(';'))[0]);
+          if (this.btnJustify == null || this.btnJustify == undefined) {
+            this.btnJustify = 'Center';
+          }
+
+          this.btnTextColor = (((str.split(';color:'))[1].split(';'))[0]);
+          if (this.btnTextColor == null || this.btnTextColor == undefined) {
+            this.btnTextColor = '#000000';
+          }
+
+          this.btnBgColor = (((str.split('background-color:'))[1].split(';'))[0]);
+          if (this.btnBgColor == null || this.btnBgColor == undefined) {
+            this.btnBgColor = '#000000';
+          }
+
+          this.btncolor = (((str.split('border-color:'))[1].split(';'))[0]);
+          if (this.btncolor == null || this.btncolor == undefined) {
+            this.btncolor = 'Solid';
+          }
+
+          this.btnborderstyle = (((str.split('border-style:'))[1].split(';'))[0]);
+          if (this.btnborderstyle == null || this.btnborderstyle == undefined) {
+            this.btnborderstyle = 'Solid';
+          }
+          
+          this.btnborderwidth = (((str.split('border-width:'))[1].split(';'))[0]).slice(0,-2);
+          if (this.btnborderwidth == null || this.btnborderwidth == undefined) {
+            this.btnborderwidth = 1;
+          }
+
+          this.btnborderradius = (((str.split('border-radius:'))[1].split(';'))[0]).slice(0,-2);
+          if (this.btnborderradius == null || this.btnborderradius == undefined) {
+            this.btnborderradius = 1;
+          }
+
+          this.buttonfontfamily = (((str.split('font-family:'))[1].split(';'))[0]);
+          if (this.buttonfontfamily == null || this.buttonfontfamily == undefined) {
+            this.buttonfontfamily = 'Arial';
+          }
+
+          this.buttonfontweight = (((str.split('font-weight:'))[1].split(';'))[0]);
+          if (this.buttonfontweight == null || this.buttonfontweight == undefined) {
+            this.buttonfontweight = 'Normal';
+          }
+          
+          this.buttonfontstyle = (((str.split('font-style:'))[1].split(';'))[0]);
+          if (this.buttonfontstyle == null || this.buttonfontstyle == undefined) {
+            this.buttonfontstyle = 'Normal';
+          }
+
+          this.buttonfontsize = (((str.split('font-size:'))[1].split(';'))[0]).slice(0,-2);
+          if (this.buttonfontsize == null || this.buttonfontsize == undefined) {
+            this.buttonfontsize = 12;
+          }
+
+          this.btnWidth = (((str.split('width:'))[1].split(';'))[0]).slice(0,-2);
+          if (this.btnWidth == null || this.btnWidth == undefined) {
+            this.btnWidth = '200';
+          }
+
+          this.btnHeight = (((str.split('height:'))[1].split(';'))[0]).slice(0,-2);
+          if (this.btnHeight == null || this.btnHeight == undefined) {
+            this.btnHeight = '200';
+          }
+
+          this.btnHorizontalPadding = (((str.split('padding-left:'))[1].split(';'))[0]).slice(0,-2);
+          if (this.btnHorizontalPadding == null || this.btnHorizontalPadding == undefined) {
+            this.btnHorizontalPadding = 12;
+          }
+
+          this.btnVerticalPadding = (((str.split('padding-bottom:'))[1].split(';'))[0]).slice(0,-2);
+          if (this.btnVerticalPadding == null || this.btnVerticalPadding == undefined) {
+            this.btnVerticalPadding = 12;
+          }
+
+
+        }).catch(error=>{
+          console.log(error);
+        })
+      }
+
+      HoverCSS(){
+        getHoverCSS({id:this.recordid})
+        .then(result=>{
+          let str = result;
+
+          this.fieldhoverbg = (((str.split('background-color:'))[1].split(';'))[0]);
+          if (this.fieldhoverbg == null || this.fieldhoverbg == undefined) {
+            this.fieldhoverbg = '#FFFFFF';
+          }
+
+          this.fieldhoverborderColor = (((str.split('border-color:'))[1].split(';'))[0]);
+          if (this.fieldhoverborderColor == null || this.fieldhoverborderColor == undefined) {
+            this.fieldhoverborderColor = '#000000';
+          }
+
+          this.fieldhovercolor = (((str.split(';color:'))[1].split(';'))[0]);
+          if (this.fieldhovercolor == null || this.fieldhovercolor == undefined) {
+            this.fieldhovercolor = '#000000';
+          }
+
+          this.hoverlabelcolor = (((str.split('lcolor:'))[1].split(';'))[0]);
+          if (this.hoverlabelcolor == null || this.hoverlabelcolor == undefined) {
+            this.hoverlabelcolor = '#000000';
+          }
+        }).catch(error=>{
+          console.log(error);
+        })
+      }
+
+      FocusCSS(){
+        getFocusCSS({id:this.recordid})
+        .then(result=>{
+          let str = result;
+
+          this.fieldfocusbg = (((str.split('background-color:'))[1].split(';'))[0]);
+          if (this.fieldfocusbg == null || this.fieldfocusbg == undefined) {
+            this.fieldfocusbg = '#FFFFFF';
+          }
+
+          this.fieldfocusborderColor = (((str.split('border-color:'))[1].split(';'))[0]);
+          if (this.fieldfocusborderColor == null || this.fieldfocusborderColor == undefined) {
+            this.fieldfocusborderColor = '#000000';
+          }
+
+          this.fieldfocuscolor = (((str.split(';color:'))[1].split(';'))[0]);
+          if (this.fieldfocuscolor == null || this.fieldfocuscolor == undefined) {
+            this.fieldfocuscolor = '#000000';
+          }
+
+          this.focuslabelcolor = (((str.split('lcolor:'))[1].split(';'))[0]);
+          if (this.focuslabelcolor == null || this.focuslabelcolor == undefined) {
+            this.focuslabelcolor = '#000000';
+          }
+        }).catch(error=>{
+          console.log(error);
+        })
+      }
+
 
       openpagefileUpload(event) {
+        const imageevent = new CustomEvent("imagespinner",{
+          detail: Array[0]
+        });
+        console.log('Event:-- '+imageevent);
+        this.dispatchEvent(imageevent);
         console.log({event});
         var file1 = [];
         const file = event.target.files[0]
@@ -504,6 +727,11 @@ export default class DesignSectionComponent extends LightningElement {
     }
 
     openformfileUpload(event) {
+      const imageevent = new CustomEvent("imagespinner",{
+        detail: Array[0]
+      });
+      console.log('Event:-- '+imageevent);
+      this.dispatchEvent(imageevent);
       console.log({event});
       var file1 = [];
       const file = event.target.files[0]
@@ -539,6 +767,11 @@ export default class DesignSectionComponent extends LightningElement {
   }
 
   removeFormBackground(event){
+    const imageevent = new CustomEvent("imagespinner",{
+      detail: Array[0]
+    });
+    console.log('Event:-- '+imageevent);
+    this.dispatchEvent(imageevent);
     console.log('remove form bg image');
     RemoveFormImage({id:this.recordid})
     .then(result=>{
@@ -556,6 +789,11 @@ export default class DesignSectionComponent extends LightningElement {
   }
 
   removePageBackground(event){
+    const imageevent = new CustomEvent("imagespinner",{
+      detail: Array[0]
+    });
+    console.log('Event:-- '+imageevent);
+    this.dispatchEvent(imageevent);
     console.log('remove page bg image');
     RemovePageImage({id:this.recordid})
     .then(result=>{
@@ -618,8 +856,14 @@ export default class DesignSectionComponent extends LightningElement {
         let Name = event.target.dataset.name;
         let value = event.target.value;
         if(Name == 'width:' || Name == 'padding-top:' || Name == 'padding-bottom:' || Name == 'padding-left:' || Name == 'padding-right:'){
+          if(value > 100){
+            value = 100;
+            event.target.value = 100;
+            this.formWidth = 100;
+          }
           value += '%';
         }
+          
         console.log('Name->'+Name);
         console.log('value->'+value);
         let str = Name+value+';';
@@ -691,10 +935,10 @@ export default class DesignSectionComponent extends LightningElement {
         let value = event.target.value;
         let str='';
         if(Name == 'padding1'){
-          str = 'padding-left:'+value+';padding-right'+value+';'; 
+          str = 'padding-left:'+value+'px;padding-right'+value+'px;'; 
         }
         else if(Name == 'padding2'){
-          str = 'padding-bottom:'+value+';padding-top'+value+';';
+          str = 'padding-bottom:'+value+'px;padding-top'+value+'px;';
         }
         else{
           if(Name == 'font-size:' || Name == 'border-width:' || Name == 'border-radius:'){
@@ -703,6 +947,23 @@ export default class DesignSectionComponent extends LightningElement {
           console.log('Name->'+Name);
           console.log('value->'+value);
           str = Name+value+';';
+        }
+
+        if(Name == 'font-size:' || Name == 'border-width:' || Name == 'border-radius:' || Name == 'padding2' || Name == 'padding1' || Name == 'border-style:' || Name == 'font-family:' || Name == 'font-weight:' || Name == 'font-style:'){
+          
+          StoreHoverStyles({Value: str, id:this.recordid})
+          .then(result=>{
+            console.log(result);
+          }).catch(error=>{
+            console.log(error);
+          })
+
+          StoreFocusStyles({Value: str, id:this.recordid})
+          .then(result=>{
+            console.log(result);
+          }).catch(error=>{
+            console.log(error);
+          })
         }
         console.log('OUTPUT : ',str);
         StoreStyles({Value: str, id:this.recordid})
@@ -717,6 +978,56 @@ export default class DesignSectionComponent extends LightningElement {
         }).catch(error=>{
           console.log(error);
         })
+      }
+
+      handleButtonCss(event){
+        let Name = event.target.dataset.name;
+        let value = event.target.value;
+        let str='';
+        if(Name == 'justify-content:'){
+          str = Name+value+';';
+          StoreBtnposition({Value :str , id:this.recordid})
+          .then(result=>{
+            console.log(result);
+            const cssevent = new CustomEvent("btnposition",{
+              detail: result
+            });
+            console.log('Event:-- '+cssevent);
+            this.dispatchEvent(cssevent);
+            console.log('after queryselector');
+          }).catch(error=>{
+            console.log(error);
+          })
+        }
+        else{
+          if(Name == 'padding1'){
+            str = 'padding-left:'+value+';padding-right'+value+';'; 
+          }
+          else if(Name == 'padding2'){
+            str = 'padding-bottom:'+value+';padding-top'+value+';';
+          }
+          else{
+            if(Name == 'font-size:' || Name == 'border-width:' || Name == 'border-radius:' || Name == 'width:' || Name == 'height:' || Name == 'padding1' || Name == 'padding2'){
+              value += 'px';
+            }
+            console.log('Name->'+Name);
+            console.log('value->'+value);
+            str = Name+value+';';
+          }
+          console.log('OUTPUT : ',str);
+          StoreBtnStyles({Value: str, id:this.recordid})
+          .then(result=>{
+            console.log(result);
+            const cssevent = new CustomEvent("getbuttoncss",{
+              detail: result
+            });
+            console.log('Event:-- '+cssevent);
+            this.dispatchEvent(cssevent);
+            console.log('after queryselector');
+          }).catch(error=>{
+            console.log(error);
+          })
+        }
       }
 
     

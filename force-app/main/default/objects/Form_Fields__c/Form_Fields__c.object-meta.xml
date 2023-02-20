@@ -159,7 +159,7 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Form_Fields</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts></searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

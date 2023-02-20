@@ -73,7 +73,7 @@
     font-size: 12px;
 }
 .myform{
-    /* overflow-y: scroll; */
+    overflow-y: scroll;
     margin: -3%;
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
     scrollbar-width: none;  /* Firefox */
@@ -483,11 +483,7 @@ border-radius: 28px;
     padding-top: 4%;
     display: flex;
     justify-content: center;
-    /* overflow-y: scroll; */
 }
-.fieldDiv1::-webkit-scrollbar {
-    display: none;
-  }
 .progressindicator{
     position: relative;
     top: 3%;

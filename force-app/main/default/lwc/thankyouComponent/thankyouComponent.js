@@ -40,7 +40,6 @@ export default class ThankyouComponent extends LightningElement {
     ThankYou_RichText;
     classtext;
     spinner;
-    @api previewthankyou;
     
 
 // <!-- ===================================
@@ -51,19 +50,11 @@ export default class ThankyouComponent extends LightningElement {
 // =================================== -->
     connectedCallback(){
         this.spinner = true;
-        console.log(this.previewthankyou + '-----------------------> connectedcallback');
-       
         getrecords({currentformid : this.currentformid}).then(result => {
             this.label = result.ThankYou_Label__c;
             this.changelabel = result.ThankYou_Label__c;
             this.currentthankyouid = result.Id;
             console.log(this.label);
-            if(this.previewthankyou == true){
-                console.log('preview');
-                this.template.querySelector('.thanksPreviewDiv').style='background-color:transparent;';
-                this.template.querySelector('.thanksMainDiv').style='justify-content:center;';
-    
-            }
             if(result.Thankyou_Page_Type__c == 'Show Text'){
             this.text = result.Thankyou_Text__c;
             this.textfunc();
@@ -300,13 +291,5 @@ export default class ThankyouComponent extends LightningElement {
     saveLabel(){
         this.editlabelcheck = false;
         this.label = this.changelabel
-    }
-
-    previewthankyoucomp(formid, previewthankyou){
-        this.currentformid = formid;
-        this.previewthankyou = previewthankyou;
-
-        console.log(this.previewthankyou + '-----------------------> previewthankyou');
-        this.connectedCallback();
     }
 }

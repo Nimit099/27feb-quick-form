@@ -29,7 +29,7 @@ export default class FieldValidation extends LightningElement {
     pageedit= false;
     @api tab;
     @api fieldId;
-    @api fieldName = '';
+    @track fieldName = '';
     d = true;
     @track labelvalue = '';
     @track helptext = '';
@@ -51,6 +51,7 @@ export default class FieldValidation extends LightningElement {
     @track salutation = [];
     @track salutationindex = 0;
     @track salutationvalue = [];
+    @track validation = [];
 
 
     fieldcancel = fieldcancel;
@@ -58,17 +59,66 @@ export default class FieldValidation extends LightningElement {
     fieldsave = fieldsave;
     fielddelete = fielddelete;
 
+    renderedCallback(){
+        // if(fieldName != ''){
+        //     this.fieldName = this.fieldName.slice(0, this.fieldName.indexOf(','));
+        // }
+    }
+
     connectedCallback(){
         this.fieldName = this.fieldName.slice(0, this.fieldName.indexOf(','));
-        console.log(this.fieldName);
         this.isRequiredcheck = false;
         this.sdisabledcheck = false;
-        getfieldvalidation({}).then(result =>{
-            let o = JSON.parse(result);
-            console.log(o +' ---------> o');
-            console.log( result + '------- result');
-        })
+        getfieldvalidation({fieldId:this.fieldId}).then(result =>{
+            let str = result.split(',');
+            let k = [];
+            for(let i = 0; i<str.length; i++){
+               let Arr = str[i].split(':');
+               let labels = Arr[0];
+               labels = labels.replace('{','');
+               labels = labels.replace('"','');
+               labels = labels.replace('"','');
+               let value = Arr[1];
+               value = value.replace('}','');
+   
+   
+            //    let mydata1 = {data:[{Name:labels}]};
+            //    mydata1.data.forEach(element => {
+            //        if (element.Name == 'isRequired') {element.isRequired = value} 
+            //        else if(element.Name == 'isDisabled') {element.isDisabled = value}
+            //        else if(element.Name == 'isLabel') {element.isLabel = value}
+            //        else if(element.Name == 'isHelpText') {element.isHelpText = value}
+            //    });
+            }
+           })
     }
+
+    // @api
+    // get valid(){
+    //     getfieldvalidation({fieldId:this.fieldId}).then(result =>{
+    //         let str = result.split(',');
+    //         let k = [];
+    //         for(let i = 0; i<str.length; i++){
+    //            let Arr = str[i].split(':');
+    //            let labels = Arr[0];
+    //            labels = labels.replace('{','');
+    //            labels = labels.replace('"','');
+    //            labels = labels.replace('"','');
+    //            let value = Arr[1];
+    //            value = value.replace('}','');
+   
+   
+    //            let mydata1 = {data:[{Name:labels}]};
+    //            mydata1.data.forEach(element => {
+    //                if (element.Name == 'isRequired') {element.isRequired = value} 
+    //                else if(element.Name == 'isDisabled') {element.isDisabled = value}
+    //                else if(element.Name == 'isLabel') {element.isLabel = value}
+    //                else if(element.Name == 'isHelpText') {element.isHelpText = value}
+    //            });
+    //         }
+    //        })
+    //        return mydata1;
+    // }
 
     @api
     get field(){
@@ -99,6 +149,42 @@ export default class FieldValidation extends LightningElement {
         });
         return mydata1;
     }
+    @api
+    openvalidation(tab, fieldId, fieldName){
+        this.tab = tab;
+        this.fieldId = fieldId;
+        this.fieldName = fieldName.slice(0, fieldName.indexOf(','));
+        this.isRequiredcheck = false;
+        this.sdisabledcheck = false;
+        this.fieldValidation = [];
+
+        getfieldvalidation({fieldId:this.fieldId}).then(result =>{
+            console.log(result);
+            // console.log(JSON.parse(result));
+            let k = result.replace('[','');
+           this.validation = k.split(',');
+           console.log(o);
+           console.log(JSON.stringify(o));
+            // console.log(JSON.stringify(result));
+
+            // let str = result.split(',');
+            // let k = [];
+            // for(let i = 0; i<str.length; i++){
+            //    let Arr = str[i].split(':');
+            //    let labels = Arr[0];
+            //    labels = labels.replace('{"','');
+            //    labels = labels.replace('"','');
+            // //    labels = labels.replace('"','');
+            //    let value = Arr[1];
+            //    value = value.replace('}','');
+            //    if(labels == 'isRequired'){
+            //     console.log('inside isRequired ------>');
+            //     console.log(value);
+            //     this.validation.push({isRequired : JSON.parse(value)});
+            //    }
+            // }
+           })
+    }
 
     validatingbtnhandle(event){
 
@@ -124,12 +210,12 @@ export default class FieldValidation extends LightningElement {
         }
         else if(event.currentTarget.dataset.title == 'Save'){
             this.fieldValidation = [
-                {"isRequired" : this.isRequiredcheck},
-                {"isDisabled" : this.isdisabledcheck},
-                {"isLabel" : this.labelcheck},
-                {"isHelpText" : this.helptextcheck},
-                {"Label" : this.labelvalue},
-                {"HelpText" : this.helptext}
+                {'isRequired' : this.isRequiredcheck},
+                {'isDisabled' : this.isdisabledcheck},
+                {'isLabel' : this.labelcheck},
+                {'isHelpText' : this.helptextcheck},
+                {'Label' : this.labelvalue},
+                {'HelpText' : this.helptext}
             ]
             if(event.currentTarget.dataset.name == "QFPHONE"){
                 this.fieldValidation.push({"isPlaceholder" : this.placeholdercheck},
@@ -204,9 +290,6 @@ export default class FieldValidation extends LightningElement {
                 this.fieldValidation.push({"Salutation" : this.salutation})
             }
 
-
-            console.log(JSON.stringify(this.fieldValidation));
-
             savevalidation({fieldId:this.fieldId, fieldValidation:JSON.stringify(this.fieldValidation)})
             .then(result => {
                 event.preventDefault();
@@ -272,18 +355,15 @@ export default class FieldValidation extends LightningElement {
         }
         else if(event.currentTarget.dataset.title == 'PlaceHolder'){
                 this.placeholdercheck = event.target.checked;
-                console.log(this.placeholdercheck);  
         }
         else if(event.currentTarget.dataset.title == 'ReadOnly'){
             this.readonlycheck = event.target.checked;
-            console.log(this.readonlycheck);  
         }
         else if(event.currentTarget.dataset.title == 'Prefix'){
             this.prefixcheck = event.detail.checked;
         }
         else if(event.currentTarget.dataset.title == 'Decimal'){
             this.decimal = event.detail.value;
-            console.log(this.decimal);
         }
         else if (event.currentTarget.dataset.title == 'RichText'){
             this.richtextinput = true;
@@ -292,12 +372,10 @@ export default class FieldValidation extends LightningElement {
 
     isRequired(event){
         this.isRequiredcheck = event.target.checked;
-        console.log(this.isRequiredcheck);
     }
 
     isdisabled(event){
         this.isdisabledcheck = event.target.checked;
-        console.log(this.isdisabledcheck);
     }
     RichTextData(event){
         this.Richtextvalue =  event.detail.value;
@@ -310,13 +388,11 @@ export default class FieldValidation extends LightningElement {
         if(event.currentTarget.dataset.title == 'Minimum'){
             if(event.detail.value < this.maximumvalue){
                 this.minimumvalue =  event.detail.value;
-                console.log(this.minimumvalue +' < '+this.maximumvalue);
             }
         }
         else if(event.currentTarget.dataset.title == 'Maximum'){
             if(event.detail.value > this.minimumvalue){
                 this.maximumvalue =  event.detail.value;
-                console.log(this.minimumvalue +' > '+this.maximumvalue);
             }
         }
         else if(event.currentTarget.dataset.title == 'Reset'){
@@ -326,6 +402,8 @@ export default class FieldValidation extends LightningElement {
     }
     @api
     get salutations(){
+        console.log(this.salutation);
+        console.log(JSON.stringify(this.salutation));
        return this.salutation;
     }
     addsalutation(event){
@@ -346,5 +424,9 @@ export default class FieldValidation extends LightningElement {
     salutationvalues(event){
         this.salutationvalue[event.currentTarget.dataset.id] = event.detail.value;
         this.salutation[event.currentTarget.dataset.id] = ({id : event.currentTarget.dataset.id, salutation: this.salutationvalue[event.currentTarget.dataset.id]});
+    }
+    @api 
+    get validations(){
+        return this.validation;
     }
 }
