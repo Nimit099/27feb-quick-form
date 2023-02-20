@@ -5,6 +5,7 @@ import fieldsave from '@salesforce/resourceUrl/fieldsave';
 import fieldduplicate from '@salesforce/resourceUrl/fieldduplicate';
 import deletefield from '@salesforce/apex/fieldvalidation.deletefield';
 import savevalidation from '@salesforce/apex/fieldvalidation.savevalidation';
+import getfieldvalidation from '@salesforce/apex/fieldvalidation.getfieldvalidation';
 
 export default class FieldValidation extends LightningElement {
     mainbody = true;
@@ -62,6 +63,11 @@ export default class FieldValidation extends LightningElement {
         console.log(this.fieldName);
         this.isRequiredcheck = false;
         this.sdisabledcheck = false;
+        getfieldvalidation({}).then(result =>{
+            let o = JSON.parse(result);
+            console.log(o +' ---------> o');
+            console.log( result + '------- result');
+        })
     }
 
     @api
