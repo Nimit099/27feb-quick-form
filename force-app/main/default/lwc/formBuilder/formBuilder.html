@@ -173,16 +173,22 @@
                                     ondragleave={dragLeave} ondragenter={dragEnter} data-page-record={page.pageId}>
 
                             <template for:each={page.FieldData} for:item="field">
+                               
 
+                                
                                         <div id={field.ParentMessage} class="field" draggable="true" 
                                             data-order-id={field.Field_Order__c} data-page-record={field.Form_Page__c}
                                             data-record={field.ParentMessage} data-ref="inner" ondragstart={onDragStart} data-record-count={fieldcount}
                                             onclick={openfieldvalidation} key={field.ParentMessage} data-field-name={field.Name} data-id={field.Id}>
+                                             <!-- <template for:each= for:item="valid">
+                                                <div key={valid.isRequired}> -->
                                             <c-quickformfieldcomponent formid={ParentMessage} t-view={field.Name} compview="Full"
                                                 disable-field="true" field-attribute="" field-attribute-value=""
-                                                field-id={field.ParentMessage} page-id={page.ParentMessage}></c-quickformfieldcomponent>
-
+                                                field-id={field.Id} page-id={page.ParentMessage} is-reqired ={field.Field_Validations__c.isRequired} helptextcheck={field.Field_Validations__c.isHelptext}></c-quickformfieldcomponent>
+                                            <!-- </div> 
+                                            </template> -->
                                 </div>
+                          
                             </template>
                         </div>
                                 <div class="footer">

@@ -24,39 +24,45 @@
                     </div>
 
                     <div class="styletext">
-                        <lightning-combobox
+                        <!-- <lightning-combobox
                         name="progress"
                         label="Label"
                         value={labelcheck}
                         placeholder="Label"
                         options={showlabel}
                         onchange={handlevalidation}
-                        data-title="Label" ></lightning-combobox>
+                        data-title="Label" ></lightning-combobox> -->
+                        <lightning-input type="toggle" label="Label visibility" checked={labelcheck} data-title="Label" message-toggle-active="" message-toggle-inactive="" onchange={handlevalidation} ></lightning-input>
                     </div>
-                    <template if:true={d}>
+                    <template if:true={labelcheck}>
                         <div class="styletext">
                             <lightning-input label="Label" data-title="Label" value={labelvalue} onchange={validatingvalue} ></lightning-input>
                         </div>
                     </template>
                     <div class="togglebox">
-                        <lightning-combobox
+                        <!-- <lightning-combobox
                         name="progress"
                         label="Help Text"
                         value={helptextcheck}
                         placeholder="Help Text"
                         options={showlabel}
                         onchange={handlevalidation}
-                        data-title="HelpText" ></lightning-combobox>
+                        data-title="HelpText" ></lightning-combobox> -->
+                        <lightning-input type="toggle" label="Help Text visibility" checked={helptextcheck} data-title="HelpText" message-toggle-active="" message-toggle-inactive="" onchange={handlevalidation} ></lightning-input>
                     </div>
-                    <template if:true={d}>
+                    <template if:true={helptextcheck}>
                         <div class="styletext">
                             <lightning-input label="Help Text" data-title="HelpText" value={helptext} onchange={validatingvalue}></lightning-input>
                         </div>
                     </template>
                     <div class="textlabel">Validation</div>
+                    <!-- <template for:each={validations} for:item="valid">
+                        <div key={valid.isRequired}> -->
                     <div class="togglebox">
                         <lightning-input type="toggle" label="Required Field" checked={isRequiredcheck} message-toggle-active="" message-toggle-inactive="" onchange={isRequired} ></lightning-input>
                     </div>
+                    <!-- </div>
+                    </template> -->
                 </div>
             </div>
         </template>
@@ -65,14 +71,14 @@
         <div key={fields.Name} title={fields.Name}>
         <template if:true={fields.QFSHORTTEXT}>
             <div class="plaintext">
-                <lightning-select label="Field Validation" value={}>
+                <!-- <lightning-select label="Field Validation" value={}>
                     <option value="None">None</option>
                     <option value="alpha">alpha</option>
                     <option value="alpha numeric">alpha numeric</option>
                     <option value="alpha space">alpha space</option>
                     <option value="alpha numeric space">alpha numeric space</option>
                     <option value="numeric">numeric</option>
-                </lightning-select>
+                </lightning-select> -->
             </div>
             <div class="slider">
                 <lightning-slider label="Min no of character" value={minimumvalue} min="0" max="256" onchange={slider} data-title="Minimum"></lightning-slider>
@@ -293,13 +299,12 @@
 
             <!-- FULL NAME -->
         <template if:true={fields.QFFULLNAME}>
-            <!-- <template for:each={validatios} for:item="valid"> -->
-                <!-- <div key={valid.isRequired}> -->
-
+            <!-- <template for:each={validations} for:item="valid">
+                <div key={valid.isRequired}> -->
               
             <div class="textlabel" >Options</div>
             <div class="togglebox">
-                <lightning-input type="toggle" label="Disable Field" checked ={validation.isRequired} message-toggle-active="" message-toggle-inactive="" onchange={isdisabled}></lightning-input>
+                <lightning-input type="toggle" label="Disable Field" checked ={isdisabledcheck} message-toggle-active="" message-toggle-inactive="" onchange={isdisabled}></lightning-input>
             </div>
             <div class="textlabel">Salutation</div>
             <template for:each={salutations} for:item="fields">

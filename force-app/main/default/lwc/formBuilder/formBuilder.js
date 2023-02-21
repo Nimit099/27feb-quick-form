@@ -107,15 +107,15 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
     @track fieldName;
 
     renderedCallback(){
-        console.log('inside the renderedcallBack--->>>');
-        console.log(this.removeObjFields.length);
+        // console.log('inside the renderedcallBack--->>>');
+        // console.log(this.removeObjFields.length);
         this.tempararyfun();
-        console.log('Renderedcallback formbuilder');
+        // console.log('Renderedcallback formbuilder');
         getFormCSS({id:this.ParentMessage})
         .then(result=>{
-            console.log(result);
+            // console.log(result);
             this.getFieldCSS = result;
-            console.log('FormCSS->> '+this.getFieldCSS);
+            // console.log('FormCSS->> '+this.getFieldCSS);
             let array = this.template.querySelector('.myform');
             let str = this.getFieldCSS;
             array.style=str;
@@ -125,7 +125,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
 
         getButtonCSS({id:this.ParentMessage})
         .then(result=>{
-            console.log(result);
+            // console.log(result);
             let str = result;
             let arr = this.template.querySelectorAll('.btn1');
             for (let i = 0; i < arr.length; i++){
@@ -136,14 +136,14 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
 
         getPageCSS({id:this.ParentMessage})
         .then(result=>{
-            console.log(result);
+            // console.log(result);
             this.getFieldCSS = result;
-            console.log('PageCSS->> '+this.getFieldCSS);
+            // console.log('PageCSS->> '+this.getFieldCSS);
             let array = this.template.querySelectorAll('.page');
             let str = this.getFieldCSS;
             for (let i = 0; i < array.length; i++) {
                 const element = array[i];
-                console.log(i+'--'+element);
+                // console.log(i+'--'+element);
                 element.style = str;
             }
             this.spinnerDataTable = false;
@@ -180,30 +180,30 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
 
     handlelabelcss(event){
         this.newCSS = event.detail;
-        console.log(event.detail);
-        console.log('newCSS->> '+this.newCSS);
-        console.log(this.template.querySelectorAll("c-quickformfieldcomponent"));
+        // console.log(event.detail);
+        // console.log('newCSS->> '+this.newCSS);
+        // console.log(this.template.querySelectorAll("c-quickformfieldcomponent"));
         let Arr = this.template.querySelectorAll("c-quickformfieldcomponent");
         for (let i = 0; i < Arr.length; i++) {
             const element = Arr[i];
-            console.log(i+'--'+element);
+            // console.log(i+'--'+element);
             element.LabelCSSUpdate(this.newCSS);
         }
         // this.template.querySelector("c-quickformfieldcomponent").FieldCSSUpdate(this.newCSS);
-        console.log('After handlelabelCSS');
+        // console.log('After handlelabelCSS');
     }
 
     handlepagecss(event){
         getPageCSS({id:this.ParentMessage})
         .then(result=>{
-            console.log(result);
+            // console.log(result);
             this.getFieldCSS = result;
-            console.log('PageCSS->> '+this.getFieldCSS);
+            // console.log('PageCSS->> '+this.getFieldCSS);
             let array = this.template.querySelectorAll('.page');
             let str = this.getFieldCSS;
             for (let i = 0; i < array.length; i++) {
                 const element = array[i];
-                console.log(i+'--'+element);
+                // console.log(i+'--'+element);
                 element.style = str;
             }
             // this.spinnerDataTable = false;
@@ -230,68 +230,68 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
 
     handlebtnpos(event){
         var str = event.detail;
-        console.log('btnpost :- '+str);  
+        // console.log('btnpost :- '+str);  
         let Arr = this.template.querySelectorAll(".footer");
-        console.log('Arr btn pos:- '+Arr.length);
+        // console.log('Arr btn pos:- '+Arr.length);
         for (let i = 0; i < Arr.length; i++) {
             const element = Arr[i];
-            console.log(i+'--'+{element});
+            // console.log(i+'--'+{element});
             element.style = str;
         }
     }
 
     handlebtncss(event){
         var str = event.detail;
-        console.log('btnpost :- '+str);  
+        // console.log('btnpost :- '+str);  
         let Arr = this.template.querySelectorAll(".btn1");
-        console.log('Arr btn pos:- '+Arr.length);
+        // console.log('Arr btn pos:- '+Arr.length);
         for (let i = 0; i < Arr.length; i++) {
             const element = Arr[i];
-            console.log(i+'--'+{element});
+            // console.log(i+'--'+{element});
             element.style = str;
         }
     }
 
     handlenewCSS(event){
         this.newCSS = event.detail;
-        console.log(event.detail);
-        console.log('newCSS->> '+this.newCSS);
-        console.log(this.template.querySelectorAll("c-quickformfieldcomponent"));
+        // console.log(event.detail);
+        // console.log('newCSS->> '+this.newCSS);
+        // console.log(this.template.querySelectorAll("c-quickformfieldcomponent"));
         let Arr = this.template.querySelectorAll("c-quickformfieldcomponent");
         for (let i = 0; i < Arr.length; i++) {
             const element = Arr[i];
-            console.log(i+'--'+element);
+            // console.log(i+'--'+element);
             element.FieldCSSUpdate(this.newCSS);
         }
         // this.template.querySelector("c-quickformfieldcomponent").FieldCSSUpdate(this.newCSS);
-        console.log('After handlenewCSS');
+        // console.log('After handlenewCSS');
     }
 
     connectedCallback() {
 
         this.spinnerDataTable = true;
-        console.log('Parent Massage :- '+this.ParentMessage);
-        console.log('FormId :- '+this.FormId);
-        console.log('FormName :- '+this.FormName);
+        // console.log('Parent Massage :- '+this.ParentMessage);
+        // console.log('FormId :- '+this.FormId);
+        // console.log('FormName :- '+this.FormName);
 
         GetFormPage({ Form_Id: this.ParentMessage })
             .then(result => {
-                console.log('get form page called');
+                // console.log('get form page called');
                 this.PageList = result;
-                console.log('this-->>');
-                console.log(this.PageList[0].Name);
-                console.log(this.PageList.length);
+                // console.log('this-->>');
+                // console.log(this.PageList[0].Name);
+                // console.log(this.PageList.length);
 
             }).catch(error => {
                 console.log(error);
             });
             getFieldsRecords({id:this.ParentMessage})
             .then(result => {
-                console.log('whyyyy');
+                console.log('whyyyy' + JSON.stringify(result));
                 this.FieldList = result;
                 this.setPageField(result);
                  
-                console.log(this.FieldList.length);
+                // console.log(this.FieldList.length);
                 var allDiv  = this.template.querySelector('.fieldtab');
                 allDiv.style = 'background-color:#b3cce6;';
             })
@@ -316,24 +316,24 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
     handleActive(event) {
 
         this.tab = event.currentTarget.dataset.title;
-        console.log('inside onclick'); 
+        // console.log('inside onclick'); 
         var divid = '.'+event.currentTarget.dataset.title;
 
         var allDiv  = this.template.querySelectorAll('.sidebar');
         var temp111 = this.template.querySelectorAll('.pageButtonMenu');
-        console.log(temp111.length);
-        console.log(allDiv.length);
+        // console.log(temp111.length);
+        // console.log(allDiv.length);
         for(var i=0;i<allDiv.length;i++){
                 allDiv[i].style  = 'background-color:none';
             }
         var Div = this.template.querySelector(divid);
-        console.log(Div);
+        // console.log(Div);
         Div.style = 'background-color:#b3cce6'
         
-         console.log(event.currentTarget.dataset.title);
-         console.log('check if condition-=->');
+        //  console.log(event.currentTarget.dataset.title);
+        //  console.log('check if condition-=->');
        if (event.currentTarget.dataset.title == 'tab-1'){
-        console.log('tab-1 if ..');
+        // console.log('tab-1 if ..');
         let cmpDef = {
             componentDef: "c:qf_home",
         };
@@ -346,7 +346,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
         });
        }
          else if (event.currentTarget.dataset.title == 'tab-2' || event.currentTarget.dataset.title == 'tab-3') {
-        console.log('in tab-2 or tab-3 code-->');
+        // console.log('in tab-2 or tab-3 code-->');
            if (event.currentTarget.dataset.title == 'tab-2') {
                this.activesidebar = true;
                this.activeDesignsidebar = false;
@@ -450,14 +450,14 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
             var classname = event.target.className;
             var pageId = event.target.dataset.pageRecord;
             var SenddataObj = {record:DraggedLabel , type:classname, PageId:pageId};
-           console.log(DraggedLabel);
+        //    console.log(DraggedLabel);
            
            console.log('On drag start-->');
             if (DraggedLabel == null) {
                 
                 onDragOver();
             } else {
-                console.log('in else condition');
+                // console.log('in else condition');
               //console.log(JSON.stringify(event.target.dataset));
                 event.dataTransfer.setData('text/plain',JSON.stringify(SenddataObj));
                 
@@ -480,7 +480,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
            }
         }
         
-        console.log('ondrop start -->',dropzone);
+        // console.log('ondrop start -->',dropzone);
         let Fieldid = event.dataTransfer.getData('text');
         let FieldLabel = JSON.parse(Fieldid);
         var classname = event.target.className;
@@ -491,31 +491,31 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
         let fieldLabelOfRemovedFeild = FieldLabel.record;
 
 //console.log('Dropzone length' + dropzone.length);
-        console.log(classname);
-        console.log({FieldLabel});
-        console.log('ondrop start-->');
-        console.log(Fieldid);
-        console.log('parent class->'+event.target.parentElement.className);
+        // console.log(classname);
+        // console.log({FieldLabel});
+        // console.log('ondrop start-->');
+        // console.log(Fieldid);
+        // console.log('parent class->'+event.target.parentElement.className);
 
         let isPageBreak=false;
         let oldfieldId = 'na';
-        console.log('inside the fieldlalbe---->>>>'+FieldLabel.record);
+        // console.log('inside the fieldlalbe---->>>>'+FieldLabel.record);
         if(FieldLabel.record=='QFPAGEBREAK'){
             isPageBreak= true;
         }
-        console.log(isPageBreak);
+        // console.log(isPageBreak);
         if (classname == 'field') {
             if(FieldLabel.type == 'field')
             {   OldFieldSend = true;
                 oldfieldId = event.target.dataset.record;
                 pageIdOfField = FieldLabel.PageId;
                 position = event.target.dataset.orderId-1;
-                console.log(pageIdOfField);
+                // console.log(pageIdOfField);
             }
             else{
             position = event.target.dataset.orderId;
             }
-            console.log('position :- ' + position);
+            // console.log('position :- ' + position);
         }
 
         if(classname==''){
@@ -524,8 +524,8 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
             if(FieldLabel.type == 'field')
             {   OldFieldSend = true;
                 pageIdOfField = FieldLabel.PageId;
-                console.log(pageIdOfField);
-                console.log(PageRecordId);
+                // console.log(pageIdOfField);
+                // console.log(PageRecordId);
                 position = event.target.parentElement.dataset.orderId-1;
                 
             }
@@ -533,14 +533,14 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
                 position = event.target.parentElement.dataset.orderId;
             }
          
-             console.log(classname);
+            //  console.log(classname);
         }
 
-        console.log(event.target.dataset);
-        console.log(PageRecordId);
-        console.log(FieldLabel);
-        console.log(FieldLabel.record);
-        console.log(FieldLabel.type);
+        // console.log(event.target.dataset);
+        // console.log(PageRecordId);
+        // console.log(FieldLabel);
+        // console.log(FieldLabel.record);
+        // console.log(FieldLabel.type);
         var FieldName = FieldLabel.record;
 
 
@@ -548,15 +548,15 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
             FieldName = FieldName + ',' + FieldLabel.type;
             
         }
-        console.log('field label type------->'+FieldLabel.type);
+        // console.log('field label type------->'+FieldLabel.type);
         if(FieldLabel.type=='Extra'){
            
             this.checkCount(FieldName);
-            console.log('get count successfully-->',this.count);
+            // console.log('get count successfully-->',this.count);
             FieldName = FieldName + ',' + FieldLabel.type+','+this.count;
              
               
-            console.log('inside field extra');
+            // console.log('inside field extra');
              
         }
 
@@ -567,20 +567,20 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
         else{
         await this.SaveFields(FieldName, PageRecordId,position,OldFieldSend,pageIdOfField,fieldLabelOfRemovedFeild);
         
-        console.log('both methods are called and finish');
+        // console.log('both methods are called and finish');
     }
     }
 
   async  makePageBreak(FieldName,pageId,position,oldfieldId ){
-    console.log('inside the page break---');
-    console.log("field id -->"+FieldName);
-    console.log("pageId-->"+pageId);
-    console.log('postion-->'+position);
+    // console.log('inside the page break---');
+    // console.log("field id -->"+FieldName);
+    // console.log("pageId-->"+pageId);
+    // console.log('postion-->'+position);
         addPageBreak({FormId: this.ParentMessage, Name:FieldName, Position:position, Form_Page_Id:pageId,TargetedFeild:oldfieldId})
         .then(result=>{
             this.FieldList = result.fieldList;
-            console.log('inside the result in page break-->');
-            console.log(result);
+            // console.log('inside the result in page break-->');
+            // console.log(result);
             this.PageList = result.pageList;
             this.setPageField(result.fieldList);
         })
@@ -592,9 +592,9 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
 
                  
     async SaveFields(FieldName, pageId,position,OldFieldSend,fieldPageId,fieldlabelname) {
-        console.log('inside saveField');
-        console.log(pageId);
-        console.log(fieldPageId);
+        // console.log('inside saveField');
+        // console.log(pageId);
+        // console.log(fieldPageId);
 
         CreateFieldRecord({
             Form_Id: this.ParentMessage,
@@ -676,6 +676,68 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
             }
             for (let j = 0; j < fieldList.length; j++) {
 
+                let isdisabledcheck;
+                let isRequiredcheck; 
+                let labelcheck; 
+                let helptextcheck;
+                let placeholdercheck;
+                let readonlycheck;
+                let prefixcheck;
+                let prefixvalue;
+                let labelvalue;
+                let helptext;
+                let placeholdervalue;
+
+                if(fieldList[j].Field_Validations__c){
+                fieldList[j].Field_Validations__c = fieldList[j].Field_Validations__c.split(',');
+                console.log(fieldList[j].Field_Validations__c.length + ' Lenght');
+                for(let i =0; i< fieldList[j].Field_Validations__c.length; i++){
+                    fieldList[j].Field_Validations__c[i] =  fieldList[j].Field_Validations__c[i].split(':');
+                    console.log( fieldList[j].Field_Validations__c[i][0] + 'Nimit');
+                    let labels = fieldList[j].Field_Validations__c[i][0];
+                    let value = fieldList[j].Field_Validations__c[i][1];
+
+                    if(labels == 'isRequired'){
+                        isRequiredcheck = JSON.parse(value);
+                       }
+                       else if(labels == 'isDisabled'){
+                        isdisabledcheck = JSON.parse(value);
+                       }
+                       else if(labels == 'isLabel'){
+                        labelcheck = JSON.parse(value);
+                       }
+                       else if(labels == 'isHelpText'){
+                        helptextcheck = JSON.parse(value);
+                       }
+                       else if(labels == 'isPlaceholder'){
+                        placeholdercheck = JSON.parse(value);
+                       }
+                       else if(labels == 'isReadonly'){
+                        readonlycheck = JSON.parse(value);
+                       }
+                       else if(labels == 'isPrefix'){
+                        prefixcheck = JSON.parse(value);
+                       }
+                       else if(labels == 'Prefix'){
+                        prefixvalue = value.replaceAll('"','');
+                       }
+                       else if(labels == 'Label'){
+                        labelvalue = value.replaceAll('"','');
+                       }
+                       else if(labels == 'HelpText'){
+                        helptext = value.replaceAll('"','');
+                       }
+                       else if(labels == 'Placeholder'){
+                        placeholdervalue = value.replaceAll('"','');
+                       }
+                       else if(labels == 'Salutation'){
+                        this.salutationvalue.push(value.replaceAll('"',''));
+                       }
+                }
+                fieldList[j].Field_Validations__c = ({isRequired: isRequiredcheck, isDisabled : isdisabledcheck, isLabel : labelcheck, isHelptext :helptextcheck, isPlaceholder : placeholdercheck, 
+                    isReadonly : readonlycheck, isPrefix : prefixcheck,  Prefix : prefixvalue, Label: labelvalue, HelpText : helptext, Placeholder : placeholdervalue});
+                    // fieldList[j].push({isRequired: isRequiredcheck});
+                }
                 if (this.PageList[i].Id == fieldList[j].Form_Page__c) {
                     console.log('inside inner loop');
                    let fieldofObj =  fieldList[j].Name.split(',');
@@ -696,6 +758,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
             islast = false;
             isnotlast = false;
             outerlist.push(temp);
+            console.log(JSON.stringify(outerlist)+ 'Nimit');
         }
 
         this.MainList = outerlist;
@@ -1192,6 +1255,7 @@ this.isModalOpen  = false;
             this.activeNotification = false;
             this.activethankyou = false;
             this.template.querySelector('.fieldvalidationdiv').style="display:none;";
+            this.connectedCallback();
         }
         else if(event.detail == 'tab-3'){
             this.activeDesignsidebar = true;
@@ -1199,6 +1263,7 @@ this.isModalOpen  = false;
             this.activeNotification = false;
             this.activethankyou = false;
             this.template.querySelector('.fieldvalidationdiv').style="display:none;";
+            this.connectedCallback();
         }
     }
 }

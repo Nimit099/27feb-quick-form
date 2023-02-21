@@ -314,8 +314,9 @@
                             Full Name {count}
                             </label>
                       </template>  
-                
+                      <template if:true={helptextcheck}>
                     <lightning-helptext class="helptxt" content={fieldHelpText}></lightning-helptext>
+                    </template>
                     <div class="fullname" id={PageId}>
                         <div class="slds-form-element__control fullnamewidth">
                             <div class="slds-select_container">
@@ -367,7 +368,9 @@
                         </label>
                   </template>  
             
+                  <template if:true={helptextcheck}>
                     <lightning-helptext class="helptxt" content={fieldHelpText}></lightning-helptext>
+                    </template>
    <div class="slds-form-element__control">
             <input placeholder="Name"
             onclick={OnFieldClick} class="slds-input" ></input>
@@ -393,7 +396,9 @@
                             {Address} {count}
                         </label>
                         <label>
-                            <lightning-helptext class="helptxt" content={fieldHelpText}></lightning-helptext>
+                            <template if:true={helptextcheck}>
+                                <lightning-helptext class="helptxt" content={fieldHelpText}></lightning-helptext>
+                                </template>
                         </label>
                     </template>
 

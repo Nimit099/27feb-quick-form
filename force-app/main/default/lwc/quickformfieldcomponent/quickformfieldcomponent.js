@@ -9,6 +9,8 @@ import EmojiRating2 from '@salesforce/resourceUrl/EmojiRating2';
 import EmojiRating3 from '@salesforce/resourceUrl/EmojiRating3';
 import EmojiRating4 from '@salesforce/resourceUrl/EmojiRating4';
 import getScaleRating from '@salesforce/apex/FormBuilderController.getScaleRating';
+import getfieldvalidation from '@salesforce/apex/fieldvalidation.getfieldvalidation';
+
 export default class Quickformfieldcomponent extends LightningElement {
 
     // icons
@@ -30,7 +32,7 @@ export default class Quickformfieldcomponent extends LightningElement {
 
    @track FieldShown = true;
    @track LabelShown =true;
-   @track isReqired =true;
+   @api isReqired;
    @track fieldHelpText = 'please fill the help text';
    @track fieldValidations='';
    FieldLabel;
@@ -42,6 +44,25 @@ export default class Quickformfieldcomponent extends LightningElement {
    @track getLabelCSS1;
    hovercssproperty;
    focuscssproperty;
+
+
+
+   @track tab;
+   @track fieldName;
+   @track isRequiredcheck;
+   @track disabledcheck;
+   @api helptextcheck;
+   @track placeholdercheck;
+   @track readonlycheck;
+   @track labelcheck;
+   @track labelvalue;
+   @track helptext;
+   @track placeholdervalue;
+   @track fieldValidation;
+   @track salutationvalue;
+   @track salutation;
+   @track salutationindex;
+
 
     connectedCallback(){
          getScaleRating()
@@ -320,10 +341,10 @@ if(this.FieldType!=undefined && this.FieldType!='undefined' && this.FieldType!='
     }
 
    get isTrueFullName(){
-   
     return this.tView == 'QFFULLNAME' || this.FieldLabel=='QFFULLNAME';
    }
-   get isTrueName(){
+
+   get isTrueName(){    
     return this.tView == 'QFNAME' || this.FieldLabel=='QFNAME';
    }
    get isTrueAddress(){

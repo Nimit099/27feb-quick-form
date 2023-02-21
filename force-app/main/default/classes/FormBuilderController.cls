@@ -770,6 +770,7 @@ public static List<Form_Fields__c> CreateFieldRecord(String Form_Id,String Name,
         field.Form__c =  Form_Id;
         field.Form_Page__c = Form_Page_Id;
         field.Field_Order__c = Position+1;
+        field.Field_Validations__c = 'isRequired:false,isLabel:true';
       
         insert field;}        
        fieldList=[SELECT Id,Name,Form__c,Form_Page__c,Field_Order__c FROM Form_Fields__c WHERE Form__c =: Form_Id ORDER BY Field_Order__c ASC];
@@ -916,7 +917,7 @@ public list<Form_Page__c> pageList{get; set;}}
             }
            insert Fields;
         }
-           List<Form_Fields__c> fieldList=[SELECT Id,Name,Form__c,Form_Page__c,Field_Order__c FROM Form_Fields__c];
+           List<Form_Fields__c> fieldList=[SELECT Id,Name,Form__c,Form_Page__c,Field_Order__c, Field_Validations__c FROM Form_Fields__c];
 
            return fieldList;
           

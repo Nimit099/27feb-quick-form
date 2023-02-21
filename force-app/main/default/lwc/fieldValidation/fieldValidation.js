@@ -156,33 +156,70 @@ export default class FieldValidation extends LightningElement {
         this.fieldName = fieldName.slice(0, fieldName.indexOf(','));
         this.isRequiredcheck = false;
         this.sdisabledcheck = false;
+        this.helptextcheck = false;
+        this.placeholdercheck = false;
+        this.readonlycheck= false;
+        this.labelcheck = false;
+        this.labelvalue = '';
+        this.helptext = '';
+        this.placeholdervalue = '';
         this.fieldValidation = [];
+        this.salutationvalue = [];
+        this.salutation = [];
+        this.salutationindex = 0;
 
         getfieldvalidation({fieldId:this.fieldId}).then(result =>{
-            console.log(result);
-            // console.log(JSON.parse(result));
-            let k = result.replace('[','');
-           this.validation = k.split(',');
-           console.log(o);
-           console.log(JSON.stringify(o));
-            // console.log(JSON.stringify(result));
-
-            // let str = result.split(',');
-            // let k = [];
-            // for(let i = 0; i<str.length; i++){
-            //    let Arr = str[i].split(':');
-            //    let labels = Arr[0];
-            //    labels = labels.replace('{"','');
-            //    labels = labels.replace('"','');
-            // //    labels = labels.replace('"','');
-            //    let value = Arr[1];
-            //    value = value.replace('}','');
-            //    if(labels == 'isRequired'){
-            //     console.log('inside isRequired ------>');
-            //     console.log(value);
-            //     this.validation.push({isRequired : JSON.parse(value)});
-            //    }
-            // }
+            let str = result.replace('[','');
+            str = str.replace(']','');
+            str = str.split(',');
+            for(let i = 0; i<str.length; i++){
+               let Arr = str[i].split(':');
+               let labels = Arr[0];
+               labels = labels.replace('{"','');
+               labels = labels.replace('"','');
+               let value = Arr[1];
+               value = value.replace('}','');
+               if(labels == 'isRequired'){
+                this.isRequiredcheck = JSON.parse(value);
+               }
+               else if(labels == 'isDisabled'){
+                this.isdisabledcheck = JSON.parse(value);
+               }
+               else if(labels == 'isLabel'){
+                this.labelcheck = JSON.parse(value);
+               }
+               else if(labels == 'isHelpText'){
+                this.helptextcheck = JSON.parse(value);
+               }
+               else if(labels == 'isPlaceholder'){
+                this.placeholdercheck = JSON.parse(value);
+               }
+               else if(labels == 'isReadonly'){
+                this.readonlycheck = JSON.parse(value);
+               }
+               else if(labels == 'isReadonly'){
+                this.readonlycheck = JSON.parse(value);
+               }
+               else if(labels == 'isPrefix'){
+                this.prefixcheck = JSON.parse(value);
+               }
+               else if(labels == 'Prefix'){
+                this.prefixvalue = value.replaceAll('"','');
+               }
+               else if(labels == 'Label'){
+                this.labelvalue = value.replaceAll('"','');
+               }
+               else if(labels == 'HelpText'){
+                this.helptext = value.replaceAll('"','');
+               }
+               else if(labels == 'Placeholder'){
+                this.placeholdervalue = value.replaceAll('"','');
+               }
+               else if(labels == 'Salutation'){
+                this.salutationvalue.push(value.replaceAll('"',''));
+               }
+            }
+            this.opensalutation();
            })
     }
 
@@ -209,14 +246,13 @@ export default class FieldValidation extends LightningElement {
             });
         }
         else if(event.currentTarget.dataset.title == 'Save'){
-            this.fieldValidation = [
-                {'isRequired' : this.isRequiredcheck},
-                {'isDisabled' : this.isdisabledcheck},
-                {'isLabel' : this.labelcheck},
-                {'isHelpText' : this.helptextcheck},
-                {'Label' : this.labelvalue},
-                {'HelpText' : this.helptext}
-            ]
+            this.fieldValidation = 'isRequired:'+this.isRequiredcheck+
+                ',isDisabled:'+ this.isdisabledcheck +
+                ',isLabel:'+this.labelcheck+
+                ',isHelpText:' +this.helptextcheck+
+                ',Label:'+ this.labelvalue+
+                ',HelpText:'+ this.helptext
+            
             if(event.currentTarget.dataset.name == "QFPHONE"){
                 this.fieldValidation.push({"isPlaceholder" : this.placeholdercheck},
                                           {"Placeholder" : this.placeholdervalue},
@@ -244,7 +280,9 @@ export default class FieldValidation extends LightningElement {
                                             {"Prefix" : this.prefixvalue})
             }
             else if(event.currentTarget.dataset.name == "QFFULLNAME"){
-                this.fieldValidation.push({"Salutation" : this.salutation})
+                for(let i = 0; i< this.salutationvalue.length; i++){
+                this.fieldValidation = this.fieldValidation.concat(',Salutation:'+ this.salutationvalue[i])
+                }
             }
             else if(event.currentTarget.dataset.name == "QFPRICE"){
                 this.fieldValidation.push({"isPlaceholder" : this.placeholdercheck},
@@ -292,11 +330,11 @@ export default class FieldValidation extends LightningElement {
 
             savevalidation({fieldId:this.fieldId, fieldValidation:JSON.stringify(this.fieldValidation)})
             .then(result => {
-                event.preventDefault();
-                const selectEvent = new CustomEvent('closevalidation', {
-                    detail: this.tab
-                });
-                this.dispatchEvent(selectEvent);
+                // event.preventDefault();
+                // const selectEvent = new CustomEvent('closevalidation', {
+                //     detail: this.tab
+                // });
+                // this.dispatchEvent(selectEvent);
             })
             .catch(error => {
                 console.log(error);
@@ -338,20 +376,10 @@ export default class FieldValidation extends LightningElement {
 
     handlevalidation(event){
         if(event.currentTarget.dataset.title == 'Label'){
-            if(event.detail.value == 'Show'){
-                this.labelcheck = true;
-            }
-            else{
-                this.labelcheck = false;
-            }
+                this.labelcheck = event.target.checked;;       
         }
         else if(event.currentTarget.dataset.title == 'HelpText'){
-            if(event.detail.value == 'Show'){
-                this.helptextcheck = true;
-            }
-            else{
-                this.helptextcheck = false;
-            }        
+                this.helptextcheck = event.target.checked;;       
         }
         else if(event.currentTarget.dataset.title == 'PlaceHolder'){
                 this.placeholdercheck = event.target.checked;
@@ -407,10 +435,15 @@ export default class FieldValidation extends LightningElement {
        return this.salutation;
     }
     addsalutation(event){
-        this.salutation.push({id : this.salutationindex , salutation: ""})
-        this.salutationindex ++;
+        this.salutation.push({id : this.salutationindex , salutation: ''})
+        this.salutationindex ++; 
+    }
+    opensalutation(){
+        for(let i = 0; i < this.salutationvalue.length; i++){
+        this.salutation.push({id : this.salutationindex , salutation: this.salutationvalue[i]})
+        this.salutationindex ++; 
         }
-
+    }
     deletesalutation(event){
         this.salutation.splice(event.currentTarget.dataset.id, 1);
         this.salutationvalue.splice(event.currentTarget.dataset.id, 1);
@@ -422,6 +455,7 @@ export default class FieldValidation extends LightningElement {
     }
 
     salutationvalues(event){
+        console.log(event.currentTarget.dataset.id);
         this.salutationvalue[event.currentTarget.dataset.id] = event.detail.value;
         this.salutation[event.currentTarget.dataset.id] = ({id : event.currentTarget.dataset.id, salutation: this.salutationvalue[event.currentTarget.dataset.id]});
     }
