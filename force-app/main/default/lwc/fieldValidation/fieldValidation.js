@@ -6,6 +6,8 @@ import fieldduplicate from '@salesforce/resourceUrl/fieldduplicate';
 import deletefield from '@salesforce/apex/fieldvalidation.deletefield';
 import savevalidation from '@salesforce/apex/fieldvalidation.savevalidation';
 import getfieldvalidation from '@salesforce/apex/fieldvalidation.getfieldvalidation';
+import copyfield from '@salesforce/apex/fieldvalidation.copyfield';
+
 
 export default class FieldValidation extends LightningElement {
     mainbody = true;
@@ -31,7 +33,7 @@ export default class FieldValidation extends LightningElement {
     @api fieldId;
     @track fieldName = '';
     d = true;
-    @track labelvalue = '';
+    @api labelvalue;
     @track helptext = '';
     @track placeholdervalue = '';
     @track prefixvalue ='';
@@ -52,7 +54,6 @@ export default class FieldValidation extends LightningElement {
     @track salutationindex = 0;
     @track salutationvalue = [];
     @track validation = [];
-
 
     fieldcancel = fieldcancel;
     fieldduplicate = fieldduplicate;
@@ -155,7 +156,7 @@ export default class FieldValidation extends LightningElement {
         this.fieldId = fieldId;
         this.fieldName = fieldName.slice(0, fieldName.indexOf(','));
         this.isRequiredcheck = false;
-        this.sdisabledcheck = false;
+        this.isdisabledcheck = false;
         this.helptextcheck = false;
         this.placeholdercheck = false;
         this.readonlycheck= false;
@@ -254,30 +255,21 @@ export default class FieldValidation extends LightningElement {
                 ',HelpText:'+ this.helptext
             
             if(event.currentTarget.dataset.name == "QFPHONE"){
-                this.fieldValidation.push({"isPlaceholder" : this.placeholdercheck},
-                                          {"Placeholder" : this.placeholdervalue},
-                                          {"isReadonly" : this.readonlycheck})
+                this.fieldValidation = this.fieldValidation.concat(',isPlaceholder:'+ this.placeholdercheck+',Placeholder:'+ this.placeholdervalue+ ',isReadonly:'+ this.readonlycheck)
             }
             else if(event.currentTarget.dataset.name == "QFADDRESS"){
-                this.fieldValidation.push({"isReadonly" : this.readonlycheck})
+                this.fieldValidation = this.fieldValidation.concat(',isReadonly:'+ this.readonlycheck)
             }
             else if( event.currentTarget.dataset.name == "QFNAME"){
-                this.fieldValidation.push({"isPlaceholder" : this.placeholdercheck},
-                                          {"Placeholder" : this.placeholdervalue},)
+                this.fieldValidation = this.fieldValidation.concat(',isPlaceholder:'+this.placeholdercheck + ',Placeholder:'+ this.placeholdervalue)
             }
             else if(event.currentTarget.dataset.name == "QFEMAILID"){
-                this.fieldValidation.push({"isPlaceholder" : this.placeholdercheck},
-                                          {"Placeholder" : this.placeholdervalue},
-                                          {"isReadonly" : this.readonlycheck},
-                                          {"Minimum" : this.minimumvalue},
-                                          {"Maximum" : this.maximumvalue})
+                this.fieldValidation = this.fieldValidation.concat(',isPlaceholder:'+ this.placeholdercheck+',Placeholder:'+ this.placeholdervalue+ ',isReadonly:'+ this.readonlycheck +
+                 ',Minimum:' +this.minimumvalue + ',Maximum:' + this.maximumvalue )                       
             }
             else if(event.currentTarget.dataset.name == "QFNUMBER"){
-                this.fieldValidation.push({"isPlaceholder" : this.placeholdercheck},
-                                            {"Placeholder" : this.placeholdervalue},
-                                            {"isReadonly" : this.readonlycheck},
-                                            {"isPrefix" : this.prefixcheck},
-                                            {"Prefix" : this.prefixvalue})
+                this.fieldValidation = this.fieldValidation.concat(',isPlaceholder:'+ this.placeholdercheck+',Placeholder:'+ this.placeholdervalue+ ',isReadonly:'+ this.readonlycheck +
+                ',isPrefix:' +this.prefixcheck + ',Prefix:' + this.prefixvalue )
             }
             else if(event.currentTarget.dataset.name == "QFFULLNAME"){
                 for(let i = 0; i< this.salutationvalue.length; i++){
@@ -285,61 +277,74 @@ export default class FieldValidation extends LightningElement {
                 }
             }
             else if(event.currentTarget.dataset.name == "QFPRICE"){
-                this.fieldValidation.push({"isPlaceholder" : this.placeholdercheck},
-                                          {"Placeholder" : this.placeholdervalue},
-                                          {"Decimal" : this.decimal})
+                this.fieldValidation = this.fieldValidation.concat(',isPlaceholder:'+ this.placeholdercheck+',Placeholder:'+ this.placeholdervalue+ ',Decimal:'+ this.decimal)
             }
             else if(event.currentTarget.dataset.name == "QFLONGTEXT"){
-                this.fieldValidation.push({"isPlaceholder" : this.placeholdercheck},
-                {"Placeholder" : this.placeholdervalue},
-                {"isReadonly" : this.readonlycheck})
+                this.fieldValidation = this.fieldValidation.concat(',isPlaceholder:'+ this.placeholdercheck+',Placeholder:'+ this.placeholdervalue+ ',isReadonly:'+ this.readonlycheck)
             }
             else if(event.currentTarget.dataset.name == "QFRICHTEXT"){
-                this.fieldValidation.push({"Richtext" : this.Richtextvalue},)
+                this.fieldValidation = this.fieldValidation.concat(',Richtext:'+ this.Richtextvalue)
             }
             else if(event.currentTarget.dataset.name == "QFSHORTTEXT"){
-                this.fieldValidation.push({"isPlaceholder" : this.placeholdercheck},
-                                            {"Placeholder" : this.placeholdervalue},
-                                            {"isReadonly" : this.readonlycheck},
-                                            {"isPrefix" : this.prefixcheck},
-                                            {"Prefix" : this.prefixvalue})
+                this.fieldValidation = this.fieldValidation.concat(',isPlaceholder:'+ this.placeholdercheck+',Placeholder:'+ this.placeholdervalue+ ',isReadonly:'+ this.readonlycheck +
+                ',isPrefix:' +this.prefixcheck + ',Prefix:' + this.prefixvalue )
             }
             else if(event.currentTarget.dataset.name == "QFLINK"){
-                this.fieldValidation.push({"isPlaceholder" : this.placeholdercheck},
-                {"Placeholder" : this.placeholdervalue},
-                {"isReadonly" : this.readonlycheck})
+                this.fieldValidation = this.fieldValidation.concat(',isPlaceholder:'+ this.placeholdercheck+',Placeholder:'+ this.placeholdervalue+ ',isReadonly:'+ this.readonlycheck)
             }
             else if(event.currentTarget.dataset.name == "QFTERMSOFSERVICE"){
-                this.fieldValidation.push({"Agreement" : this.Richtextvalue},)
+                this.fieldValidation = this.fieldValidation.concat(',Agreement:'+ this.Richtextvalue)
             }
             else if(event.currentTarget.dataset.name == "QFTIME"){
-                this.fieldValidation.push({"isReadonly" : this.readonlycheck})
+                this.fieldValidation = this.fieldValidation.concat(',isReadonly:'+ this.readonlycheck)
             }
             else if(event.currentTarget.dataset.name == "QFDATETIME"){
-                this.fieldValidation.push({"isReadonly" : this.readonlycheck})
+                this.fieldValidation = this.fieldValidation.concat(',isReadonly:'+ this.readonlycheck)
             }
             else if(event.currentTarget.dataset.name == "QFDATE"){
-                this.fieldValidation.push({"isReadonly" : this.readonlycheck})
+                this.fieldValidation = this.fieldValidation.concat(',isReadonly:'+ this.readonlycheck)
             }
             else if(event.currentTarget.dataset.name == "QFRADIOBUTTON"){
-                this.fieldValidation.push({"Salutation" : this.salutation})
+                for(let i = 0; i< this.salutationvalue.length; i++){
+                    this.fieldValidation = this.fieldValidation.concat(',Salutation:'+ this.salutationvalue[i])
+                    }
             }
             else if(event.currentTarget.dataset.name == "QFCHECKBOX"){
-                this.fieldValidation.push({"Salutation" : this.salutation})
+                for(let i = 0; i< this.salutationvalue.length; i++){
+                    this.fieldValidation = this.fieldValidation.concat(',Salutation:'+ this.salutationvalue[i])
+                    }
+            }
+            else if(event.currentTarget.dataset.name == "QFSCALERATING"){
+                for(let i = 0; i< this.salutationvalue.length; i++){
+                    this.fieldValidation = this.fieldValidation.concat(',Salutation:'+ this.salutationvalue[i])
+                    }
             }
 
             savevalidation({fieldId:this.fieldId, fieldValidation:JSON.stringify(this.fieldValidation)})
             .then(result => {
-                // event.preventDefault();
-                // const selectEvent = new CustomEvent('closevalidation', {
-                //     detail: this.tab
-                // });
-                // this.dispatchEvent(selectEvent);
+                event.preventDefault();
+                const selectEvent = new CustomEvent('closevalidation', {
+                    detail: this.tab
+                });
+                this.dispatchEvent(selectEvent);
             })
             .catch(error => {
                 console.log(error);
             });
            
+        }
+        else if(event.currentTarget.dataset.title == 'Copy'){
+            copyfield({fieldId:this.fieldId})
+            .then(result => {
+                event.preventDefault();
+                const selectEvent = new CustomEvent('closevalidation', {
+                    detail: this.tab
+                });
+                this.dispatchEvent(selectEvent);
+            })
+            .catch(error => {
+                console.log(error);
+            });
         }
     }
 

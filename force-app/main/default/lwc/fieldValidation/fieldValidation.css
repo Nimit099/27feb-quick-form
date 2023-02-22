@@ -176,6 +176,9 @@ label.slds-checkbox_toggle.slds-grid>* {
     background-color:#d5d5d5;
     text-align: center;
 }
+.validationicon{
+    cursor: pointer;
+}
 @media screen and (max-width: 1600px) {
     .btnDiv{
         width: 45px;

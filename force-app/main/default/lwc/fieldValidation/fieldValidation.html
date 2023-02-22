@@ -417,7 +417,7 @@
             <!-- Scale Rating -->
             <!-- <aura:if isTrue={WrapperList.AttributeList.Form_Field__r.Data_Record_Id__c == 'QFSCALERATING'}> -->
         <template if:true={fields.QFSCALERATING}>
-            <template if:true={scaleratinghelptext}>
+            <!-- <template if:true={scaleratinghelptext}>
                 <div class="styletext">
                     <lightning-input label="Label" value={} ></lightning-input>
                 </div>
@@ -429,30 +429,30 @@
                 <div class="styletext">
                     <lightning-input label="Help Text" value={} ></lightning-input>
                 </div>
-            </template>
-            <div class="textlabel">Validation</div>
+            </template> -->
+            <!-- <div class="textlabel">Validation</div>
             <div class="togglebox">
                 <lightning-input type="toggle" label="Required Field" checked={} message-toggle-active="" message-toggle-inactive="" ></lightning-input>
-            </div>
-            <div class="textlabel">Statement Choices</div>
-            <!-- <aura:iteration items={StatementList} var="item" indexVar="index"> -->
+            </div> -->
+            <!-- <div class="textlabel">Statement Choices</div>
+            <aura:iteration items={StatementList} var="item" indexVar="index"> 
                 <div class="Item" id={index}>
                     <lightning-input class="slds-size_5-of-6" variant="label-hidden"  value={} onblur={changeStatement} ></lightning-input>
                     <lightning-button-icon class="slds-size_1-of-6" icon-name="utility:delete" size="medium"  name={} onclick={deleteStatement} ></lightning-button-icon>
                 </div>
-            <!-- </aura:iteration> -->
-            <div class="Itembutton">
+            </aura:iteration> -->
+            <!-- <div class="Itembutton">
                 <lightning-button icon-name="utility:add" title="Add" onclick={addStatement}></lightning-button>
-            </div>
+            </div> -->
             <div class="textlabel">Option Choices</div>
-            <!-- <aura:iteration items={OptionList} var="item" indexVar="index"> -->
-                <div class="Item" id={index}>
-                    <lightning-input class="slds-size_5-of-6" variant="label-hidden"  value={} onblur={changeOption} ></lightning-input>
-                    <lightning-button-icon class="slds-size_1-of-6" icon-name="utility:delete" size="medium"  name={} onclick={deleteOption} ></lightning-button-icon>
+            <template for:each={salutations} for:item="fields">
+                <div class="Item" key={fields.id}>
+                    <lightning-input class="slds-size_5-of-6" variant="label-hidden" data-id={fields.id} value={fields.salutation} onchange={salutationvalues}></lightning-input>
+                    <lightning-button-icon class="slds-size_1-of-6" icon-name="utility:delete" size="medium" data-id={fields.id}  onclick={deletesalutation}></lightning-button-icon>
                 </div>
-            <!-- </aura:iteration> -->
+            </template>
             <div class="Itembutton">
-                <lightning-button icon-name="utility:add" title="Add" onclick={addOption}></lightning-button>
+                <lightning-button icon-name="utility:add" title="Add" onclick={addsalutation}></lightning-button>
             </div>
         </template>
 

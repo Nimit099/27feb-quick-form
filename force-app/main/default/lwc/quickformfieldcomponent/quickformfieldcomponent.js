@@ -9,8 +9,6 @@ import EmojiRating2 from '@salesforce/resourceUrl/EmojiRating2';
 import EmojiRating3 from '@salesforce/resourceUrl/EmojiRating3';
 import EmojiRating4 from '@salesforce/resourceUrl/EmojiRating4';
 import getScaleRating from '@salesforce/apex/FormBuilderController.getScaleRating';
-import getfieldvalidation from '@salesforce/apex/fieldvalidation.getfieldvalidation';
-
 export default class Quickformfieldcomponent extends LightningElement {
 
     // icons
@@ -44,27 +42,16 @@ export default class Quickformfieldcomponent extends LightningElement {
    @track getLabelCSS1;
    hovercssproperty;
    focuscssproperty;
-
-
-
-   @track tab;
-   @track fieldName;
-   @track isRequiredcheck;
-   @track disabledcheck;
+   @api labelvalue;
+   @api labelcheck;
+   @api salutationvalue;
    @api helptextcheck;
-   @track placeholdercheck;
-   @track readonlycheck;
-   @track labelcheck;
-   @track labelvalue;
-   @track helptext;
-   @track placeholdervalue;
-   @track fieldValidation;
-   @track salutationvalue;
-   @track salutation;
-   @track salutationindex;
-
-
+   @api helptextvalue;
+   @api isdisabled;
+   @api placeholder;
     connectedCallback(){
+        console.log(this.labelvalue);
+        console.log(this.salutationvalue + '-- salutationvalue');
          getScaleRating()
     .then(result=>{
        this.scaleRating = result;
@@ -328,7 +315,7 @@ if(this.FieldType!=undefined && this.FieldType!='undefined' && this.FieldType!='
         return false;
    
     }
-   @track placeHolder='New Field';
+   
     get isFieldCompView(){
         return this.compview =='Field' ;
     }
@@ -341,10 +328,10 @@ if(this.FieldType!=undefined && this.FieldType!='undefined' && this.FieldType!='
     }
 
    get isTrueFullName(){
+   
     return this.tView == 'QFFULLNAME' || this.FieldLabel=='QFFULLNAME';
    }
-
-   get isTrueName(){    
+   get isTrueName(){
     return this.tView == 'QFNAME' || this.FieldLabel=='QFNAME';
    }
    get isTrueAddress(){
