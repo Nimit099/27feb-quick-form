@@ -247,8 +247,9 @@
    <template if:true={hasType}>
        <div onmouseenter={FieldCSSUpdate}>
            <template if:true={FieldShown}>
-               <template if:true={LabelShown}>
+              
                        <label>
+                        <template if:true={labelcheck}>
                            <div class="flabel">
                             <template if:true={isReqired}>
                                <label class="slds-form-element_label">
@@ -262,14 +263,13 @@
                                 <lightning-helptext class="helptxt" content={helptextvalue}></lightning-helptext>
                                 </template>
                            </div>
+                        </template>
                            <div  class="slds-form-element__control">
                                <input onmousemove={handlehover} onmouseout={handleblur} onfocusin={handlefocus} onblur={handleblur1} placeholder={placeholder} type={FieldType} value=""
                                onclick={OnFieldClick} class="slds-input" />
                            </div>
                            <!-- <lightning-input class={fieldId} ></lightning-input> -->
                        </label>
-                   
-               </template>
            </template>
        </div>
    </template>
@@ -761,7 +761,7 @@
                     </template>
                     
                         <label class="slds-form-element__label ">
-                             Rating
+                             {labelvalue}
                         </label>
                     </template>  
                     <div class="starrating">
@@ -793,7 +793,7 @@
                         </template>
                         
                         <label class="slds-form-element__label ">
-                            Emoji Rating
+                           {labelvalue}
                         </label>
                     </template>  
                 
@@ -824,7 +824,7 @@
                         </template>
                         
                         <label class="slds-form-element__label ">
-                          Scale Rating
+                          {labelvalue}
                         </label>
                     </template>  
                 
@@ -848,7 +848,7 @@
                     </tr>
                     <tr>
                         <td>FeedBack</td>
-                            <template for:each={scaleRating} for:item="rating">
+                            <template for:each={salutationvalue} for:item="ratng">
                                 <td key={rating}>
                                  <input  type="radio" class="radio" id={rating} name={rating} value="5" onclick={ratingvalue} checked={checkedRating}  style="display:block;margin:auto;width:8rem"/>
                                 </td>

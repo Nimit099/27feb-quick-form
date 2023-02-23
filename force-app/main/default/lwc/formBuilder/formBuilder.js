@@ -704,10 +704,8 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
 
                 if(fieldList[j].Field_Validations__c){
                     fieldList[j].Field_Validations__c = fieldList[j].Field_Validations__c.split(',');
-                    console.log(fieldList[j].Field_Validations__c.length + ' Lenght');
                     for(let i =0; i< fieldList[j].Field_Validations__c.length; i++){
                         fieldList[j].Field_Validations__c[i] =  fieldList[j].Field_Validations__c[i].split(':');
-                        console.log( fieldList[j].Field_Validations__c[i][0] + 'Nimit');
                         let labels = fieldList[j].Field_Validations__c[i][0];
                         let value = fieldList[j].Field_Validations__c[i][1];
 
@@ -762,7 +760,6 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
             isnotlast = false;
             outerlist.push(temp);
         }
-        console.log(JSON.stringify(outerlist) + ' --Nimit');
         this.MainList = outerlist;
     }
 

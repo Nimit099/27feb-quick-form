@@ -39,9 +39,7 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
 
         getcaptcha({id:this.formid})
         .then(result =>{
-            console.log(result);
             this.captchavalue = result;
-            console.log('captcha -- ' +this.captchavalue);
             });
 
         GetFormPage({ Form_Id: this.formid})
@@ -56,7 +54,6 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
         getFieldsRecords({id:this.formid})
             .then(result => {
                 this.FieldList = result;
-                console.log('FieldList ====>'+ JSON.stringify(this.FieldList));
                 this.setPageField(this.FieldList);
             })
             .catch(error => {
@@ -66,19 +63,82 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
 
 
 
-    setPageField(fieldLists) {
+    setPageField(fieldList) {
         let outerlist = [];
         for (let i = 0; i < this.PageList.length; i++) {
             let innerlist = [];
-            for (let j = 0; j < fieldLists.length; j++) {
-                if (this.PageList[i].Id == fieldLists[j].Form_Page__c) {
-                   let fieldofObj =  fieldLists[j].Name.split(',');
+            for (let j = 0; j < fieldList.length; j++) {
+                if (this.PageList[i].Id == fieldList[j].Form_Page__c) {
+                   let fieldofObj =  fieldList[j].Name.split(',');
                    if(fieldofObj.length==2){
                      if(fieldofObj[1]!='Extra' && fieldofObj[1]!=undefined && fieldofObj[1]!='undefined'){
                         this.removeObjFields.push(fieldofObj[0]);
                      }
                  }
-                    innerlist.push(fieldLists[j]);
+                 
+                 let isdisabledcheck;
+                 let isRequiredcheck; 
+                 let labelcheck; 
+                 let helptextcheck;
+                 let placeholdercheck;
+                 let readonlycheck;
+                 let prefixcheck;
+                 let prefixvalue;
+                 let labelvalue;
+                 let helptext;
+                 let placeholdervalue;
+                 let salutationvalue = []; 
+
+                if(fieldList[j].Field_Validations__c){
+                    fieldList[j].Field_Validations__c = fieldList[j].Field_Validations__c.split(',');
+                    for(let i =0; i< fieldList[j].Field_Validations__c.length; i++){
+                        fieldList[j].Field_Validations__c[i] =  fieldList[j].Field_Validations__c[i].split(':');
+                        console.log( fieldList[j].Field_Validations__c[i][0] + 'Nimit');
+                        let labels = fieldList[j].Field_Validations__c[i][0];
+                        let value = fieldList[j].Field_Validations__c[i][1];
+
+                        if(labels == 'isRequired'){
+                            isRequiredcheck = JSON.parse(value);
+                           }
+                           else if(labels == 'isDisabled'){
+                            isdisabledcheck = JSON.parse(value);
+                           }
+                           else if(labels == 'isLabel'){
+                            labelcheck = JSON.parse(value);
+                           }
+                           else if(labels == 'isHelpText'){
+                            helptextcheck = JSON.parse(value);
+                           }
+                           else if(labels == 'isPlaceholder'){
+                            placeholdercheck = JSON.parse(value);
+                           }
+                           else if(labels == 'isReadonly'){
+                            readonlycheck = JSON.parse(value);
+                           }
+                           else if(labels == 'isPrefix'){
+                            prefixcheck = JSON.parse(value);
+                           }
+                           else if(labels == 'Prefix'){
+                            prefixvalue = value.replaceAll('"','');
+                           }
+                           else if(labels == 'Label'){
+                            labelvalue = value.replaceAll('"','');
+                           }
+                           else if(labels == 'HelpText'){
+                            helptext = value.replaceAll('"','');
+                           }
+                           else if(labels == 'Placeholder'){
+                            placeholdervalue = value.replaceAll('"','');
+                           }
+                           else if(labels == 'Salutation'){
+                            salutationvalue.push(value.replaceAll('"',''));
+                           }
+                           
+                    }
+                    fieldList[j].Field_Validations__c = ({isRequired: isRequiredcheck, isDisabled : isdisabledcheck, isLabel : labelcheck, isHelptext :helptextcheck, isPlaceholder : placeholdercheck, 
+                        isReadonly : readonlycheck, isPrefix : prefixcheck,  Prefix : prefixvalue, Label: labelvalue, HelpText : helptext, Placeholder : placeholdervalue , Salutation : salutationvalue});
+                }
+                    innerlist.push(fieldList[j]);
                 }
             }
 
@@ -86,10 +146,8 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
 
             outerlist.push(temp);
         }
-        console.log('outerlist ----->'+ JSON.stringify(outerlist));
         this.Mainlist = outerlist;
         this.page = outerlist[0];
-        console.log('MainList ----->'+ JSON.stringify(this.page.pageId))
 
         getFormCSS({id:this.formid})
         .then(result=>{
@@ -149,7 +207,6 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
                 }
             }
             else if(this.PageList.length  == this.pageindex){
-                console.log('lastindex');
                 this.pageindex--;               
                 this.isIndexLast = false;
                 if(this.pageindex == 1){
@@ -202,7 +259,6 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
                 this.template.querySelector('c-toast-component').showToast('error',toast_error_msg,3000);
             }
             else {
-                console.log(this.verify);
                 let toast_error_msg = 'Please Verify Captcha';
                 this.template.querySelector('c-toast-component').showToast('error',toast_error_msg,3000);
             }
