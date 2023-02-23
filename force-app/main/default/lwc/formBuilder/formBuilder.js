@@ -348,12 +348,14 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
          else if (event.currentTarget.dataset.title == 'tab-2' || event.currentTarget.dataset.title == 'tab-3') {
         console.log('in tab-2 or tab-3 code-->');
            if (event.currentTarget.dataset.title == 'tab-2') {
+            if( this.fieldvalidationdiv == true){
+                this.template.querySelector('.fieldvalidationdiv').style="display:none;";
+                this.fieldvalidationdiv = false;
+            }
                this.activesidebar = true;
                this.activeDesignsidebar = false;
                this.activeNotification = false;
                this.activethankyou = false;
-               this.fieldvalidationdiv = false;
-             
            }
 
            else if (event.currentTarget.dataset.title == 'tab-3') {
@@ -361,7 +363,10 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
                this.activesidebar = false;
                this.activeNotification = false;
                this.activethankyou = false;
-               this.fieldvalidationdiv = false;
+               if( this.fieldvalidationdiv == true){
+                this.template.querySelector('.fieldvalidationdiv').style="display:none;";
+                this.fieldvalidationdiv = false;
+            }
            }
 
 
@@ -373,7 +378,6 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
        }
 
        else if (event.currentTarget.dataset.title == 'tab-4') {
-           console.log('Tab-4');
            this.activeDesignsidebar = false;
            this.activesidebar = false;
            this.activeDropZone = false;
