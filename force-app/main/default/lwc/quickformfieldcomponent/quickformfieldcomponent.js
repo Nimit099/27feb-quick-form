@@ -293,7 +293,7 @@ export default class Quickformfieldcomponent extends LightningElement {
         ];
     }
     get hasType(){
-  
+        console.log(this.tView + 'tviewNim');
         if(this.tView.includes(',')){
             let tempararyList = this.tView.split(',');
             this.FieldLabel= tempararyList[0];

@@ -135,6 +135,7 @@ label.slds-checkbox_toggle.slds-grid>* {
 
  .btnDiv {
     margin: 2% 5%;
+    cursor: pointer;
 }
 .fieldvalidationbody{
     /* width: 21%; */

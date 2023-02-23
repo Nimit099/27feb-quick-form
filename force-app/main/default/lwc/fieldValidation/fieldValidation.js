@@ -54,6 +54,9 @@ export default class FieldValidation extends LightningElement {
     @track salutationindex = 0;
     @track salutationvalue = [];
     @track validation = [];
+    @track fieldtype;
+    @track maximumdate;
+    @track minimumdate;
 
     fieldcancel = fieldcancel;
     fieldduplicate = fieldduplicate;
@@ -69,7 +72,7 @@ export default class FieldValidation extends LightningElement {
     connectedCallback(){
         this.fieldName = this.fieldName.slice(0, this.fieldName.indexOf(','));
         this.isRequiredcheck = false;
-        this.sdisabledcheck = false;
+        this.isdisabledcheck = false;
         getfieldvalidation({fieldId:this.fieldId}).then(result =>{
             let str = result.split(',');
             let k = [];
@@ -81,48 +84,14 @@ export default class FieldValidation extends LightningElement {
                labels = labels.replace('"','');
                let value = Arr[1];
                value = value.replace('}','');
-   
-   
-            //    let mydata1 = {data:[{Name:labels}]};
-            //    mydata1.data.forEach(element => {
-            //        if (element.Name == 'isRequired') {element.isRequired = value} 
-            //        else if(element.Name == 'isDisabled') {element.isDisabled = value}
-            //        else if(element.Name == 'isLabel') {element.isLabel = value}
-            //        else if(element.Name == 'isHelpText') {element.isHelpText = value}
-            //    });
+
             }
            })
     }
 
-    // @api
-    // get valid(){
-    //     getfieldvalidation({fieldId:this.fieldId}).then(result =>{
-    //         let str = result.split(',');
-    //         let k = [];
-    //         for(let i = 0; i<str.length; i++){
-    //            let Arr = str[i].split(':');
-    //            let labels = Arr[0];
-    //            labels = labels.replace('{','');
-    //            labels = labels.replace('"','');
-    //            labels = labels.replace('"','');
-    //            let value = Arr[1];
-    //            value = value.replace('}','');
-   
-   
-    //            let mydata1 = {data:[{Name:labels}]};
-    //            mydata1.data.forEach(element => {
-    //                if (element.Name == 'isRequired') {element.isRequired = value} 
-    //                else if(element.Name == 'isDisabled') {element.isDisabled = value}
-    //                else if(element.Name == 'isLabel') {element.isLabel = value}
-    //                else if(element.Name == 'isHelpText') {element.isHelpText = value}
-    //            });
-    //         }
-    //        })
-    //        return mydata1;
-    // }
-
     @api
     get field(){
+        if(this.fieldtype == 'Extra'){
         let mydata1 = {data:[{Name:this.fieldName}]};
         mydata1.data.forEach(element => {
             if (element.Name == 'QFPHONE') {element.QFPHONE = true} 
@@ -150,8 +119,22 @@ export default class FieldValidation extends LightningElement {
         });
         return mydata1;
     }
+    else{
+        let mydata1 = {data:[{Name:this.fieldtype}]};
+        mydata1.data.forEach(element => {
+            if (element.Name == 'PHONE') {element.QFPHONE = true} 
+            else if(element.Name == 'STRING' || element.Name == 'TEXTAREA' || element.Name == 'EMAIL' || element.Name == 'ENCRYPTEDSTRING') {element.QFEMAILID = true}
+            else if(element.Name == 'DOUBLE' || element.Name == 'CURRENCY' || element.Name == 'PERCENT') {element.QFNUMBER = true}
+            else if(element.Name == 'DATE') {element.QFDATE = true}
+            else if(element.Name == 'TIME') {element.QFTIME = true}
+            else if(element.Name == 'DATETIME') {element.QFDATETIME = true}
+        });
+        return mydata1; 
+    }
+    }
     @api
     openvalidation(tab, fieldId, fieldName){
+        this.fieldtype = fieldName.split(',')[1];
         this.tab = tab;
         this.fieldId = fieldId;
         this.fieldName = fieldName.slice(0, fieldName.indexOf(','));
@@ -168,6 +151,8 @@ export default class FieldValidation extends LightningElement {
         this.salutationvalue = [];
         this.salutation = [];
         this.salutationindex = 0;
+        this.maximumdate ='';
+        this.minimumdate ='';
 
         getfieldvalidation({fieldId:this.fieldId}).then(result =>{
             let str = result.replace('[','');
@@ -219,6 +204,24 @@ export default class FieldValidation extends LightningElement {
                else if(labels == 'Salutation'){
                 this.salutationvalue.push(value.replaceAll('"',''));
                }
+               else if(labels == 'MinimumDateTime'){
+              this.minimumdate = value;
+               }
+               else if(labels == 'MaximumDateTime'){
+                this.maximumdate = value;
+               }
+               else if(labels == 'MinimumDate'){
+                this.minimumdate = value;
+               }
+               else if(labels == 'MaximumDate'){
+                this.maximumdate = value;
+               }
+               else if(labels == 'MinimumTime'){
+                this.minimumdate = value;
+               }
+               else if(labels == 'MaximumTime'){
+                this.maximumdate = value;
+               }
             }
             this.opensalutation();
            })
@@ -253,9 +256,9 @@ export default class FieldValidation extends LightningElement {
                 ',isHelpText:' +this.helptextcheck+
                 ',Label:'+ this.labelvalue+
                 ',HelpText:'+ this.helptext
-            
+            if(this.fieldtype == 'Extra'){
             if(event.currentTarget.dataset.name == "QFPHONE"){
-                this.fieldValidation = this.fieldValidation.concat(',isPlaceholder:'+ this.placeholdercheck+',Placeholder:'+ this.placeholdervalue+ ',isReadonly:'+ this.readonlycheck)
+                this.fieldValidation = this.fieldValidation.concat(',isPlaceholder:'+ this.placeholdercheck+',Placeholder:'+ this.placeholdervalue)
             }
             else if(event.currentTarget.dataset.name == "QFADDRESS"){
                 this.fieldValidation = this.fieldValidation.concat(',isReadonly:'+ this.readonlycheck)
@@ -264,11 +267,11 @@ export default class FieldValidation extends LightningElement {
                 this.fieldValidation = this.fieldValidation.concat(',isPlaceholder:'+this.placeholdercheck + ',Placeholder:'+ this.placeholdervalue)
             }
             else if(event.currentTarget.dataset.name == "QFEMAILID"){
-                this.fieldValidation = this.fieldValidation.concat(',isPlaceholder:'+ this.placeholdercheck+',Placeholder:'+ this.placeholdervalue+ ',isReadonly:'+ this.readonlycheck +
+                this.fieldValidation = this.fieldValidation.concat(',isPlaceholder:'+ this.placeholdercheck+',Placeholder:'+ this.placeholdervalue +
                  ',Minimum:' +this.minimumvalue + ',Maximum:' + this.maximumvalue )                       
             }
             else if(event.currentTarget.dataset.name == "QFNUMBER"){
-                this.fieldValidation = this.fieldValidation.concat(',isPlaceholder:'+ this.placeholdercheck+',Placeholder:'+ this.placeholdervalue+ ',isReadonly:'+ this.readonlycheck +
+                this.fieldValidation = this.fieldValidation.concat(',isPlaceholder:'+ this.placeholdercheck+',Placeholder:'+ this.placeholdervalue +
                 ',isPrefix:' +this.prefixcheck + ',Prefix:' + this.prefixvalue )
             }
             else if(event.currentTarget.dataset.name == "QFFULLNAME"){
@@ -280,29 +283,29 @@ export default class FieldValidation extends LightningElement {
                 this.fieldValidation = this.fieldValidation.concat(',isPlaceholder:'+ this.placeholdercheck+',Placeholder:'+ this.placeholdervalue+ ',Decimal:'+ this.decimal)
             }
             else if(event.currentTarget.dataset.name == "QFLONGTEXT"){
-                this.fieldValidation = this.fieldValidation.concat(',isPlaceholder:'+ this.placeholdercheck+',Placeholder:'+ this.placeholdervalue+ ',isReadonly:'+ this.readonlycheck)
+                this.fieldValidation = this.fieldValidation.concat(',isPlaceholder:'+ this.placeholdercheck+',Placeholder:'+ this.placeholdervalue)
             }
             else if(event.currentTarget.dataset.name == "QFRICHTEXT"){
                 this.fieldValidation = this.fieldValidation.concat(',Richtext:'+ this.Richtextvalue)
             }
             else if(event.currentTarget.dataset.name == "QFSHORTTEXT"){
-                this.fieldValidation = this.fieldValidation.concat(',isPlaceholder:'+ this.placeholdercheck+',Placeholder:'+ this.placeholdervalue+ ',isReadonly:'+ this.readonlycheck +
+                this.fieldValidation = this.fieldValidation.concat(',isPlaceholder:'+ this.placeholdercheck+',Placeholder:'+ this.placeholdervalue +
                 ',isPrefix:' +this.prefixcheck + ',Prefix:' + this.prefixvalue )
             }
             else if(event.currentTarget.dataset.name == "QFLINK"){
-                this.fieldValidation = this.fieldValidation.concat(',isPlaceholder:'+ this.placeholdercheck+',Placeholder:'+ this.placeholdervalue+ ',isReadonly:'+ this.readonlycheck)
+                this.fieldValidation = this.fieldValidation.concat(',isPlaceholder:'+ this.placeholdercheck+',Placeholder:'+ this.placeholdervalue)
             }
             else if(event.currentTarget.dataset.name == "QFTERMSOFSERVICE"){
                 this.fieldValidation = this.fieldValidation.concat(',Agreement:'+ this.Richtextvalue)
             }
             else if(event.currentTarget.dataset.name == "QFTIME"){
-                this.fieldValidation = this.fieldValidation.concat(',isReadonly:'+ this.readonlycheck)
+                this.fieldValidation = this.fieldValidation.concat(',MinimumTime:'+ this.minimumdate + ',MaximumTime:' + this.maximumdate)
             }
             else if(event.currentTarget.dataset.name == "QFDATETIME"){
-                this.fieldValidation = this.fieldValidation.concat(',isReadonly:'+ this.readonlycheck)
+                this.fieldValidation = this.fieldValidation.concat(',MinimumDateTime:'+ this.minimumdate + ',MaximumDateTime:' + this.maximumdate)
             }
             else if(event.currentTarget.dataset.name == "QFDATE"){
-                this.fieldValidation = this.fieldValidation.concat(',isReadonly:'+ this.readonlycheck)
+                this.fieldValidation = this.fieldValidation.concat(',MinimumDate:'+ this.minimumdate + ',MaximumDate:' + this.maximumdate)
             }
             else if(event.currentTarget.dataset.name == "QFRADIOBUTTON"){
                 for(let i = 0; i< this.salutationvalue.length; i++){
@@ -319,7 +322,29 @@ export default class FieldValidation extends LightningElement {
                     this.fieldValidation = this.fieldValidation.concat(',Salutation:'+ this.salutationvalue[i])
                     }
             }
-
+        }
+        else{
+            if(this.fieldtype == "PHONE"){
+                this.fieldValidation = this.fieldValidation.concat(',isPlaceholder:'+ this.placeholdercheck+',Placeholder:'+ this.placeholdervalue)
+            }
+            else if(this.fieldtype == "STRING" || this.fieldtype == "TEXTAREA" || this.fieldtype == "ENCRYPTEDSTRING" || this.fieldtype == "EMAIL" ){
+                this.fieldValidation = this.fieldValidation.concat(',isPlaceholder:'+ this.placeholdercheck+',Placeholder:'+ this.placeholdervalue +
+                 ',Minimum:' +this.minimumvalue + ',Maximum:' + this.maximumvalue )                       
+            }
+            else if(this.fieldtype == "NUMBER" || this.fieldtype == "CURRENCY" || this.fieldtype == "PERCENT"){
+                this.fieldValidation = this.fieldValidation.concat(',isPlaceholder:'+ this.placeholdercheck+',Placeholder:'+ this.placeholdervalue +
+                ',Minimum:' +this.minimumvalue + ',Maximum:' + this.maximumvalue )
+            }
+            else if(this.fieldtype == "TIME"){
+                this.fieldValidation = this.fieldValidation.concat(',MinimumTime:'+ this.minimumdate + ',MaximumTime:' + this.maximumdate)
+            }
+            else if(this.fieldtype == "DATETIME"){
+                this.fieldValidation = this.fieldValidation.concat(',MinimumDateTime:'+ this.minimumdate + ',MaximumDateTime:' + this.maximumdate)
+            }
+            else if(this.fieldtype == "DATE"){
+                this.fieldValidation = this.fieldValidation.concat(',MinimumDate:'+ this.minimumdate + ',MaximumDate:' + this.maximumdate)
+            }
+        }
             savevalidation({fieldId:this.fieldId, fieldValidation:JSON.stringify(this.fieldValidation)})
             .then(result => {
                 event.preventDefault();
@@ -377,6 +402,18 @@ export default class FieldValidation extends LightningElement {
         else if(event.currentTarget.dataset.title == 'Prefix'){
             this.prefixvalue = event.detail.value;
         }
+        else if(event.currentTarget.dataset.title == 'Maximum'){
+            this.maximumvalue =  event.detail.value;
+        }
+        else if(event.currentTarget.dataset.title == 'Minimum'){
+            this.minimumvalue =  event.detail.value;
+        }
+        else if(event.currentTarget.dataset.title == 'MinimumDate'){
+            this.minimumdate =  event.detail.value;
+        }
+        else if(event.currentTarget.dataset.title == 'MaximumDate'){
+            this.maximumdate =  event.detail.value;
+        }
     }
 
     handlevalidation(event){
@@ -389,9 +426,9 @@ export default class FieldValidation extends LightningElement {
         else if(event.currentTarget.dataset.title == 'PlaceHolder'){
                 this.placeholdercheck = event.target.checked;
         }
-        else if(event.currentTarget.dataset.title == 'ReadOnly'){
-            this.readonlycheck = event.target.checked;
-        }
+        // else if(event.currentTarget.dataset.title == 'ReadOnly'){
+        //     this.readonlycheck = event.target.checked;
+        // }
         else if(event.currentTarget.dataset.title == 'Prefix'){
             this.prefixcheck = event.detail.checked;
         }
@@ -405,10 +442,16 @@ export default class FieldValidation extends LightningElement {
 
     isRequired(event){
         this.isRequiredcheck = event.target.checked;
+        if(this.isRequiredcheck == true){
+            this.isdisabledcheck = false;
+        }
     }
 
     isdisabled(event){
         this.isdisabledcheck = event.target.checked;
+        if(this.isdisabledcheck == true){
+            this.isRequiredcheck = false;
+        }
     }
     RichTextData(event){
         this.Richtextvalue =  event.detail.value;
@@ -435,8 +478,6 @@ export default class FieldValidation extends LightningElement {
     }
     @api
     get salutations(){
-        console.log(this.salutation);
-        console.log(JSON.stringify(this.salutation));
        return this.salutation;
     }
     addsalutation(event){
@@ -460,7 +501,6 @@ export default class FieldValidation extends LightningElement {
     }
 
     salutationvalues(event){
-        console.log(event.currentTarget.dataset.id);
         this.salutationvalue[event.currentTarget.dataset.id] = event.detail.value;
         this.salutation[event.currentTarget.dataset.id] = ({id : event.currentTarget.dataset.id, salutation: this.salutationvalue[event.currentTarget.dataset.id]});
     }

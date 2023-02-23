@@ -39,11 +39,12 @@ import formDetails from '@salesforce/apex/FormBuilderController.formDetails';
 import pageDetails from '@salesforce/apex/FormBuilderController.pageDetails';
 import updatePage from '@salesforce/apex/FormBuilderController.updatePage';
 import editFormSubmit from '@salesforce/apex/FormBuilderController.editFormSubmit';
+import { updateRecord } from 'lightning/uiRecordApi';
 
 
 export default class FormBuilder extends NavigationMixin(LightningElement)  {
 
-    
+    @api recordId;
     @track spinnerDataTable = false;
     //     icons        // 
     @track homeIcon = HomeIcon;
@@ -105,6 +106,43 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
     @track tab ='tab-2';
     @track fieldId;
     @track fieldName;
+    
+    connectedCallback() {
+
+        this.spinnerDataTable = true;
+        console.log('Parent Massage :- '+this.ParentMessage);
+        console.log('FormId :- '+this.FormId);
+        console.log('FormName :- '+this.FormName);
+
+        GetFormPage({ Form_Id: this.ParentMessage })
+            .then(result => {
+                console.log('get form page called');
+                this.PageList = result;
+                console.log('this-->>');
+                console.log(this.PageList[0].Name);
+                console.log(this.PageList.length);
+
+            }).catch(error => {
+                console.log(error);
+            });
+            getFieldsRecords({id:this.ParentMessage})
+            .then(result => {
+                console.log('whyyyy',result);
+                this.FieldList = result;
+                this.setPageField(result);
+                 
+                console.log(this.FieldList.length);
+                var allDiv  = this.template.querySelector('.fieldtab');
+                allDiv.style = 'background-color:#b3cce6;';
+            })
+            .catch(error => {
+                console.log(error);
+                var allDiv  = this.template.querySelector('.fieldtab');
+                allDiv.style = 'background-color:#b3cce6;';
+            });
+        this.activesidebar = true;
+
+    }
 
     renderedCallback(){
         console.log('inside the renderedcallBack--->>>');
@@ -267,42 +305,6 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
         console.log('After handlenewCSS');
     }
 
-    connectedCallback() {
-
-        this.spinnerDataTable = true;
-        console.log('Parent Massage :- '+this.ParentMessage);
-        console.log('FormId :- '+this.FormId);
-        console.log('FormName :- '+this.FormName);
-
-        GetFormPage({ Form_Id: this.ParentMessage })
-            .then(result => {
-                console.log('get form page called');
-                this.PageList = result;
-                console.log('this-->>');
-                console.log(this.PageList[0].Name);
-                console.log(this.PageList.length);
-
-            }).catch(error => {
-                console.log(error);
-            });
-            getFieldsRecords({id:this.ParentMessage})
-            .then(result => {
-                console.log('whyyyy');
-                this.FieldList = result;
-                this.setPageField(result);
-                 
-                console.log(this.FieldList.length);
-                var allDiv  = this.template.querySelector('.fieldtab');
-                allDiv.style = 'background-color:#b3cce6;';
-            })
-            .catch(error => {
-                console.log(error);
-                var allDiv  = this.template.querySelector('.fieldtab');
-                allDiv.style = 'background-color:#b3cce6;';
-            });
-        this.activesidebar = true;
-
-    }
     //  @wire(getFieldsRecords)
     //  wiredCallback(result) {
     //   this.WieredResult = result;
@@ -662,7 +664,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
         }
     }
     setPageField(fieldList) {
-        console.log('in set PageField');
+        console.log('in set PageField'+fieldList.length + JSON.stringify(fieldList));
         let outerlist = [];
         let isIndexZero= false;
              let islast = false;
@@ -764,6 +766,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
             isnotlast = false;
             outerlist.push(temp);
         }
+        console.log(outerlist.length + JSON.stringify(outerlist) + 'ourere');
         this.MainList = outerlist;
     }
 
