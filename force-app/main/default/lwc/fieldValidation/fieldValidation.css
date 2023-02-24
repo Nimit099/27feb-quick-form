@@ -167,7 +167,7 @@ label.slds-checkbox_toggle.slds-grid>* {
     width: 96%;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 5px;
 }
 .fieldvalidationbtnmaindiv{
     display: flex;
@@ -179,6 +179,17 @@ label.slds-checkbox_toggle.slds-grid>* {
 }
 .validationicon{
     cursor: pointer;
+}
+.resetbtn{
+    width: 95%;
+    height: 3vh;
+    border: 1px solid black;
+    background: white;
+    margin: auto;
+    border-radius: 4px;
+}
+.resettext{
+    padding: auto;
 }
 @media screen and (max-width: 1600px) {
     .btnDiv{

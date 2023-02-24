@@ -191,7 +191,11 @@
                     <lightning-input type="number" label="Maximum Value" data-title="Maximum" value={maximumvalue} onchange={validatingvalue} ></lightning-input>
                 </div>
                 <!-- <lightning-slider label="Max no of character" value={maximumvalue} min="0" max="256" onchange={slider} data-title="Maximum"></lightning-slider> -->
-            <lightning-button class="resetcharacter" label="Reset Character Limit" variant="brand-outline" onclick={slider} data-title="Reset" ></lightning-button><br/>
+
+                <div class="resetbtn" onclick={slider} data-title="Reset">
+                  <p class="resettext">  Reset Character Limit </p>
+                </div>
+            <!-- <lightning-button class="resetcharacter" label="Reset Character Limit" variant="brand-outline" onclick={slider} data-title="Reset" ></lightning-button><br/> -->
 
             <div class="togglebox">
                 <lightning-input type="toggle" label="Add Placeholder text:" checked={placeholdercheck} onchange={handlevalidation} data-title="PlaceHolder" message-toggle-active="" message-toggle-inactive="" ></lightning-input>

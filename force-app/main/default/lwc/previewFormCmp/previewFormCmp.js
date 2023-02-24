@@ -30,7 +30,67 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
     BackButton = BackButton;
     @track verify;
 
+    renderedCallback(){
+        getFormCSS({id:this.formid})
+        .then(result=>{
+            console.log(result);
+            this.getFieldCSS = result;
+            console.log('FormCSS->> '+this.getFieldCSS);
+            let array = this.template.querySelector('.myform');
+            let str = this.getFieldCSS;
+            array.style=str;
+        }).catch(error=>{
+            console.log({error});
+        })
 
+        getButtonCSS({id:this.formid})
+        .then(result=>{
+            console.log(result + 'button css');
+            let str = result;
+            let value;
+            let arr = this.template.querySelectorAll('.btn1');
+            for (let i = 0; i < arr.length; i++){
+                const element = arr[i];
+                element.style = str; 
+            }
+            let buttoncss = result.split(';');
+          for(let i = 0; i < buttoncss.length; i++){
+            buttoncss[i] = buttoncss[i].split(':');
+            let label = buttoncss[i][0];
+         
+            if(label == 'justify-content'){
+                value = 'justify-content:'+buttoncss[i][1];
+                console.log(value);
+            }
+          }
+
+            let Arr = this.template.querySelectorAll(".footer");
+            for (let i = 0; i < Arr.length; i++) {
+                const element = Arr[i];
+                console.log(i+'--'+{element});
+                element.style = value;
+            }
+        })
+
+        getPageCSS({id:this.formid})
+        .then(result=>{
+            console.log(result);
+            this.getFieldCSS = result;
+            console.log('PageCSS->> '+this.getFieldCSS);
+            let array = this.template.querySelectorAll('.page');
+            let str = this.getFieldCSS;
+            for (let i = 0; i < array.length; i++) {
+                const element = array[i];
+                console.log(i+'--'+element);
+                element.style = str;
+            }
+            this.spinnerDataTable = false;
+        }).catch(error=>{
+            console.log({error});
+            this.spinnerDataTable = false;
+        })
+
+    }
     connectedCallback() {
         this.spinnerDataTable = true;
         getprogressbar({id:this.formid})
