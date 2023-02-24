@@ -42,16 +42,16 @@
                     
                     <template for:each={page.FieldData} for:item="field">
                         
-                        <div id={field.ParentMessage} class="field" draggable="true" 
+                        <div id={field.formid} class="field" draggable="true" 
                         data-order-id={field.Field_Order__c} data-page-record={field.Form_Page__c}
-                        data-record={field.ParentMessage} data-ref="inner" ondragstart={onDragStart} data-record-count={fieldcount}
-                        onclick={openfieldvalidation} key={field.ParentMessage} data-field-name={field.Name} data-id={field.Id}>
+                        data-record={field.formid} data-ref="inner" ondragstart={onDragStart} data-record-count={fieldcount}
+                        onclick={openfieldvalidation} key={field.formid} data-field-name={field.Name} data-id={field.Id}>
                       
-                         <c-quickformfieldcomponent formid={ParentMessage} t-view={field.Name} compview="Full"
+                         <c-quickformfieldcomponent formid={formid} t-view={field.Name} compview="Full"
                          disable-field="true" field-attribute="" field-attribute-value=""
-                         field-id={field.Id} page-id={page.ParentMessage} is-reqired ={field.Field_Validations__c.isRequired} helptextcheck={field.Field_Validations__c.isHelptext}
+                         field-id={field.Id} page-id={page.formid} is-reqired ={field.Field_Validations__c.isRequired} helptextcheck={field.Field_Validations__c.isHelptext}
                          labelcheck={field.Field_Validations__c.isLabel} labelvalue={field.Field_Validations__c.Label} helptextvalue={field.Field_Validations__c.HelpText}
-                         salutationvalue={field.Field_Validations__c.Salutation} isdisabled ={field.Field_Validations__c.isDisabled} placeholder={field.Field_Validations__c.Placeholder}></c-quickformfieldcomponent>
+                         salutationvalue={field.Field_Validations__c.Salutation} isdisabled ={field.Field_Validations__c.isDisabled} placeholder={field.Field_Validations__c.Placeholder} fieldtype ={field.Field_Validations__c.Fieldtype}></c-quickformfieldcomponent>
 
                         </div>
                 </template>
@@ -65,32 +65,32 @@
                 
                 <template if:true={isIndexZero}>
                     <template if:false={isIndexLast}>
-                        <lightning-button data-name = "next" variant="brand" label="Next" title="Next"
-                        onclick={onaddpage1} class="btn"></lightning-button>
+                        <button data-name = "next" variant="brand" label="Next" title="Next"
+                        onclick={onaddpage1} class="btn1">Next</button>
                     </template>
                     <template if:true={isIndexLast}>
-                        <lightning-button variant="brand" label="Submit" title="Submit" 
-                        onclick={onaddpage1} class="btn" data-name = "submit"></lightning-button>
+                        <button variant="brand" label="Submit" title="Submit" 
+                        onclick={onaddpage1} class="btn1" data-name = "submit">Submit</button>
                     </template>
                 </template>
                 
                 <template if:false={isIndexZero}>
-                    <lightning-button data-name = "previous" variant="brand" label="Previous"
-                    title="Previous"  onclick={onaddpage1} class="btn"></lightning-button>  
+                    <button data-name = "previous" variant="brand" label="Previous"
+                    title="Previous"  onclick={onaddpage1} class="btn1">Previous</button>  
                     
                     <template if:false={isIndexLast}>
-                        <lightning-button data-name = "next" variant="brand" label="Next" title="Next"
-                        onclick={onaddpage1} class="btn"></lightning-button>
+                        <button data-name = "next" variant="brand" label="Next" title="Next"
+                        onclick={onaddpage1} class="btn1">Next</button>
                     </template>
                     <template if:true={isIndexLast}>
-                        <lightning-button variant="brand" label="Submit" title="Submit" 
-                        onclick={onaddpage1} class="btn" data-name = "submit"></lightning-button>
+                        <button variant="brand" label="Submit" title="Submit" 
+                        onclick={onaddpage1} class="btn1" data-name = "submit">Submit</button>
                     </template>
                 </template>
                 
                 <!-- <template if:true={isIndexLast}>
-                    <lightning-button variant="brand" label="Submit" title="Submit" 
-                    onclick={onaddpage1} class="btn" data-name = "submit"></lightning-button>
+                    <button variant="brand" label="Submit" title="Submit" 
+                    onclick={onaddpage1} class="btn1" data-name = "submit"></button>
                 </template> -->
             </div>
         </div>

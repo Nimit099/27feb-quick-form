@@ -49,6 +49,7 @@ export default class Quickformfieldcomponent extends LightningElement {
    @api helptextvalue;
    @api isdisabled;
    @api placeholder;
+   @api fieldtype;
     connectedCallback(){
         console.log(this.labelvalue);
         console.log(this.salutationvalue + '-- salutationvalue');
@@ -295,6 +296,7 @@ export default class Quickformfieldcomponent extends LightningElement {
     get hasType(){
         console.log(this.tView + 'tviewNim');
         if(this.tView.includes(',')){
+            console.log('Insider nf');
             let tempararyList = this.tView.split(',');
             this.FieldLabel= tempararyList[0];
             this.FieldType= tempararyList[1];
@@ -305,12 +307,14 @@ if(tempararyList.length==3){
 
 if(this.FieldType!=undefined && this.FieldType!='undefined' && this.FieldType!='Extra')
 {
+    console.log('Insider n');
     if(this.FieldType=='QFADDRESS'){
         this.tView = this.FieldType;
         this.Address = this.FieldLabel;
         return false;
     }
-    return true;}
+    return true;
+}
         }
         return false;
    
@@ -526,9 +530,5 @@ if(this.FieldType!=undefined && this.FieldType!='undefined' && this.FieldType!='
         } catch (error) {
             console.log('In the catch part of emojiRatingValue ==>', {error});
         }
-    }
-
-    get Address(){
-       
     }
 }

@@ -244,7 +244,7 @@
        </template>
    </template>
 
-   <template if:true={hasType}>
+   <template if:true={fieldtype}>
        <div onmouseenter={FieldCSSUpdate}>
            <template if:true={FieldShown}>
               
@@ -273,7 +273,7 @@
            </template>
        </div>
    </template>
-   <template if:false={hasType}>
+   <template if:false={fieldtype}>
 
     <!-- email -->
     <template if:true={isTrueEmail}>

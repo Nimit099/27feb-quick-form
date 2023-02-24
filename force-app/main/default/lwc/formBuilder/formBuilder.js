@@ -140,8 +140,8 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
                 var allDiv  = this.template.querySelector('.fieldtab');
                 allDiv.style = 'background-color:#b3cce6;';
             });
-        this.activesidebar = true;
-
+     
+                this.activesidebar = true;
     }
 
     renderedCallback(){
@@ -685,6 +685,8 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
                 if (this.PageList[i].Id == fieldList[j].Form_Page__c) {
                     console.log('inside inner loop');
                    let fieldofObj =  fieldList[j].Name.split(',');
+                   let fieldtype = fieldofObj[1];
+                   console.log(fieldtype + 'fieldtpys');
                    console.log('in setpage field----->'+fieldofObj);
                    if(fieldofObj.length==2){
                     console.log(fieldofObj.length);
@@ -707,6 +709,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
                  let helptext;
                  let placeholdervalue;
                  let salutationvalue = []; 
+                
 
                 if(fieldList[j].Field_Validations__c){
                     fieldList[j].Field_Validations__c = fieldList[j].Field_Validations__c.split(',');
@@ -754,7 +757,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement)  {
                            
                     }
                     fieldList[j].Field_Validations__c = ({isRequired: isRequiredcheck, isDisabled : isdisabledcheck, isLabel : labelcheck, isHelptext :helptextcheck, isPlaceholder : placeholdercheck, 
-                        isReadonly : readonlycheck, isPrefix : prefixcheck,  Prefix : prefixvalue, Label: labelvalue, HelpText : helptext, Placeholder : placeholdervalue , Salutation : salutationvalue});
+                        isReadonly : readonlycheck, isPrefix : prefixcheck,  Prefix : prefixvalue, Label: labelvalue, HelpText : helptext, Placeholder : placeholdervalue , Salutation : salutationvalue, Fieldtype : fieldtype});
                 }
                     innerlist.push(fieldList[j]);
                 }
@@ -1255,21 +1258,12 @@ this.isModalOpen  = false;
     // this.template.querySelector('c-field-validation').openvalidation(this.tab,this.fieldId,fieldName);
     }
     closevalidation(event){
-        if(event.detail == 'tab-2'){
-            this.activesidebar = true;
+        this.tab = event.detail;
             this.activeDesignsidebar = false;
             this.activeNotification = false;
             this.activethankyou = false;
             this.template.querySelector('.fieldvalidationdiv').style="display:none;";
             this.connectedCallback();
-        }
-        else if(event.detail == 'tab-3'){
-            this.activeDesignsidebar = true;
-            this.activesidebar = false;
-            this.activeNotification = false;
-            this.activethankyou = false;
-            this.template.querySelector('.fieldvalidationdiv').style="display:none;";
-            this.connectedCallback();
-        }
+       
     }
 }

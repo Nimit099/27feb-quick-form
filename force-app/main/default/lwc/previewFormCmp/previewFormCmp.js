@@ -4,6 +4,7 @@ import GetFormPage from '@salesforce/apex/FormBuilderController.GetFormPage';
 import getFieldsRecords from '@salesforce/apex/FormBuilderController.getFieldsRecords';
 import getFormCSS from '@salesforce/apex/FormBuilderController.getFormCSS';
 import getPageCSS from '@salesforce/apex/FormBuilderController.getPageCSS';
+import getButtonCSS from '@salesforce/apex/FormBuilderController.getButtonCSS';
 import getprogressbar from '@salesforce/apex/FormBuilderController.getprogressbar';
 import getcaptcha from '@salesforce/apex/FormBuilderController.getcaptcha';
 import BackButton from '@salesforce/resourceUrl/BackButton';
@@ -12,7 +13,7 @@ import { NavigationMixin } from "lightning/navigation";
 
 export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
 
-    @api formid ='';
+    @api formid;
     @track getFieldCSS;
     removeObjFields = [];
     @track page = [];
@@ -70,6 +71,7 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
             for (let j = 0; j < fieldList.length; j++) {
                 if (this.PageList[i].Id == fieldList[j].Form_Page__c) {
                    let fieldofObj =  fieldList[j].Name.split(',');
+                   let fieldtype = fieldofObj[1];
                    if(fieldofObj.length==2){
                      if(fieldofObj[1]!='Extra' && fieldofObj[1]!=undefined && fieldofObj[1]!='undefined'){
                         this.removeObjFields.push(fieldofObj[0]);
@@ -136,7 +138,7 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
                            
                     }
                     fieldList[j].Field_Validations__c = ({isRequired: isRequiredcheck, isDisabled : isdisabledcheck, isLabel : labelcheck, isHelptext :helptextcheck, isPlaceholder : placeholdercheck, 
-                        isReadonly : readonlycheck, isPrefix : prefixcheck,  Prefix : prefixvalue, Label: labelvalue, HelpText : helptext, Placeholder : placeholdervalue , Salutation : salutationvalue});
+                        isReadonly : readonlycheck, isPrefix : prefixcheck,  Prefix : prefixvalue, Label: labelvalue, HelpText : helptext, Placeholder : placeholdervalue , Salutation : salutationvalue, Fieldtype : fieldtype});
                 }
                     innerlist.push(fieldList[j]);
                 }
@@ -171,6 +173,18 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
         }).catch(error=>{
             console.log({error});
         })
+
+         getButtonCSS({id:this.formid})
+        .then(result=>{
+            console.log(result);
+            let str = result;
+            let arr = this.template.querySelectorAll('.btn1');
+            for (let i = 0; i < arr.length; i++){
+                const element = arr[i];
+                element.style = str; 
+            }
+        })
+
         if(this.pageindex == this.PageList.length){
             this.isIndexZero = true;
             this.isIndexLast = true;
