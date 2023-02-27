@@ -29,6 +29,8 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
     @track captchavalue;
     BackButton = BackButton;
     @track verify;
+    footercss;
+    buttonscss;
 
     renderedCallback(){
         getFormCSS({id:this.formid})
@@ -41,35 +43,6 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
             array.style=str;
         }).catch(error=>{
             console.log({error});
-        })
-
-        getButtonCSS({id:this.formid})
-        .then(result=>{
-            console.log(result + 'button css');
-            let str = result;
-            let value;
-            let arr = this.template.querySelectorAll('.btn1');
-            for (let i = 0; i < arr.length; i++){
-                const element = arr[i];
-                element.style = str; 
-            }
-            let buttoncss = result.split(';');
-          for(let i = 0; i < buttoncss.length; i++){
-            buttoncss[i] = buttoncss[i].split(':');
-            let label = buttoncss[i][0];
-         
-            if(label == 'justify-content'){
-                value = 'justify-content:'+buttoncss[i][1];
-                console.log(value);
-            }
-          }
-
-            let Arr = this.template.querySelectorAll(".footer");
-            for (let i = 0; i < Arr.length; i++) {
-                const element = Arr[i];
-                console.log(i+'--'+{element});
-                element.style = value;
-            }
         })
 
         getPageCSS({id:this.formid})
@@ -109,6 +82,36 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
             this.secondmethod();
         }).catch(error => {
             console.log(error);
+        });
+        getButtonCSS({id:this.formid})
+        .then(result=>{
+ 
+            let str = result;
+            this.buttonscss = result;
+            let value;
+            let arr = this.template.querySelectorAll('.btn1');
+            for (let i = 0; i < arr.length; i++){
+                const element = arr[i];
+                element.style = str; 
+            }
+            let buttoncss = result.split(';');
+          for(let i = 0; i < buttoncss.length; i++){
+            buttoncss[i] = buttoncss[i].split(':');
+            let label = buttoncss[i][0];
+         
+            if(label == 'justify-content'){
+                this.footercss = buttoncss[i][1];
+                value = 'justify-content:'+buttoncss[i][1];
+                console.log(value);
+            }
+          }
+
+            let Arr = this.template.querySelectorAll(".footer");
+            for (let i = 0; i < Arr.length; i++) {
+                const element = Arr[i];
+                console.log(i+'--'+{element});
+                element.style = value;
+            }
         });
     }
     secondmethod(){
@@ -152,7 +155,7 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
                  let salutationvalue = []; 
 
                 if(fieldList[j].Field_Validations__c){
-                    fieldList[j].Field_Validations__c = fieldList[j].Field_Validations__c.split(',');
+                    fieldList[j].Field_Validations__c = fieldList[j].Field_Validations__c.split('?$`~');
                     for(let i =0; i< fieldList[j].Field_Validations__c.length; i++){
                         fieldList[j].Field_Validations__c[i] =  fieldList[j].Field_Validations__c[i].split(':');
                         console.log( fieldList[j].Field_Validations__c[i][0] + 'Nimit');
@@ -181,19 +184,19 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
                             prefixcheck = JSON.parse(value);
                            }
                            else if(labels == 'Prefix'){
-                            prefixvalue = value.replaceAll('"','');
+                            prefixvalue = value;
                            }
                            else if(labels == 'Label'){
-                            labelvalue = value.replaceAll('"','');
+                            labelvalue = value;
                            }
                            else if(labels == 'HelpText'){
-                            helptext = value.replaceAll('"','');
+                            helptext = value;
                            }
                            else if(labels == 'Placeholder'){
-                            placeholdervalue = value.replaceAll('"','');
+                            placeholdervalue = value;
                            }
                            else if(labels == 'Salutation'){
-                            salutationvalue.push(value.replaceAll('"',''));
+                            salutationvalue.push(value);
                            }
                            
                     }
@@ -238,6 +241,7 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
         .then(result=>{
             console.log(result);
             let str = result;
+            this.buttonscss = result;
             let arr = this.template.querySelectorAll('.btn1');
             for (let i = 0; i < arr.length; i++){
                 const element = arr[i];
@@ -268,8 +272,9 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
     }
 
     onaddpage1(event){
+        this.spinnerDataTable = true;
+
         if(event.currentTarget.dataset.name == 'previous'){
-            
             if(this.pageindex == 1){ 
                 this.isIndexZero = true;              
             }
@@ -294,6 +299,7 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
         }
 
         else if(event.currentTarget.dataset.name == 'next'){
+
             if(this.pageindex == 1){ 
 
                 if(this.pageindex == this.PageList.length){
@@ -337,6 +343,29 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
                 this.template.querySelector('c-toast-component').showToast('error',toast_error_msg,3000);
             }
         }
+
+        let arr = this.template.querySelectorAll('.btn1');
+        for (let i = 0; i < arr.length; i++){
+            const element = arr[i];
+            element.style = this.buttonscss; 
+        }
+        let buttoncss = this.buttonscss.split(';');
+      for(let i = 0; i < buttoncss.length; i++){
+        buttoncss[i] = buttoncss[i].split(':');
+        let label = buttoncss[i][0];
+     
+        if(label == 'justify-content'){
+            this.footercss = buttoncss[i][1];
+            value = 'justify-content:'+buttoncss[i][1];
+        }
+      }
+
+        let Arr = this.template.querySelectorAll(".footer");
+        for (let i = 0; i < Arr.length; i++) {
+            const element = Arr[i];
+            element.style = value;
+        }
+        this.spinnerDataTable = false;
     }
 
     verifycaptcha(event){
