@@ -36,5 +36,9 @@
         <members>Notification__c</members>
         <name>CustomObject</name>
     </types>
+     <types>
+        <members>Notification__c</members>
+        <name>CustomMetadata</name>
+    </types>
     <version>56.0</version>
 </Package>

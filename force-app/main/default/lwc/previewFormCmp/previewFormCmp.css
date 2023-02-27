@@ -273,7 +273,7 @@ div.child2{
     position: fixed;
 }
 
-.footer {
+ .footer {
     border-radius: 3px;
     width: 94%;
     padding-top: 1%;
@@ -513,12 +513,4 @@ border-radius: 28px;
     display: flex;
     justify-content: center;
     width: 60% !important;
-}
-
-.slds-modal__footer {
-    height: 10%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #ffffff;
 }

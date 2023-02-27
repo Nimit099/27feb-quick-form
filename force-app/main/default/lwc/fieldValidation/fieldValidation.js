@@ -57,37 +57,12 @@ export default class FieldValidation extends LightningElement {
     @track fieldtype;
     @track maximumdate;
     @track minimumdate;
+    spinnerDataTable;
 
     fieldcancel = fieldcancel;
     fieldduplicate = fieldduplicate;
     fieldsave = fieldsave;
     fielddelete = fielddelete;
-
-    renderedCallback(){
-        // if(fieldName != ''){
-        //     this.fieldName = this.fieldName.slice(0, this.fieldName.indexOf(','));
-        // }
-    }
-
-    connectedCallback(){
-        this.fieldName = this.fieldName.slice(0, this.fieldName.indexOf(','));
-        this.isRequiredcheck = false;
-        this.isdisabledcheck = false;
-        getfieldvalidation({fieldId:this.fieldId}).then(result =>{
-            let str = result.split(',');
-            let k = [];
-            for(let i = 0; i<str.length; i++){
-               let Arr = str[i].split(':');
-               let labels = Arr[0];
-               labels = labels.replace('{','');
-               labels = labels.replace('"','');
-               labels = labels.replace('"','');
-               let value = Arr[1];
-               value = value.replace('}','');
-
-            }
-           })
-    }
 
     @api
     get field(){
@@ -153,18 +128,14 @@ export default class FieldValidation extends LightningElement {
         this.salutationindex = 0;
         this.maximumdate ='';
         this.minimumdate ='';
-
-        getfieldvalidation({fieldId:this.fieldId}).then(result =>{
-            let str = result.replace('[','');
-            str = str.replace(']','');
-            str = str.split(',');
+        this.spinnerDataTable = true;
+        getfieldvalidation({fieldId:this.fieldId}).then(result =>{ 
+                       
+            let str = result.split(',');
             for(let i = 0; i<str.length; i++){
                let Arr = str[i].split(':');
                let labels = Arr[0];
-               labels = labels.replace('{"','');
-               labels = labels.replace('"','');
                let value = Arr[1];
-               value = value.replace('}','');
                if(labels == 'isRequired'){
                 this.isRequiredcheck = JSON.parse(value);
                }
@@ -190,19 +161,19 @@ export default class FieldValidation extends LightningElement {
                 this.prefixcheck = JSON.parse(value);
                }
                else if(labels == 'Prefix'){
-                this.prefixvalue = value.replaceAll('"','');
+                this.prefixvalue = value;
                }
                else if(labels == 'Label'){
-                this.labelvalue = value.replaceAll('"','');
+                this.labelvalue = value;
                }
                else if(labels == 'HelpText'){
-                this.helptext = value.replaceAll('"','');
+                this.helptext = value;
                }
                else if(labels == 'Placeholder'){
-                this.placeholdervalue = value.replaceAll('"','');
+                this.placeholdervalue = value;
                }
                else if(labels == 'Salutation'){
-                this.salutationvalue.push(value.replaceAll('"',''));
+                this.salutationvalue.push(value);
                }
                else if(labels == 'MinimumDateTime'){
               this.minimumdate = value;
@@ -224,6 +195,7 @@ export default class FieldValidation extends LightningElement {
                }
             }
             this.opensalutation();
+            this.spinnerDataTable = false;
            })
     }
 
@@ -426,9 +398,6 @@ export default class FieldValidation extends LightningElement {
         else if(event.currentTarget.dataset.title == 'PlaceHolder'){
                 this.placeholdercheck = event.target.checked;
         }
-        // else if(event.currentTarget.dataset.title == 'ReadOnly'){
-        //     this.readonlycheck = event.target.checked;
-        // }
         else if(event.currentTarget.dataset.title == 'Prefix'){
             this.prefixcheck = event.detail.checked;
         }

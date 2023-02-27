@@ -28,7 +28,7 @@ export default class NotificationComponent extends LightningElement {
     @track text3;
     @track Subject= '';
     @track Message= '';
-    @track Attachment;
+    @track Attachment = false;
     @track toast_error_msg;
     @api form_id;
     @track Notification_id;
@@ -96,72 +96,73 @@ export default class NotificationComponent extends LightningElement {
         this.get_records();
     }
 
-    get_records(){
-         getContactList({form_id :this.form_id})
+    get_records() {
+    getContactList({form_id: this.form_id})
         .then(result => {
-            // console.log('y r in getcontactlist');
-            // console.log(result);
-            // this.list_length = result.length;
-            // this.to = result[0].To_Recipients__c;
-            // this.to_email(this.to);
-            // this.cc = result[0].CC_Recipients__c;
-            // this.cc_email(this.cc);
-            // this.bcc = result[0].BCC_Recipients__c;
-            // this.bcc_email(this.bcc);
-            // this.Subject = result[0].Subject__c;
-            // this.Message = result[0].Email_Body__c;
-            // this.Attachment = result[0].Attachment__c;
-            // this.Notification_id = result[0].Id;
-            // console.log('noti',this.Notification_id);
             console.log('y r in getcontactlist');
             console.log(result);
+
             this.list_length = result.length;
             this.to = result[0].To_Recipients__c;
-            console.log('to :- ',this.to);
+            console.log('to :- ', this.to);
             this.to_email(this.to);
+
             this.cc = result[0].CC_Recipients__c;
-            console.log('cc',this.cc);
+            console.log('cc: ', this.cc);
             this.cc_email(this.cc);
+
             this.bcc = result[0].BCC_Recipients__c;
-            console.log('bcc',this.bcc);
+            console.log('bcc: ', this.bcc);
             this.bcc_email(this.bcc);
+
             this.Subject = result[0].Subject__c;
-            console.log('Subject in get : ',this.Subject);
+            console.log('Subject in get: ', this.Subject);
+
             this.Message = result[0].Email_Body__c;
-            console.log('Message : ',this.Message);
+            console.log('Message: ', this.Message);
+
             this.Attachment = result[0].Attachment__c;
-            console.log('Message : ',this.Message);
-            this.Attachment = result[0].Id;
-            console.log('noti',this.Attachment);
+            console.log('Attachment: ', this.Attachment);
+
+            // this.Attachment = result[0].Id;
+            // console.log('noti: ', this.Attachment);
+
             this.Notification_id = result[0].Id;
-            if(this.cc =='' || this.cc ==null || this.bcc =='' || this.bcc ==null){
+
+            if (this.cc == '' || this.cc == null || this.bcc == '' || this.bcc == null) {
                 this.open_addcc_and_addbcc = true;
-            }
-            else{
+                console.log('open_addcc_and_addbcc -->', this.open_addcc_and_addbcc);
+            } else {
+                console.log('open_addcc_and_addbcc -->', this.open_addcc_and_addbcc);
                 this.open_addcc_and_addbcc = false;
+                console.log('open_addcc_and_addbcc -->', this.open_addcc_and_addbcc);
             }
-            if(this.cc !='' && this.cc !=null){
+
+            if (this.cc != '' && this.cc != null) {
                 this.open_addcc = true;
                 this.open_addcc_label = false;
-            }
-            else{
+                console.log('cc if checking');
+            } else {
                 this.open_addcc = false;
                 this.open_addcc_label = true;
+                console.log('else if cc checking');
             }
-            if(this.bcc !='' && this.bcc !=null){
+
+            if (this.bcc != '' && this.bcc != null) {
                 this.open_addbcc = true;
                 this.open_addbcc_label = false;
-            }
-            else{
+                console.log('if bcc checking');
+            } else {
                 this.open_addbcc = false;
                 this.open_addbcc_label = true;
+                console.log('else if bcc checking');
             }
         })
         .catch(error => {
             this.error = error;
         });
+}
 
-    }
 
 
     renderedCallback(){
@@ -262,7 +263,7 @@ export default class NotificationComponent extends LightningElement {
     handleAttachment(event) {
         // console.log('in to attachent'+event);
         this.Attachment = event.target.checked;
-        // console.log('yas :- '+this.Attachment);
+        console.log('handleAttachment :- '+this.Attachment);
     }
     validate() {
         if (!this.myVal) {
@@ -290,14 +291,109 @@ export default class NotificationComponent extends LightningElement {
         }
     }
     open_add_cc(){
+        console.log();
         this.open_addcc = true;
         this.open_addcc_label = false;
+        console.log('open_addcc--> ',this.open_addcc);
+        this.remove_cc_and_bcc();     
     }
     open_add_bcc(){
-         this.open_addbcc = true;
-         this.open_addbcc_label = false;
-         
+        this.open_addbcc = true;
+        this.open_addbcc_label = false;
+        console.log('open_addbcc--> ',this.open_addbcc);
+        this.remove_cc_and_bcc();     
     }
+
+    remove_cc_and_bcc(){
+        if( this.open_addbcc == true && this.open_addcc == true){
+            console.log('open_addcc_and_addbcc --> ',this.open_addcc_and_addbcc);
+            this.open_addcc_and_addbcc = false;
+            console.log('open_addcc_and_addbcc --> ',this.open_addcc_and_addbcc);
+        }
+    }
+ 
+   inputValue
+   handlechange(event){
+    this.inputValue = event.target.value;
+    console.log('Input value:', this.inputValue);
+   }
+   inputValue1
+   handlechange1(event){
+    this.inputValue1 = event.target.value;
+    console.log('Input value:', this.inputValue1);
+   }
+   inputValue2
+   handlechange2(event){
+    this.inputValue2 = event.target.value;
+    console.log('Input value:', this.inputValue2);
+   }
+//   handleSave() {
+//     let toValue = this.inputValue;
+//     console.log('handle save toValue', toValue);
+   
+//     if (toValue === '' || toValue === undefined) {
+//         // To address is empty, proceed to save
+//         console.log('first if -->');
+//         this.save();
+//         this.inputValue = '';
+//     } else {
+//         console.log('first else -->');
+//         let isToValid = this.isEmailValid(toValue);
+//         if (isToValid) {
+//             console.log('second if -->');
+//             // To address is valid, proceed to save
+//             this.save();
+//             this.inputValue = '';
+//             toValue = '';
+//         } else {
+//             console.log('second else -->');
+//             this.inputValue = '';
+//             toValue = '';
+//         }
+//     }
+// }
+handleSave() {
+  let toValue = this.inputValue;
+  let ccValue = this.inputValue1;
+  let bccValue = this.inputValue2;
+  
+  if ((toValue === '' || toValue === undefined) && (ccValue === '' || ccValue === undefined) && (bccValue === '' || bccValue === undefined)) {
+    // All email fields are empty, proceed to save
+    this.save();
+    this.inputValue = '';
+    this.inputValue1 = '';
+    this.inputValue2 = '';
+  } else {
+    let isToValid = this.isEmailValid(toValue);
+    let isCcValid = this.isEmailValid(ccValue);
+    let isBccValid = this.isEmailValid(bccValue);
+
+    if (isToValid && isCcValid && isBccValid) {
+      // All email fields are valid, proceed to save
+      this.save();
+      this.inputValue = '';
+      this.inputValue1 = '';
+      this.inputValue2 = '';
+    } else {
+        this.inputValue = '';
+      this.inputValue1 = '';
+      this.inputValue2 = '';
+      // At least one of the email fields is invalid, show an error message
+    //   this.showToast('error', 'Invalid email address', 'Please enter a valid email address for all recipients.');
+    }
+  }
+}
+
+
+
+isEmailValid(email) {
+    // Regular expression to validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+
+
     save(){
         console.log('you r in save');
         const testmap = this.selectedValuesMap.keys();
@@ -318,6 +414,7 @@ export default class NotificationComponent extends LightningElement {
         if(this.textto == ''){
             // alert('pls insert to');
             this.required_to = true;
+            this.email_msg = false;
         }
         if(this.Subject==''){
             this.required_Subject = true;
@@ -330,7 +427,7 @@ export default class NotificationComponent extends LightningElement {
 
         }
         
-        if(this.text2 != '' &&this.Subject!='' &&this.Message!=''){
+        if(this.textto != '' &&this.Subject!='' &&this.Message!=''){
             console.log('you r in req');
            
             let listObj = { 'sobjectType': 'Notification__c' };
@@ -431,39 +528,33 @@ export default class NotificationComponent extends LightningElement {
 
 
 
-
-
-
-
-    handleKeyPress(event) {
-        if (event.keyCode === 13) {
-            event.preventDefault(); // Ensure it is only this code that runs
-            const value = this.template.querySelector('lightning-input.input2').value;
-            console.log('to email',value);
-        var pattern =/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    create_pill_to(event){
+    console.log('create_pill');
+    event.preventDefault(); // Ensure it is only this code that runs
+    const value = this.template.querySelector('lightning-input.input2').value;
+    console.log('to email',value);
+    var pattern = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    if (value == null || value == '') {
+        this.email_msg = false;
+    } else {
         var validation = pattern.test(value);
-
         if (validation == false) {
-           this.email_msg = true;
-           this.remove_error_msg();
-        //    this.dispatchEvent(new CustomEvent('removeerrormessage'))
-        }
-        else{
+            this.email_msg = true;
+            this.remove_error_msg();
+        } else {
             this.email_msg = false;
             this.selectedValuesMap.set(value, value);
-            // var map = [];
-            // map = this.selectedValuesMap;
-            // const testmap = this.selectedValuesMap.keys();
-            // this.test45 = testmap.toString();
-            // console.log('text ;-',this.test45);
-            // console.log('yash ;-',testmap);
-            // console.log('this.selectedValuesMap>>',map.keys());
-            // console.log({map});
             this.selectedValues = [...this.selectedValuesMap.keys()];
             console.log('selectedValues kvjdfbkdsvj :- ',this.selectedValues);
         }
+    }
+   this.template.querySelector('lightning-input.input2').value = "";
+}
 
-            this.template.querySelector('lightning-input.input2').value = "";
+
+    handleKeyPress(event) {
+        if (event.keyCode === 13 || event.keyCode === 44 || event.keyCode === 32 ) {
+            this.create_pill_to(event);
         }
     }
 
@@ -504,28 +595,30 @@ export default class NotificationComponent extends LightningElement {
     }
     
 
+    create_pill_cc(event){
+    event.preventDefault(); // Ensure it is only this code that runs
+    const value = this.template.querySelector('lightning-input.input3').value;
+    console.log('cc value :- ',value);
+    var pattern =/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    var validation = pattern.test(value);
+    if (value == null || value == '') {
+        this.email_msg_cc = false;
+    }
+    else if (validation == false) {
+        this.email_msg_cc = true;
+    }
+    else {
+        this.email_msg_cc = false;
+        this.selectedValues_2Map.set(value, value);
+        this.selectedValues_2 = [...this.selectedValues_2Map.keys()];
+    }
+    this.template.querySelector('lightning-input.input3').value = "";
+}
 
 
     handleKeyPress_2(event) {
-        if (event.keyCode === 13) {
-            event.preventDefault(); // Ensure it is only this code that runs
-            const value = this.template.querySelector('lightning-input.input3').value;
-            console.log('cc value :- ',value);
-        var pattern =/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-        var validation = pattern.test(value);
-
-        if (validation == false) {
-           this.email_msg_cc = true;
-        }
-        else{
-            this.email_msg_cc = false;
-            this.selectedValues_2Map.set(value, value);
-            this.selectedValues_2 = [...this.selectedValues_2Map.keys()];
-                    
-
-        }
-
-            this.template.querySelector('lightning-input.input3').value = "";
+        if (event.keyCode === 13 || event.keyCode === 44 || event.keyCode === 32 ) {
+            this.create_pill_cc(event);
         }
     }
 
@@ -568,28 +661,31 @@ export default class NotificationComponent extends LightningElement {
 
 
 
-
-
-    handleKeyPress_3(event) {
-        if (event.keyCode === 13) {
-            event.preventDefault(); // Ensure it is only this code that runs
-            const value = this.template.querySelector('lightning-input.input4').value;
-            console.log('cc value :- ',value);
+    create_pill_bcc(event){
+        event.preventDefault(); // Ensure it is only this code that runs
+        const value = this.template.querySelector('lightning-input.input4').value;
+        console.log('cc value :- ',value);
         var pattern =/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        if (value == null || value == '') {
+        this.email_msg_bcc = false;
+    }else{
         var validation = pattern.test(value);
 
         if (validation == false) {
-           this.email_msg_bcc = true;
+            this.email_msg_bcc = true;
         }
         else{
             this.email_msg_bcc = false;
             this.selectedValues_3Map.set(value, value);
-            this.selectedValues_3 = [...this.selectedValues_3Map.keys()];
-                    
-
+            this.selectedValues_3 = [...this.selectedValues_3Map.keys()];       
         }
+    }
+        this.template.querySelector('lightning-input.input4').value = "";
+    }
 
-            this.template.querySelector('lightning-input.input4').value = "";
+    handleKeyPress_3(event) {
+        if (event.keyCode === 13 || event.keyCode === 44 || event.keyCode === 32 ) {
+            this.create_pill_bcc(event);
         }
     }
 

@@ -153,9 +153,11 @@ public with sharing class objectSelection {
             List<String> lst = Mapped_Objects.split(',');
             System.debug(form.Id);
             List<Form_Page__c> FormPages = new List<Form_Page__c>();
+            Integer pageNum = 1;
             for (String obj : lst) {
-                Form_Page__c Fpage = new Form_Page__c(Name = obj+' Page', Form__c = form.Id, Page_Number__c = 1);
+                Form_Page__c Fpage = new Form_Page__c(Name = obj+' Page', Form__c = form.Id, Page_Number__c = pageNum);
                 FormPages.add(Fpage);
+                pageNum++;
             }
             Database.insert(FormPages);
             return form.Id;

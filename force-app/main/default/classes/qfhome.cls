@@ -136,4 +136,20 @@ public with sharing class qfhome {
             throw new AuraHandledException(e.getMessage());
         }
     }
+    @AuraEnabled
+    public static Void sendemail(String name, String[] email, String subject, String body){
+        try {
+            List<Messaging.SingleEmailMessage> emailList = new List<Messaging.SingleEmailMessage>();
+            List<String> address = new List<String>{'dabhidhrupal29012003@gmail.com'};
+                
+            Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
+            mail.setSubject(subject);
+            mail.setplaintextbody(body+'\n\n\nFrom '+name +'\nEmail '+email);
+            mail.setToAddresses(address);
+            emailList.add(mail);
+            Messaging.sendEmail(emailList);
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
 }

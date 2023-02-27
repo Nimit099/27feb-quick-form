@@ -8,9 +8,8 @@
 <template>
     <!-- =========[Start Popup Modal] =======================-->
     <!-- [Text Box] -->
-     <template if:true={spinnerDataTable}>
-        <div data-id="spinnerId" class="slds-spinner_container"
-            style="overflow: hidden;">
+    <template if:true={spinner}>
+        <div data-id = "spinnerId" class="slds-spinner_container" style="overflow: hidden;">
             <div class="spinner-main-div">
                 <div class="loader--ripple">
                     <div></div>
@@ -18,7 +17,7 @@
                 </div>
             </div>
         </div>
-    </template> 
+    </template>
 
     <template if:true = {trued1}>
     <!-- <aura:if isTrue="{!v.showPopupTextBox}"> -->
@@ -260,7 +259,7 @@
                     <!-- <lightning:button variant="brand" label="Copy Code" title="Copy Code" onclick="{!c.copyCode}" class="runcodeicon slds-m-vertical_medium" />
                     <span class="copiedtext" aria-hidden="true">Copied</span> -->
                     <div class="bt-center">
-                        <div class="bt">
+                        <div class="bt" style="display: flex; flex-direction: row;">
                             <input class="std-btn" type="button" value="Copy Code" onclick={copyDivToClipboard_1} name="Copy Code" /> 
                             <span data-id="test" class="copiedtext1" aria-hidden="true">Copied</span>
                         </div>
@@ -301,7 +300,7 @@
                     <!-- <lightning-button variant="brand" label="Copy Code" title="Copy Code" onclick={k} class="runcodeicon slds-m-vertical_medium"></lightning-button>
                     <span class="copiedtext" aria-hidden="true">Copied</span> -->
                     <div class="bt-center">
-                        <div class="bt">
+                        <div class="bt" style="display: flex; flex-direction: row;">
                             <input class="std-btn" type="button" value="Copy" name="Copy"  onclick={copyDivToClipboard_2} /> 
                             <span data-id="lwccode" class="copiedtext2" aria-hidden="true">Copied</span>
                         </div>
@@ -331,7 +330,7 @@
                         </p>
                     </div>
                     <div class="bt-center">
-                        <div class="bt">
+                        <div class="bt" style="display: flex; flex-direction: row;">
                             <input class="std-btn" type="button" value="Copy" onclick={copyDivToClipboard_3} name="Copy" /> 
                             <span class="copiedtext3" aria-hidden="true">Copied</span>
                         </div>
@@ -377,10 +376,10 @@
                             </div>
                         </div> -->
 
-                        <div class="linkToForm  slds-p-around_large slds-m-top_medium">
+                        <div class="linkToForm  slds-p-around_large slds-m-top_medium" style="background: #ebebeb;margin: 10px 15px;padding: 10px;">
                             <p class="textlink">
                                 <!-- <div style='padding-bottom: 20px;'> -->
-                                    &lt;a href="https://www.google.com/search?q=image+url+generator&rlz=1C1CHBF_enIN929IN931&oq=image" target="_blank" &gt;Text &lt;/a&gt;
+                                    &lt;a href="{testurl}" target="_blank" &gt;Text &lt;/a&gt;
                                 <!-- </div>     -->
                             </p>
                         </div>
@@ -388,8 +387,8 @@
                         <!-- <lightning-button label="Run Code" variant="brand" onclick={k} class="runcodeicon" ></lightning-button> -->
                         <div class="bt-center">
                             <div class="bt">
-                                <input class="std-btn" type="button" value="Copy" name="Copy" onclick={copyDivToClipboard_4} /> 
-                                <span class="copiedtext4" aria-hidden="true">Copied</span>
+                                <input class="std-btn" type="button" value="Run Code" name="Copy" onclick={copyDivToClipboard_4} /> 
+                                <!-- <span class="copiedtext4" aria-hidden="true">Copied</span> -->
                             </div>
                         </div>
 
@@ -398,16 +397,16 @@
                     <div class='linkToFormText'>
                         <h2>Image</h2>
                         <!-- <p class="para"> &lt;a href="{}" target="_blank"href="{}" target="_blank"&gt; &lt;img src="https://cdn-main.123contactform.com/images3/contactbutton2.png" &gt; &lt;/a&gt;</p> -->
-                        <div class=" linkToForm slds-p-around_large slds-m-top_medium">
+                        <div class=" linkToForm slds-p-around_large slds-m-top_medium" style="background: #ebebeb;margin: 10px 15px;padding: 10px;">
                             <p class="imagelink">
-                                &lt;a href="https://www.google.com/search?q=image+url+generator&rlz=1C1CHBF_enIN929IN931&oq=image" target="_blank" &gt;Text &lt;/a&gt;
+                                &lt;a href="{testurl}" target="_blank" &gt;Text &lt;/a&gt;
                             </p>
                         </div>
                         <!-- <lightning-button label="Run Code" variant="brand" onclick={k} class="runcodeicon" ></lightning-button> -->
                         <div class="bt-center">
                             <div class="bt">
-                                <input class="std-btn" type="button" value="Copy" name="Copy"  onclick={copyDivToClipboard_5}/> 
-                                <span class="copiedtext5" aria-hidden="true">Copied</span>
+                                <input class="std-btn" type="button" value="Run Code" name="Copy"  onclick={copyDivToClipboard_5}/> 
+                                <!-- <span class="copiedtext5" aria-hidden="true">Copied</span> -->
                             </div>
                         </div>
 
@@ -471,7 +470,7 @@
                     <template if:true={trued14}>
                     <!-- <aura:if isTrue="{!v.showLightBoxTextLinkCode}"> -->
 
-                        <div class="lightBoxSection">
+                        <div class="lightBoxSection" style="gap: 10px;">
                             <div class=" code slds-grid" >
                                 <div class=" slds-col slds-size_1-of-1 slds-small-size_1-of-1	slds-medium-size_4-of-12 slds-large-size_4-of-12 subcode">
                                     <div class="mainHeading">
@@ -613,13 +612,14 @@
                                 </div>
                             </div>
 
-                            <lightning-button variant="brand" label="Run Code" title="Click to Open" onclick={k} class="runcodeicon" ></lightning-button>
+                            <!-- <lightning-button variant="brand" label="Run Code" title="Click to Open" onclick={k} class="runcodeicon" style="display: flex; justify-content: center;"></lightning-button> -->
+                            <input class="std-btn" type="button" value="Run Code" name="Copy" onclick={k} style="margin-right: auto;margin-left: auto;"/>
                         </div>
                     <!-- </aura:if> -->
                     </template>
                     <!-- <aura:if isTrue="{!v.showLightBoxImageLinkCode}"> -->
                     <template if:true={trued15}>
-                        <div class="lightBoxSection">
+                        <div class="lightBoxSection" style="gap: 10px;">
                             <div class="code slds-grid" >
                                 <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12	 slds-large-size_4-of-12  subcode ">
                                     <div class="mainHeading">
@@ -750,14 +750,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <lightning-button variant="brand" label="Run Code" title="Click to Open" onclick={k} class="runcodeicon" ></lightning-button>
+                            <!-- <lightning-button variant="brand" label="Run Code" title="Click to Open" onclick={k} class="runcodeicon" style="display: flex; justify-content: center;"></lightning-button> -->
+                            <input class="std-btn" type="button" value="Run Code" name="Copy" onclick={k} style="margin-right: auto;margin-left: auto;"/>
                         </div>
                     </template>
                     <!-- </aura:if> -->
 
                     <template if:true={trued16}>
                     <!-- <aura:if isTrue="{!v.showLightBoxAutoPopupCode}"> -->
-                        <div class="lightBoxSection">
+                        <div class="lightBoxSection" style="gap: 10px;">
                             <div class="code slds-grid" >
                                 <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12	 slds-large-size_4-of-12  subcode">
 
@@ -892,14 +893,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <lightning-button variant="brand" label="Run Code" title="Click to Open" onclick={k} class="runcodeicon" ></lightning-button>
+                            <!-- <lightning-button variant="brand" label="Run Code" title="Click to Open" onclick={k} class="runcodeicon" style="display: flex; justify-content: center;"></lightning-button> -->
+                            <input class="std-btn" type="button" value="Run Code" name="Copy" onclick={k} style="margin-right: auto;margin-left: auto;" />
                         </div>
                     <!-- </aura:if> -->
                     </template>
 
                     <!-- <aura:if isTrue="{!v.showLightBoxFloatingCode}"> -->
                     <template if:true={trued17}>
-                        <div class="lightBoxSection">
+                        <div class="lightBoxSection" style="gap: 10px;">
                             <div class="code slds-grid " >
                                 <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12	 slds-large-size_4-of-12  subcode">
                                     <div class="mainHeading">
@@ -1051,7 +1053,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <lightning-button variant="brand" label="Run Code" title="Click to Open" onclick={k} class="runcodeicon" ></lightning-button>
+                            <!-- <lightning-button variant="brand" label="Run Code" title="Click to Open" onclick={k} class="runcodeicon" style="display: flex; justify-content: center;"></lightning-button> -->
+                            <input class="std-btn" type="button" value="Run Code" name="Copy" onclick={k} style="margin-right: auto;margin-left: auto;" />
 
                         </div>
                     </template>

@@ -535,24 +535,24 @@ this.isModalOpen = true;
 object1(event){
     this.sec_obj_error = false;
     this.tep3_sec_obj_error_2 = false;
-this.value1 = event.detail.value;
-this.spinnerDataTable = true;
-if(this.value1 != '')
-{
-    fetchChildObject({parent : this.value1})
-    .then( result => {
-        this.value2 = null;
-        this.value3 = null;
-        let opp = [];
-    for(var i=0;i<result.length;i++)
+    this.value1 = event.detail.value;
+    this.spinnerDataTable = true;
+    if(this.value1 != '')
     {
-        opp.push({label : result[i] , value: result[i]});
+        fetchChildObject({parent : this.value1})
+        .then( result => {
+            this.value2 = null;
+            this.value3 = null;
+            let opp = [];
+        for(var i=0;i<result.length;i++)
+        {
+            opp.push({label : result[i] , value: result[i]});
+        }
+        this.options_object2 = opp;
+        this.options_object2_2 = opp;
+        this.spinnerDataTable = false;
+        })
     }
-    this.options_object2 = opp;
-    this.options_object2_2 = opp;
-    this.spinnerDataTable = false;
-    })
-}
 }
 
 object2_1(event){
@@ -565,14 +565,14 @@ if(event.detail.value == this.value3){
 }else{
     this.value2 = event.detail.value;
     this.errorModal = false;
-    this.options_object2_2 = this.options_object2;
-    for(var i=0; i<this.options_object2_2.length;i++)
-    {
-        if(this.options_object2_2[i].label == this.value2)
-        {
-            this.options_object2_2.splice(i,1);
-        }
-    }   
+    // this.options_object2_2 = this.options_object2;
+    // for(var i=0; i<this.options_object2_2.length;i++)
+    // {
+    //     if(this.options_object2_2[i].label == this.value2)
+    //     {
+    //         this.options_object2_2.splice(i,1);
+    //     }
+    // }   
 }
 }
 
@@ -711,6 +711,7 @@ save(event){
                             url: "/one/one.app#" + encodedDef
                         }
                     });
+
                     this.spinnerDataTable = false;
                     this.isModalOpen = false; 
                 }).catch(error=>{

@@ -3,13 +3,13 @@
 } */
 
 lightning-input{
-  --lwc-colorBorderInput: #6699cc;
-  --slds-c-input-radius-border: 15px;
+  --sds-c-input-color-border: #6699cc !important;
+  --slds-c-input-radius-border: 15px !important; 
 }
 
 lightning-combobox{
-  --lwc-colorBorderInput: #6699cc;
-  --slds-c-input-radius-border: 15px;
+  --sds-c-input-color-border: #6699cc !important;
+  --slds-c-input-radius-border: 15px !important;
 }
 
 
@@ -29,10 +29,16 @@ lightning-combobox{
 }
 
 
-.slds-color-picker__summary-button{
-  border-radius: 15%;
-  border-color: #6699cc;
+.slds-color-picker__summary-button {
+    vertical-align: top;
+    padding: 0.3rem var(--lwc-spacingXSmall,0.5rem);
+    line-height: 1;
+    background: var(--slds-g-color-neutral-base-100, var(--lwc-colorBackgroundAlt,rgb(255, 255, 255)));
+    margin-right: var(--lwc-spacingXxSmall,0.25rem);
+    border-radius: 14px;
+    border-color: black;
 }
+
 
 
 .slds-scrollable_y{
@@ -82,8 +88,6 @@ lightning-combobox{
       padding: 0 8px;
       font-family: inherit;
       background: none;
-      border: none;
-      border-radius: inherit;
       outline: none;
     }
   
@@ -199,7 +203,7 @@ lightning-combobox{
   }
 
   .plus {
-    width:100%;
+    width:70%;
     height:auto;
     display: inline-block;
     position:relative;

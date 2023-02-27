@@ -222,7 +222,7 @@
 .codeCopySection {
     background: #EBEBEB;
     border-radius: 15px;
-    line-height: 3em;
+    line-height: 2em;
     overflow: hidden;
     overflow-y: scroll;
     height: 40%;
@@ -248,17 +248,17 @@
 
    .copiedtext,.copiedtext1,.copiedtext2,.copiedtext3,.copiedtext5,
    .copiedUrl {
-    position: absolute;
+    /* position: absolute;
     left: 25%;
     top: 49%;
-    right: 0;
+    right: 0; */
     text-align: center;
     opacity: 0;
-    transform: translateY(-1em);
+    /* transform: translateY(-1em); */
     color: #000;
-    transition: all .500s;
+    /* transition: all .500s; */
     opacity: 1;
-    transform: translateY(13em);
+    /* transform: translateY(13em); */
     display: none;
     color: #6699CC;
     font-size: 1rem;
@@ -465,7 +465,7 @@
     padding-left: 0.9rem;
     padding-left: 0.9rem;
     background-color: #f0f0f0;
-    height: 20rem;
+    height: 18rem;
     overflow-y: scroll;
     background-color: #f0f0f0;
 }
@@ -924,17 +924,17 @@
     } */
     .copiedtext,.copiedtext1,.copiedtext2,.copiedtext3,.copiedtext4,.copiedtext5,
    .copiedUrl {
-    position: absolute;
+   /* position: absolute;
     left: 40%;
     top: 45%;
-    right: 0%;
+    right: 0%; */
     text-align: center;
     opacity: 0;
-    transform: translateY(-1em);
+    /* transform: translateY(-1em); */
     color: #000;
-    transition: all .500s;
+    /* transition: all .500s; */
     opacity: 1;
-    transform: translateY(13em);
+    /* transform: translateY(13em); */
     display: none;
     color: #6699CC;
     font-size: 1rem;

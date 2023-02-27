@@ -10,6 +10,7 @@ export default class Qf_publish extends LightningElement {
     @api day = { id: '123', name: 'my_day', label: 'My Day' };
     copy_Icon = copyIcon;
     @track spinnerDataTable = false;
+    @track spinner = false;
     trued = true;
     trued1;  //proper // popup
     trued2;  // proper (required image) popup
@@ -47,11 +48,12 @@ export default class Qf_publish extends LightningElement {
     //     this.template.querySelector('.checkBoxes').style = "border-bottom : 1px solid lightgrey"
     // }  
     connectedCallback(){
-        this.spinnerDataTable = true;
+        this.spinner = true;
         console.log('OUTPUT to connectedcallback : ',this.currentformid);
         siteUrl({Formid:this.currentformid})
         .then(data =>{
             this.testurl = data;
+            this.spinner = false;
             console.log('testurl : ',this.testurl);
             console.log('OUTPUT : ',data);
             this.messages = data;
@@ -59,9 +61,10 @@ export default class Qf_publish extends LightningElement {
         })
         .catch(error => {
             console.log({error});
+            this.spinner = false;
         })
         // getformid({Formid:this.currentformid})
-        this.spinnerDataTable = false;
+        // this.spinner = false;
     }
     // @wire(siteUrl) wiredsiteUrl({ error, data }) {
     //     if (data) {

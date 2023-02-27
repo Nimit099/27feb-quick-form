@@ -51,8 +51,6 @@ export default class Quickformfieldcomponent extends LightningElement {
    @api placeholder;
    @api fieldtype;
     connectedCallback(){
-        console.log(this.labelvalue);
-        console.log(this.salutationvalue + '-- salutationvalue');
          getScaleRating()
     .then(result=>{
        this.scaleRating = result;
@@ -81,13 +79,15 @@ export default class Quickformfieldcomponent extends LightningElement {
     }
     renderedCallback(){
         console.log('quickformfield rendered callback!');
+        console.log('formid --> '+this.formid);
         getFieldCSS({id:this.formid})
         .then(result=>{
             console.log(result);
             this.getFieldCSS1 = result;
             console.log('FieldCSS->> '+this.getFieldCSS1);
-            console.log(this.template.querySelectorAll('input'));
-            let array = this.template.querySelectorAll('input');
+            console.log(this.template.querySelectorAll('.slds-input'));
+            console.log(this.template.querySelectorAll('.areatext'));
+            let array = this.template.querySelectorAll('.slds-input');
             console.log(array.length);
             let str = this.getFieldCSS1;
             let Arr = str.split(';color:');
@@ -99,19 +99,20 @@ export default class Quickformfieldcomponent extends LightningElement {
                 element.style.setProperty("--c",pcolor);
             }
             this.template.querySelector('select').style = str;
-            let array2 = this.template.querySelectorAll('.slds-input');
-            console.log(array.length);
-            let str2 = this.getFieldCSS1;
-            let Arr22 = str2.split(';color:');
-            let Arr222 = Arr22[1].split(';');
-            let pcolor2 = Arr222[0];
-            for (let i = 0; i < array2.length; i++) {
-                const element = array[i];
-                element.style=str;
-                element.style.setProperty("--c",pcolor2);
-            }
+            console.log('before textarea');
+            // let array2 = this.template.querySelectorAll('.areatext');
+            // console.log({array2});
+            // console.log('after queryselector -> '+array2.length);
+            // // let Arr3 = str.split(';color:');
+            // // let Arr4 = Arr3[1].split(';');
+            // // let pcolor2 = Arr4[0];
+            // for (let i = 0; i < array2.length; i++) {
+            //     const element = array2[i];
+            //     element.style=str;
+            //     // element.style.setProperty("--c",pcolor2);
+            // }
         }).catch(error=>{
-            console.log({error});
+            console.log('quickformfield --> '+{error});
         })
 
         getHoverCSS({id:this.formid})
@@ -152,8 +153,12 @@ export default class Quickformfieldcomponent extends LightningElement {
                 const element = array2[j];
                 element.style='margin:top:'+str2;
             }
+            const event1 = CustomEvent('startsppiner');
+            this.dispatchEvent(event1);
         }).catch(error=>{
             console.log({error});
+            const event1 = CustomEvent('startsppiner');
+            this.dispatchEvent(event1);
         })
         
     }
@@ -176,29 +181,35 @@ export default class Quickformfieldcomponent extends LightningElement {
                 element.style=str;
                 element.style.setProperty("--c",pcolor);
             }
+            let array2 = this.template.querySelectorAll('.textarea');
+            let Arr3 = str.split(';color:');
+            let Arr4 = Arr3[1].split(';');
+            let pcolor2 = Arr4[0];
+            for (let i = 0; i < array2.length; i++) {
+                const element = array2[i];
+                element.style=str;
+                element.style.setProperty("--c",pcolor2);
+            }
             this.template.querySelector('select').style = str;
         }).catch(error=>{
             console.log({error});
         })
 
-        // console.log('CSS->> '+CSSString);
-        // if (CSSString == null || CSSString == undefined) {
-        //     this.getFieldCSS1 = CSSString;
-        // }
-        // console.log('FieldCSS->> '+this.getFieldCSS1);
-        // console.log(this.template.querySelectorAll('input'));
-        // let array = this.template.querySelectorAll('input');
-        // console.log(array.length);
-        // let str = this.getFieldCSS1;
-        // let Arr = str.split(';color:');
-        // let Arr2 = Arr[1].split(';');
-        // let pcolor = Arr2[0];
-        // for (let i = 0; i < array.length; i++) {
-        //     const element = array[i];
-        //     element.style=str;
-        //     element.style.setProperty("--c",pcolor);
-        // }
-        // this.template.querySelector('select').style = str;
+        // console.log('FieldCSS->> '+CSSString);
+        //     console.log(this.template.querySelectorAll('input'));
+        //     let array = this.template.querySelectorAll('input');
+        //     console.log(array.length);
+        //     let str = this.getFieldCSS1;
+        //     let Arr = str.split(';color:');
+        //     let Arr2 = Arr[1].split(';');
+        //     let pcolor = Arr2[0];
+        //     for (let i = 0; i < array.length; i++) {
+        //         const element = array[i];
+        //         element.style=str;
+        //         element.style.setProperty("--c",pcolor);
+        //     }
+        //     this.template.querySelector('select').style = str;
+        
     }
 
     @api LabelCSSUpdate(CSSString){
@@ -229,6 +240,15 @@ export default class Quickformfieldcomponent extends LightningElement {
 
     ApplyCSS(event){
         // event.target.style = "color:blue";
+    }
+
+    @api handleeffect(type,property){
+        if(type=='hover'){
+            this.hovercssproperty = property;
+        }
+        else if(type == 'focus'){
+            this.focuscssproperty = property;
+        }
     }
 
     handlehover(event){
@@ -294,9 +314,8 @@ export default class Quickformfieldcomponent extends LightningElement {
         ];
     }
     get hasType(){
-        console.log(this.tView + 'tviewNim');
+  
         if(this.tView.includes(',')){
-            console.log('Insider nf');
             let tempararyList = this.tView.split(',');
             this.FieldLabel= tempararyList[0];
             this.FieldType= tempararyList[1];
@@ -307,19 +326,17 @@ if(tempararyList.length==3){
 
 if(this.FieldType!=undefined && this.FieldType!='undefined' && this.FieldType!='Extra')
 {
-    console.log('Insider n');
     if(this.FieldType=='QFADDRESS'){
         this.tView = this.FieldType;
         this.Address = this.FieldLabel;
         return false;
     }
-    return true;
-}
+    return true;}
         }
         return false;
    
     }
-   
+   @track placeHolder='New Field';
     get isFieldCompView(){
         return this.compview =='Field' ;
     }
