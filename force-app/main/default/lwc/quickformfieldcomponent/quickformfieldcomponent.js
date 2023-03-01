@@ -31,7 +31,7 @@ export default class Quickformfieldcomponent extends LightningElement {
     @track FieldShown = true;
     @track LabelShown = true;
     // @api isReqired;
-    @track isReqired = true;
+    @api isReqired;
     @track fieldHelpText = 'please fill the help text';
     @track fieldValidations = '';
     FieldLabel;
@@ -347,12 +347,11 @@ export default class Quickformfieldcomponent extends LightningElement {
         return this.compview == 'Full';
     }
     get isTrueEmail() {
-        console.log(this.FieldLabel);
+        this.tView = this.tView.split(',')[0];
         return this.tView == 'QFEMAILID' || this.FieldLabel == 'QFEMAILID';
     }
 
     get isTrueFullName() {
-
         return this.tView == 'QFFULLNAME' || this.FieldLabel == 'QFFULLNAME';
     }
     get isTrueName() {

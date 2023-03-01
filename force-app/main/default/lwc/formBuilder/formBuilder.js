@@ -126,42 +126,43 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
     connectedCallback() {
 
         this.spinnerDataTable = true;
-        console.log('Parent Massage :- ' + this.ParentMessage);
-        console.log('FormId :- ' + this.FormId);
-        console.log('FormName :- ' + this.FormName);
-
-        GetFormPage({ Form_Id: this.ParentMessage })
-            .then(result => {
-                console.log('get form page called');
-                this.PageList = result;
-                console.log('this-->>');
-                console.log('*** pageList ==>', result);
-                console.log(this.PageList[0].Name);
-                console.log(this.PageList.length);
-
-            }).catch(error => {
-                console.log(error);
-            });
-        getFieldsRecords({ id: this.ParentMessage })
-            .then(result => {
-                console.log('whyyyy');
-                console.log('*** FieldList ==>', result);
-                this.FieldList = result;
-                this.setPageField(result);
-
-                console.log(this.FieldList.length);
-                var allDiv = this.template.querySelector('.tab-2');
-                allDiv.style = 'background-color: #8EBFF0;padding: 12%;border-radius: 50%;';
-            })
-            .catch(error => {
-                console.log(error);
-                var allDiv = this.template.querySelector('.tab-2');
-                allDiv.style = 'background-color: #8EBFF0;padding: 12%;border-radius: 50%;';
-            });
         this.activesidebar = true;
+       this.reloadform();
 
     }
+
+    reloadform(){
+        GetFormPage({ Form_Id: this.ParentMessage })
+        .then(result => {
+            console.log('get form page called');
+            this.PageList = result;
+            console.log('this-->>');
+            console.log('*** pageList ==>', result);
+            console.log(this.PageList[0].Name);
+            console.log(this.PageList.length);
+
+        }).catch(error => {
+            console.log(error);
+        });
+    getFieldsRecords({ id: this.ParentMessage })
+        .then(result => {
+            console.log('whyyyy');
+            console.log('*** FieldList ==>', result);
+            this.FieldList = result;
+            this.setPageField(result);
+            if(this.tab == 'tab-2'){
+            var allDiv = this.template.querySelector('.tab-2');
+            allDiv.style = 'background-color: #8EBFF0;padding: 12%;border-radius: 50%;';
+            }
+            console.log(this.FieldList.length);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+
     renderedCallback() {
+
         console.log('inside the renderedcallBack--->>>');
         console.log(this.removeObjFields.length);
         this.tempararyfun();
@@ -422,8 +423,8 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
                     this.template.querySelector('.fieldvalidationdiv').style = "display:none;";
                     this.fieldvalidationdiv = false;
                 }
-                this.activeDropZone = true
-                this.spinnerDataTable = true;
+                // this.activeDropZone = true
+                // this.spinnerDataTable = true;
                 this.activesidebar = true;
                 this.activeDesignsidebar = false;
                 this.activeNotification = false;
@@ -798,7 +799,12 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
                 if (this.PageList[i].Id == fieldList[j].Form_Page__c) {
                     console.log('inside inner loop');
                     let fieldofObj = fieldList[j].Name.split(',');
-                    let fieldtype = fieldofObj[1];
+                    let fieldtype;
+                    if (fieldofObj[1] == 'Extra') {
+                        fieldtype = false;
+                    } else {
+                        fieldtype = true;
+                    }
                     console.log(fieldtype + 'fieldtpys');
                     console.log('in setpage field----->' + fieldofObj);
                     if (fieldofObj.length == 2) {
@@ -825,11 +831,12 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
                     if (fieldList[j].Field_Validations__c) {
                         fieldList[j].Field_Validations__c = fieldList[j].Field_Validations__c.split('?$`~');
                         for (let i = 0; i < fieldList[j].Field_Validations__c.length; i++) {
-                            fieldList[j].Field_Validations__c[i] = fieldList[j].Field_Validations__c[i].split(':');
+                            fieldList[j].Field_Validations__c[i] = fieldList[j].Field_Validations__c[i].split('>>');
                             let labels = fieldList[j].Field_Validations__c[i][0];
                             let value = fieldList[j].Field_Validations__c[i][1];
 
                             if (labels == 'isRequired') {
+                                console.log(value + ' NImit check');
                                 isRequiredcheck = JSON.parse(value);
                             } else if (labels == 'isDisabled') {
                                 isdisabledcheck = JSON.parse(value);
@@ -1480,16 +1487,20 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
         this.fieldvalidationdiv = true;
         this.template.querySelector('.fieldvalidationdiv').style = "display:block;";
         this.template.querySelector('c-field-validation').openvalidation(this.tab, this.fieldId, this.fieldName);
-
-        // this.template.querySelector('c-field-validation').openvalidation(this.tab,this.fieldId,fieldName);
     }
     closevalidation(event) {
+        this.spinnerDataTable = true;
         this.tab = event.detail;
-        this.activeDesignsidebar = false;
         this.activeNotification = false;
         this.activethankyou = false;
+        this.fieldvalidationdiv = false;
         this.template.querySelector('.fieldvalidationdiv').style = "display:none;";
-        this.connectedCallback();
-
+        this.reloadform();
+        if(this.tab == 'tab-2'){
+            this.activesidebar = true;
+        }
+        else if(this.tab == 'tab-3'){
+            this.activeDesignsidebar = true;
+        }
     }
 }

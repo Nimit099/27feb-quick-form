@@ -37,17 +37,16 @@ export default class FieldValidation extends LightningElement {
     @track helptext = '';
     @track placeholdervalue = '';
     @track prefixvalue ='';
-    @track decimal;
+    @track decimal = '';
     @track helptextcheck = false;
     @track labelcheck = true;
     @track isRequiredcheck = false;
     @track isdisabledcheck = false;
     @track placeholdercheck = false;
-    @track readonlycheck = false
     @track prefixcheck = false;
     @track richtextinput = false;
     @track FieldValidation = [];
-    @track Richtextvalue;
+    @track Richtextvalue = '';
     @track minimumvalue = 0;
     @track maximumvalue = 128;
     @track salutation = [];
@@ -55,8 +54,9 @@ export default class FieldValidation extends LightningElement {
     @track salutationvalue = [];
     @track validation = [];
     @track fieldtype;
-    @track maximumdate;
-    @track minimumdate;
+    @track maximumdate = '';
+    @track minimumdate = '';
+    standardrequired;
     spinnerDataTable;
 
     fieldcancel = fieldcancel;
@@ -107,9 +107,11 @@ export default class FieldValidation extends LightningElement {
         return mydata1; 
     }
     }
+
     @api
     openvalidation(tab, fieldId, fieldName){
         this.fieldtype = fieldName.split(',')[1];
+        this.standardrequired = fieldName.split(',')[2];
         this.tab = tab;
         this.fieldId = fieldId;
         this.fieldName = fieldName.slice(0, fieldName.indexOf(','));
@@ -117,7 +119,6 @@ export default class FieldValidation extends LightningElement {
         this.isdisabledcheck = false;
         this.helptextcheck = false;
         this.placeholdercheck = false;
-        this.readonlycheck= false;
         this.labelcheck = false;
         this.labelvalue = '';
         this.helptext = '';
@@ -129,11 +130,13 @@ export default class FieldValidation extends LightningElement {
         this.maximumdate ='';
         this.minimumdate ='';
         this.spinnerDataTable = true;
+        this.minimumvalue = 0;
+        this.maximumvalue = 128;
         getfieldvalidation({fieldId:this.fieldId}).then(result =>{ 
                        
             let str = result.split('?$`~');
             for(let i = 0; i<str.length; i++){
-               let Arr = str[i].split(':');
+               let Arr = str[i].split('>>');
                let labels = Arr[0];
                let value = Arr[1];
                if(labels == 'isRequired'){
@@ -150,12 +153,6 @@ export default class FieldValidation extends LightningElement {
                }
                else if(labels == 'isPlaceholder'){
                 this.placeholdercheck = JSON.parse(value);
-               }
-               else if(labels == 'isReadonly'){
-                this.readonlycheck = JSON.parse(value);
-               }
-               else if(labels == 'isReadonly'){
-                this.readonlycheck = JSON.parse(value);
                }
                else if(labels == 'isPrefix'){
                 this.prefixcheck = JSON.parse(value);
@@ -193,6 +190,12 @@ export default class FieldValidation extends LightningElement {
                else if(labels == 'MaximumTime'){
                 this.maximumdate = value;
                }
+               else if(labels == 'Minimum'){
+                this.minimumvalue = value;
+               }
+                else if(labels == 'Maximum'){
+                  this.maximumvalue = value;
+                }
             }
             this.opensalutation();
             this.spinnerDataTable = false;
@@ -222,101 +225,225 @@ export default class FieldValidation extends LightningElement {
             });
         }
         else if(event.currentTarget.dataset.title == 'Save'){
-            this.fieldValidation = 'isRequired:'+this.isRequiredcheck+
-                '?$`~isDisabled:'+ this.isdisabledcheck +
-                '?$`~isLabel:'+this.labelcheck+
-                '?$`~isHelpText:' +this.helptextcheck+
-                '?$`~Label:'+ this.labelvalue+
-                '?$`~HelpText:'+ this.helptext
-            if(this.fieldtype == 'Extra'){
-            if(event.currentTarget.dataset.name == "QFPHONE"){
-                this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue)
-            }
-            else if(event.currentTarget.dataset.name == "QFADDRESS"){
-                this.fieldValidation = this.fieldValidation.concat('?$`~isReadonly:'+ this.readonlycheck)
-            }
-            else if( event.currentTarget.dataset.name == "QFNAME"){
-                this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+this.placeholdercheck + '?$`~Placeholder:'+ this.placeholdervalue)
-            }
-            else if(event.currentTarget.dataset.name == "QFEMAILID"){
-                this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-                 '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue )                       
-            }
-            else if(event.currentTarget.dataset.name == "QFNUMBER"){
-                this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-                '?$`~isPrefix:' +this.prefixcheck + '?$`~Prefix:' + this.prefixvalue )
-            }
-            else if(event.currentTarget.dataset.name == "QFFULLNAME"){
-                for(let i = 0; i< this.salutationvalue.length; i++){
-                this.fieldValidation = this.fieldValidation.concat('?$`~Salutation:'+ this.salutationvalue[i])
-                }
-            }
-            else if(event.currentTarget.dataset.name == "QFPRICE"){
-                this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue+ '?$`~Decimal:'+ this.decimal)
-            }
-            else if(event.currentTarget.dataset.name == "QFLONGTEXT"){
-                this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue)
-            }
-            else if(event.currentTarget.dataset.name == "QFRICHTEXT"){
-                this.fieldValidation = this.fieldValidation.concat('?$`~Richtext:'+ this.Richtextvalue)
-            }
-            else if(event.currentTarget.dataset.name == "QFSHORTTEXT"){
-                this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-                '?$`~isPrefix:' +this.prefixcheck + '?$`~Prefix:' + this.prefixvalue )
-            }
-            else if(event.currentTarget.dataset.name == "QFLINK"){
-                this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue)
-            }
-            else if(event.currentTarget.dataset.name == "QFTERMSOFSERVICE"){
-                this.fieldValidation = this.fieldValidation.concat('?$`~Agreement:'+ this.Richtextvalue)
-            }
-            else if(event.currentTarget.dataset.name == "QFTIME"){
-                this.fieldValidation = this.fieldValidation.concat('?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate)
-            }
-            else if(event.currentTarget.dataset.name == "QFDATETIME"){
-                this.fieldValidation = this.fieldValidation.concat('?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate)
-            }
-            else if(event.currentTarget.dataset.name == "QFDATE"){
-                this.fieldValidation = this.fieldValidation.concat('?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate)
-            }
-            else if(event.currentTarget.dataset.name == "QFRADIOBUTTON"){
-                for(let i = 0; i< this.salutationvalue.length; i++){
-                    this.fieldValidation = this.fieldValidation.concat('?$`~Salutation:'+ this.salutationvalue[i])
-                    }
-            }
-            else if(event.currentTarget.dataset.name == "QFCHECKBOX"){
-                for(let i = 0; i< this.salutationvalue.length; i++){
-                    this.fieldValidation = this.fieldValidation.concat('?$`~Salutation:'+ this.salutationvalue[i])
-                    }
-            }
-            else if(event.currentTarget.dataset.name == "QFSCALERATING"){
-                for(let i = 0; i< this.salutationvalue.length; i++){
-                    this.fieldValidation = this.fieldValidation.concat('?$`~Salutation:'+ this.salutationvalue[i])
-                    }
-            }
-        }
-        else{
-            if(this.fieldtype == "PHONE"){
-                this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue)
-            }
-            else if(this.fieldtype == "STRING" || this.fieldtype == "TEXTAREA" || this.fieldtype == "ENCRYPTEDSTRING" || this.fieldtype == "EMAIL" ){
-                this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-                 '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue )                       
-            }
-            else if(this.fieldtype == "NUMBER" || this.fieldtype == "CURRENCY" || this.fieldtype == "PERCENT"){
-                this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-                '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue )
-            }
-            else if(this.fieldtype == "TIME"){
-                this.fieldValidation = this.fieldValidation.concat('?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate)
-            }
-            else if(this.fieldtype == "DATETIME"){
-                this.fieldValidation = this.fieldValidation.concat('?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate)
-            }
-            else if(this.fieldtype == "DATE"){
-                this.fieldValidation = this.fieldValidation.concat('?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate)
-            }
-        }
+            this.fieldValidation ;
+            
+                this.fieldValidation = 'isRequired>>'+this.isRequiredcheck+
+                '?$`~isDisabled>>'+ this.isdisabledcheck +
+                '?$`~isLabel>>'+this.labelcheck+
+                '?$`~isHelpText>>' +this.helptextcheck+
+                '?$`~Label>>'+ this.labelvalue+
+                '?$`~HelpText>>'+ this.helptext +
+                '?$`~isPlaceholder>>'+ this.placeholdercheck+
+                '?$`~Placeholder>>'+ this.placeholdervalue +
+                '?$`~Minimum>>' +this.minimumvalue + 
+                '?$`~Maximum>>' + this.maximumvalue +
+                '?$`~isPrefix>>' + this.prefixcheck +
+                '?$`~Prefix>>' + this.prefixvalue +
+                '?$`~Decimal>>' + this.decimal + 
+                '?$`~Richtext>>'+ this.Richtextvalue +
+                '?$`~MinimumTime>>'+ this.minimumdate + 
+                '?$`~MaximumTime>>' + this.maximumdate +
+                '?$`~MinimumDateTime>>'+ this.minimumdate +
+                '?$`~MaximumDateTime>>' + this.maximumdate+
+                '?$`~MinimumDate>>'+ this.minimumdate +
+                '?$`~MaximumDate>>' + this.maximumdate ;
+                  for(let i = 0; i < this.salutationvalue.length; i++){
+                    this.fieldValidation = this.fieldValidation.concat('?$`~Salutation>>'+ this.salutationvalue[i]);
+                  }
+
+        //     if(this.fieldtype == 'Extra'){
+        //     if(event.currentTarget.dataset.name == "QFPHONE"){
+               
+        //     }
+        //     else if(event.currentTarget.dataset.name == "QFADDRESS"){
+        //         for(let i = 0; i <= this.salutationvalue.length; i++){
+        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
+        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
+        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
+        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
+        //         }    
+
+        //     }
+        //     else if( event.currentTarget.dataset.name == "QFNAME"){
+        //         for(let i = 0; i <= this.salutationvalue.length; i++){
+        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
+        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
+        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
+        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
+        //         }    
+        //     }
+        //     else if(event.currentTarget.dataset.name == "QFEMAILID"){
+        //         for(let i = 0; i <= this.salutationvalue.length; i++){
+        //         this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
+        //          '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
+        //          + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
+        //           + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
+        //         }                      
+        //     }
+        //     else if(event.currentTarget.dataset.name == "QFNUMBER"){
+        //         for(let i = 0; i <= this.salutationvalue.length; i++){
+        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
+        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
+        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
+        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
+        //         }    
+        //     }
+        //     else if(event.currentTarget.dataset.name == "QFFULLNAME"){
+        //         for(let i = 0; i <= this.salutationvalue.length; i++){
+        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
+        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
+        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
+        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
+        //         }    
+        //     }
+        //     else if(event.currentTarget.dataset.name == "QFPRICE"){
+        //         for(let i = 0; i <= this.salutationvalue.length; i++){
+        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
+        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
+        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
+        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
+        //         }    
+        //     }
+        //     else if(event.currentTarget.dataset.name == "QFLONGTEXT"){
+        //         for(let i = 0; i <= this.salutationvalue.length; i++){
+        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
+        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
+        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
+        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
+        //         }    
+        //     }
+        //     else if(event.currentTarget.dataset.name == "QFRICHTEXT"){
+        //         for(let i = 0; i <= this.salutationvalue.length; i++){
+        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
+        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
+        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
+        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
+        //         }    
+        //     }
+        //     else if(event.currentTarget.dataset.name == "QFSHORTTEXT"){
+        //         for(let i = 0; i <= this.salutationvalue.length; i++){
+        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
+        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
+        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
+        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
+        //         }    
+        //     }
+        //     else if(event.currentTarget.dataset.name == "QFLINK"){
+        //         for(let i = 0; i <= this.salutationvalue.length; i++){
+        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
+        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
+        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
+        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
+        //         }    
+        //     }
+        //     else if(event.currentTarget.dataset.name == "QFTERMSOFSERVICE"){
+        //         for(let i = 0; i <= this.salutationvalue.length; i++){
+        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
+        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
+        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
+        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
+        //         }    
+        //     }
+        //     else if(event.currentTarget.dataset.name == "QFTIME"){
+        //         for(let i = 0; i <= this.salutationvalue.length; i++){
+        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
+        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
+        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
+        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
+        //         }    
+        //     }
+        //     else if(event.currentTarget.dataset.name == "QFDATETIME"){
+        //         for(let i = 0; i <= this.salutationvalue.length; i++){
+        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
+        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
+        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
+        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
+        //         }    
+        //     }
+        //     else if(event.currentTarget.dataset.name == "QFDATE"){
+        //         for(let i = 0; i <= this.salutationvalue.length; i++){
+        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
+        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
+        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
+        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
+        //         }    
+        //     }
+        //     else if(event.currentTarget.dataset.name == "QFRADIOBUTTON"){
+        //         for(let i = 0; i <= this.salutationvalue.length; i++){
+        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
+        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
+        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
+        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
+        //         }    
+        //     }
+        //     else if(event.currentTarget.dataset.name == "QFCHECKBOX"){
+        //         for(let i = 0; i <= this.salutationvalue.length; i++){
+        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
+        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
+        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
+        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
+        //         }    
+        //     }
+        //     else if(event.currentTarget.dataset.name == "QFSCALERATING"){
+        //         for(let i = 0; i <= this.salutationvalue.length; i++){
+        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
+        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
+        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
+        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
+        //         }    
+        //     }
+        // }
+        // else{
+        //     if(this.fieldtype == "PHONE" || this.fieldtype == 'PICKLIST'){
+        //         for(let i = 0; i <= this.salutationvalue.length; i++){
+        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
+        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
+        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
+        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
+        //         }    
+        //     }
+        //     else if(this.fieldtype == "STRING" || this.fieldtype == "TEXTAREA" || this.fieldtype == "ENCRYPTEDSTRING" || this.fieldtype == "EMAIL" ){
+        //         for(let i = 0; i <= this.salutationvalue.length; i++){
+        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
+        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
+        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
+        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
+        //         }    
+        //     }
+        //     else if(this.fieldtype == "NUMBER" || this.fieldtype == "CURRENCY" || this.fieldtype == "PERCENT"){
+        //         for(let i = 0; i <= this.salutationvalue.length; i++){
+        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
+        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
+        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
+        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
+        //         }    
+        //     }
+        //     else if(this.fieldtype == "TIME"){
+        //         for(let i = 0; i <= this.salutationvalue.length; i++){
+        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
+        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
+        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
+        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
+        //         }    
+        //     }
+        //     else if(this.fieldtype == "DATETIME"){
+        //         for(let i = 0; i <= this.salutationvalue.length; i++){
+        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
+        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
+        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
+        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
+        //         }    
+        //     }
+        //     else if(this.fieldtype == "DATE"){
+        //         for(let i = 0; i <= this.salutationvalue.length; i++){
+        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
+        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
+        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
+        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
+        //         }    
+        //     }
+        // }
+        if(this.maximumvalue > this.minimumvalue){
             savevalidation({fieldId:this.fieldId, fieldValidation:JSON.stringify(this.fieldValidation)})
             .then(result => {
                 event.preventDefault();
@@ -328,9 +455,13 @@ export default class FieldValidation extends LightningElement {
             .catch(error => {
                 console.log(error);
             });
+        }else{
+            this.template.querySelector('c-toast-component').showToast('error','There is some error in your validations',3000);             
+        }
            
         }
         else if(event.currentTarget.dataset.title == 'Copy'){
+            if(this.fieldtype == 'Extra'){
             copyfield({fieldId:this.fieldId})
             .then(result => {
                 event.preventDefault();
@@ -342,6 +473,10 @@ export default class FieldValidation extends LightningElement {
             .catch(error => {
                 console.log(error);
             });
+        }
+        else{
+            this.template.querySelector('c-toast-component').showToast('error','You cannot copy Object Fields',3000);
+        }
         }
     }
 
@@ -411,15 +546,32 @@ export default class FieldValidation extends LightningElement {
 
     isRequired(event){
         this.isRequiredcheck = event.target.checked;
-        if(this.isRequiredcheck == true){
-            this.isdisabledcheck = false;
+        if(this.standardrequired == 'isrequired'){
+            if(this.isRequiredcheck == false){
+                this.isRequiredcheck = true;
+                this.isdisabledcheck = false;
+                this.template.querySelector('c-toast-component').showToast('error','You cannot change required of Standard Required field' ,3000);  
+            }
+        } else {
+            
+            if(this.isRequiredcheck == true){
+                this.isdisabledcheck = false;
+            }
         }
     }
 
     isdisabled(event){
         this.isdisabledcheck = event.target.checked;
-        if(this.isdisabledcheck == true){
-            this.isRequiredcheck = false;
+        if(this.standardrequired == 'isrequired'){
+            if(this.isdisabledcheck == true){
+                this.isRequiredcheck = true;
+                this.isdisabledcheck = false;
+                this.template.querySelector('c-toast-component').showToast('error','You cannot disable Standard Required field' ,3000);  
+            }
+        } else {
+            if(this.isdisabledcheck == true){
+                this.isRequiredcheck = false;
+            }
         }
     }
     RichTextData(event){
@@ -428,16 +580,20 @@ export default class FieldValidation extends LightningElement {
     closerichtext(){
         this.richtextinput = false;
     }
-
     slider(event){
+        console.log(event.detail.value);
         if(event.currentTarget.dataset.title == 'Minimum'){
-            if(event.detail.value < this.maximumvalue){
-                this.minimumvalue =  event.detail.value;
+            this.minimumvalue = event.detail.value;
+            this.minimumvalue = parseInt( this.minimumvalue);
+            if(this.minimumvalue >= this.maximumvalue){
+                this.template.querySelector('c-toast-component').showToast('error',this.minimumvalue +'---<----'+this.maximumvalue ,3000);  
             }
         }
         else if(event.currentTarget.dataset.title == 'Maximum'){
-            if(event.detail.value > this.minimumvalue){
-                this.maximumvalue =  event.detail.value;
+            this.maximumvalue =  event.detail.value;
+            this.maximumvalue = parseInt(this.maximumvalue);
+            if(this.minimumvalue >= this.maximumvalue){
+                this.template.querySelector('c-toast-component').showToast('error',this.minimumvalue +'---<----'+this.maximumvalue ,3000);           
             }
         }
         else if(event.currentTarget.dataset.title == 'Reset'){

@@ -190,6 +190,7 @@ label.slds-checkbox_toggle.slds-grid>* {
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 .resettext{
     padding: auto;

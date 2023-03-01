@@ -785,13 +785,73 @@ public with sharing class FormBuilderController {
                 field.Form_Page__c = Form_Page_Id;
                 field.Field_Order__c = Position+1;
                 if( Name.split(',')[0].replace('QF','') == 'RADIOBUTTON'|| Name.split(',')[0].replace('QF','') == 'CHECKBOX'){
-                    field.Field_Validations__c = 'isLabel:true?$`~isRequired:false?$`~Label:'+ Name.split(',')[0].replace('QF','')+ '?$`~Salutation:1';
+                    field.Field_Validations__c =  'isRequired>>false'+
+                    '?$`~isDisabled>>false' +
+                    '?$`~isLabel>>true'+
+                    '?$`~isHelpText>>false'+
+                    '?$`~Label>>'+ Name.split(',')[0].replace('QF','')+
+                    '?$`~HelpText>>' +
+                    '?$`~isPlaceholder>>false'+
+                    '?$`~Placeholder>>'+
+                    '?$`~Minimum>>0' + 
+                    '?$`~Maximum>>128' + 
+                    '?$`~isPrefix>>false' + 
+                    '?$`~Prefix>>'+ 
+                    '?$`~Decimal>>' + 
+                    '?$`~Richtext>>' + 
+                    '?$`~MinimumTime>>' +
+                    '?$`~MaximumTime>>' +
+                    '?$`~MinimumDateTime>>' +
+                    '?$`~MaximumDateTime>>'+
+                    '?$`~MinimumDate>>' +
+                    '?$`~MaximumDate>>'+
+                    '?$`~Salutation>>1';
                 }
                 else if(Name.split(',')[0].replace('QF','') == 'SCALERATING'){
-                    field.Field_Validations__c = 'isLabel:true?$`~isRequired:false?$`~Label:'+ Name.split(',')[0].replace('QF','')+ '?$`~Salutation:Very Poor?$`~Salutation:Poor?$`~Salutation:Good?$`~Salutation:Very Good?$`~Salutation:Excellent';
+                    field.Field_Validations__c =  'isRequired>>false'+
+                    '?$`~isDisabled>>false' +
+                    '?$`~isLabel>>true'+
+                    '?$`~isHelpText>>false'+
+                    '?$`~Label>>'+ Name.split(',')[0].replace('QF','')+
+                    '?$`~HelpText>>' +
+                    '?$`~isPlaceholder>>false'+
+                    '?$`~Placeholder>>'+
+                    '?$`~Minimum>>0' + 
+                    '?$`~Maximum>>128' + 
+                    '?$`~isPrefix>>false' + 
+                    '?$`~Prefix>>'+ 
+                    '?$`~Decimal>>' + 
+                    '?$`~Richtext>>' + 
+                    '?$`~MinimumTime>>' +
+                    '?$`~MaximumTime>>' +
+                    '?$`~MinimumDateTime>>' +
+                    '?$`~MaximumDateTime>>'+
+                    '?$`~MinimumDate>>' +
+                    '?$`~MaximumDate>>'+
+                    '?$`~Salutation>>Very Poor?$`~Salutation>>Poor?$`~Salutation>>Good?$`~Salutation>>Very Good?$`~Salutation>>Excellent';
                 }
                 else{
-                field.Field_Validations__c = 'isLabel:true?$`~isRequired:false?$`~Label:'+ Name.split(',')[0].replace('QF','');
+                    field.Field_Validations__c =  'isRequired>>false'+
+                    '?$`~isDisabled>>false' +
+                    '?$`~isLabel>>true'+
+                    '?$`~isHelpText>>false'+
+                    '?$`~Label>>'+ Name.split(',')[0].replace('QF','')+
+                    '?$`~HelpText>>' +
+                    '?$`~isPlaceholder>>false'+
+                    '?$`~Placeholder>>'+
+                    '?$`~Minimum>>0' + 
+                    '?$`~Maximum>>128' + 
+                    '?$`~isPrefix>>false' + 
+                    '?$`~Prefix>>'+ 
+                    '?$`~Decimal>>' + 
+                    '?$`~Richtext>>' + 
+                    '?$`~MinimumTime>>' +
+                    '?$`~MaximumTime>>' +
+                    '?$`~MinimumDateTime>>' +
+                    '?$`~MaximumDateTime>>'+
+                    '?$`~MinimumDate>>' +
+                    '?$`~MaximumDate>>'+
+                    '?$`~Salutation>>';
                 }
             
                 insert field;
@@ -943,7 +1003,28 @@ public with sharing class FormBuilderController {
                                 field.Form__c =  FormDetail.Id;
                                 field.Form_Page__c = page_Id.Id;
                                 field.Field_Order__c = Position+1;
-                                field.Field_Validations__c = 'isLabel:true?$`~isRequired:true?$`~Label:'+ fieldName.split(',')[0];
+                                field.Field_Validations__c =  'isRequired>>true'+
+                                '?$`~isDisabled>>false' +
+                                '?$`~isLabel>>true'+
+                                '?$`~isHelpText>>false'+
+                                '?$`~Label>>'+fieldName.split(',')[0]+
+                                '?$`~HelpText>>' +
+                                '?$`~isPlaceholder>>false'+
+                                '?$`~Placeholder>>'+
+                                '?$`~Minimum>>0' + 
+                                '?$`~Maximum>>128' + 
+                                '?$`~isPrefix>>false' + 
+                                '?$`~Prefix>>'+ 
+                                '?$`~Decimal>>' + 
+                                '?$`~Richtext>>' + 
+                                '?$`~MinimumTime>>' +
+                                '?$`~MaximumTime>>' +
+                                '?$`~MinimumDateTime>>' +
+                                '?$`~MaximumDateTime>>'+
+                                '?$`~MinimumDate>>' +
+                                '?$`~MaximumDate>>'+
+                                '?$`~Salutation>>';
+                                
                                 Fields.add(field);
                             }
                             
@@ -1016,7 +1097,7 @@ public with sharing class FormBuilderController {
                 
             }
             List<Form_Fields__c> latestFieldList = new List<Form_Fields__c>();
-            latestFieldList = [SELECT Id,Name,Form__c,Form_Page__c,Field_Order__c FROM Form_Fields__c WHERE Form__c =: cuurentField.Form__c ORDER BY Field_Order__c ASC];
+            latestFieldList = [SELECT Id,Name,Form__c,Form_Page__c,Field_Order__c,Field_Validations__c FROM Form_Fields__c WHERE Form__c =: cuurentField.Form__c ORDER BY Field_Order__c ASC];
             return latestFieldList;
         } catch (Exception e) {
             System.debug('Error Line Number ==>' + e.getLineNumber() + ' Error Message ==>'+ e.getMessage());

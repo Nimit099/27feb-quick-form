@@ -29,15 +29,13 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
     @track captchavalue;
     BackButton = BackButton;
     @track verify;
-    footercss;
-    buttonscss;
+    @track footercss;
+    @track buttonscss;
 
     renderedCallback(){
         getFormCSS({id:this.formid})
         .then(result=>{
-            console.log(result);
             this.getFieldCSS = result;
-            console.log('FormCSS->> '+this.getFieldCSS);
             let array = this.template.querySelector('.myform');
             let str = this.getFieldCSS;
             array.style=str;
@@ -47,14 +45,11 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
 
         getPageCSS({id:this.formid})
         .then(result=>{
-            console.log(result);
             this.getFieldCSS = result;
-            console.log('PageCSS->> '+this.getFieldCSS);
             let array = this.template.querySelectorAll('.page');
             let str = this.getFieldCSS;
             for (let i = 0; i < array.length; i++) {
                 const element = array[i];
-                console.log(i+'--'+element);
                 element.style = str;
             }
             this.spinnerDataTable = false;
@@ -88,6 +83,7 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
  
             let str = result;
             this.buttonscss = result;
+            console.log('buttoncss' + this.buttonscss);
             let value;
             let arr = this.template.querySelectorAll('.btn1');
             for (let i = 0; i < arr.length; i++){
@@ -102,14 +98,12 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
             if(label == 'justify-content'){
                 this.footercss = buttoncss[i][1];
                 value = 'justify-content:'+buttoncss[i][1];
-                console.log(value);
             }
           }
 
             let Arr = this.template.querySelectorAll(".footer");
             for (let i = 0; i < Arr.length; i++) {
                 const element = Arr[i];
-                console.log(i+'--'+{element});
                 element.style = value;
             }
         });
@@ -157,8 +151,7 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
                 if(fieldList[j].Field_Validations__c){
                     fieldList[j].Field_Validations__c = fieldList[j].Field_Validations__c.split('?$`~');
                     for(let i =0; i< fieldList[j].Field_Validations__c.length; i++){
-                        fieldList[j].Field_Validations__c[i] =  fieldList[j].Field_Validations__c[i].split(':');
-                        console.log( fieldList[j].Field_Validations__c[i][0] + 'Nimit');
+                        fieldList[j].Field_Validations__c[i] =  fieldList[j].Field_Validations__c[i].split('>>');
                         let labels = fieldList[j].Field_Validations__c[i][0];
                         let value = fieldList[j].Field_Validations__c[i][1];
 
@@ -239,7 +232,6 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
 
          getButtonCSS({id:this.formid})
         .then(result=>{
-            console.log(result);
             let str = result;
             this.buttonscss = result;
             let arr = this.template.querySelectorAll('.btn1');
@@ -273,6 +265,7 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
 
     onaddpage1(event){
         this.spinnerDataTable = true;
+        
 
         if(event.currentTarget.dataset.name == 'previous'){
             if(this.pageindex == 1){ 
@@ -343,11 +336,13 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
                 this.template.querySelector('c-toast-component').showToast('error',toast_error_msg,3000);
             }
         }
-
+        let value;
         let arr = this.template.querySelectorAll('.btn1');
         for (let i = 0; i < arr.length; i++){
             const element = arr[i];
-            element.style = this.buttonscss; 
+            console.log('element' + arr[i]);
+            element.style = this.buttonscss;
+            console.log('buttonscss' + this.buttonscss); 
         }
         let buttoncss = this.buttonscss.split(';');
       for(let i = 0; i < buttoncss.length; i++){
@@ -357,6 +352,7 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
         if(label == 'justify-content'){
             this.footercss = buttoncss[i][1];
             value = 'justify-content:'+buttoncss[i][1];
+            console.log(value + ' value');
         }
       }
 
@@ -364,6 +360,7 @@ export default class PreviewFormCmp  extends NavigationMixin(LightningElement) {
         for (let i = 0; i < Arr.length; i++) {
             const element = Arr[i];
             element.style = value;
+            console.log('footer');
         }
         this.spinnerDataTable = false;
     }
