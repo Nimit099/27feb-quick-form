@@ -10,29 +10,9 @@ import copyfield from '@salesforce/apex/fieldvalidation.copyfield';
 
 
 export default class FieldValidation extends LightningElement {
-    mainbody = true;
-    shorttextoptions = false;
-    shorttextprefix = false;
-    longtextoptions = false;
-    dropdownchoices = false;
-    numberoptions = false;
-    numberprefix= false;
-    emailoptions= true;
-    priceoption = false;
-    nameoptions = false;
-    
-    scaleratinghelptext= false;
-    scaleratingoptions = false;
-    termsofservice = false;
-    editterms= false;
-    linkoptions = false;
-
-    formedit= false;
-    pageedit= false;
     @api tab;
     @api fieldId;
     @track fieldName = '';
-    d = true;
     @api labelvalue;
     @track helptext = '';
     @track placeholdervalue = '';
@@ -43,7 +23,6 @@ export default class FieldValidation extends LightningElement {
     @track isRequiredcheck = false;
     @track isdisabledcheck = false;
     @track placeholdercheck = false;
-    @track prefixcheck = false;
     @track richtextinput = false;
     @track FieldValidation = [];
     @track Richtextvalue = '';
@@ -53,11 +32,11 @@ export default class FieldValidation extends LightningElement {
     @track salutationindex = 0;
     @track salutationvalue = [];
     @track validation = [];
-    @track fieldtype;
     @track maximumdate = '';
     @track minimumdate = '';
-    standardrequired;
-    spinnerDataTable;
+    @track fieldtype;
+    @track standardrequired;
+    spinnerDataTable = false;
 
     fieldcancel = fieldcancel;
     fieldduplicate = fieldduplicate;
@@ -66,79 +45,69 @@ export default class FieldValidation extends LightningElement {
 
     @api
     get field(){
-        if(this.fieldtype == 'Extra'){
-        let mydata1 = {data:[{Name:this.fieldName}]};
-        mydata1.data.forEach(element => {
-            if (element.Name == 'QFPHONE') {element.QFPHONE = true} 
-            else if(element.Name == 'QFFULLNAME') {element.QFFULLNAME = true}
-            else if(element.Name == 'QFADDRESS') {element.QFADDRESS = true}
-            else if(element.Name == 'QFNAME') {element.QFNAME = true}
-            else if(element.Name == 'QFEMAILID') {element.QFEMAILID = true}
-            else if(element.Name == 'QFNUMBER') {element.QFNUMBER = true}
-            else if(element.Name == 'QFPRICE') {element.QFPRICE = true}
-            else if(element.Name == 'QFRADIOBUTTON') {element.QFRADIOBUTTON = true}
-            else if(element.Name == 'QFCHECKBOX') {element.QFCHECKBOX = true}
-            else if(element.Name == 'QFRICHTEXT') {element.QFRICHTEXT = true}
-            else if(element.Name == 'QFLONGTEXT') {element.QFLONGTEXT = true}
-            else if(element.Name == 'QFSHORTTEXT') {element.QFSHORTTEXT = true}
-            else if(element.Name == 'QFFILEUPLOAD') {element.QFFILEUPLOAD = true}
-            else if(element.Name == 'QFTERMSOFSERVICE') {element.QFTERMSOFSERVICE = true}
-            else if(element.Name == 'QFSIGNATURE') {element.QFSIGNATURE = true}
-            else if(element.Name == 'QFLINK') {element.QFLINK = true}
-            else if(element.Name == 'QFDATE') {element.QFDATE = true}
-            else if(element.Name == 'QFTIME') {element.QFTIME = true}
-            else if(element.Name == 'QFDATETIME') {element.QFDATETIME = true}
-            else if(element.Name == 'QFRATING') {element.QFRATING = true}
-            else if(element.Name == 'QFEMOJIRATING') {element.QFEMOJIRATING = true}
-            else if(element.Name == 'QFSCALERATING') {element.QFSCALERATING = true}
-        });
-        return mydata1;
-    }
-    else{
-        let mydata1 = {data:[{Name:this.fieldtype}]};
-        mydata1.data.forEach(element => {
-            if (element.Name == 'PHONE') {element.QFPHONE = true} 
-            else if(element.Name == 'STRING' || element.Name == 'TEXTAREA' || element.Name == 'EMAIL' || element.Name == 'ENCRYPTEDSTRING') {element.QFEMAILID = true}
-            else if(element.Name == 'DOUBLE' || element.Name == 'CURRENCY' || element.Name == 'PERCENT') {element.QFNUMBER = true}
-            else if(element.Name == 'DATE') {element.QFDATE = true}
-            else if(element.Name == 'TIME') {element.QFTIME = true}
-            else if(element.Name == 'DATETIME') {element.QFDATETIME = true}
-        });
-        return mydata1; 
-    }
+        try{
+            if(this.fieldtype == 'Extra'){
+                let mydata1 = {data:[{Name:this.fieldName}]};
+                mydata1.data.forEach(element => {
+                    if (element.Name == 'QFPHONE') {element.QFPHONE = true} 
+                    else if(element.Name == 'QFFULLNAME') {element.QFFULLNAME = true}
+                    else if(element.Name == 'QFADDRESS') {element.QFADDRESS = true}
+                    else if(element.Name == 'QFNAME') {element.QFEMAILID = true}
+                    else if(element.Name == 'QFEMAILID') {element.QFEMAILID = true}
+                    else if(element.Name == 'QFNUMBER') {element.QFNUMBER = true}
+                    else if(element.Name == 'QFPRICE') {element.QFPRICE = true}
+                    else if(element.Name == 'QFRADIOBUTTON') {element.QFRADIOBUTTON = true}
+                    else if(element.Name == 'QFCHECKBOX') {element.QFCHECKBOX = true}
+                    else if(element.Name == 'QFRICHTEXT') {element.QFRICHTEXT = true}
+                    else if(element.Name == 'QFLONGTEXT') {element.QFLONGTEXT = true}
+                    else if(element.Name == 'QFSHORTTEXT') {element.QFSHORTTEXT = true}
+                    else if(element.Name == 'QFFILEUPLOAD') {element.QFFILEUPLOAD = true}
+                    else if(element.Name == 'QFTERMSOFSERVICE') {element.QFTERMSOFSERVICE = true}
+                    else if(element.Name == 'QFSIGNATURE') {element.QFSIGNATURE = true}
+                    else if(element.Name == 'QFDATE') {element.QFDATE = true}
+                    else if(element.Name == 'QFTIME') {element.QFTIME = true}
+                    else if(element.Name == 'QFDATETIME') {element.QFDATETIME = true}
+                    else if(element.Name == 'QFRATING') {element.QFRATING = true}
+                    else if(element.Name == 'QFEMOJIRATING') {element.QFEMOJIRATING = true}
+                    else if(element.Name == 'QFSCALERATING') {element.QFSCALERATING = true}
+                });
+                return mydata1;
+            }
+            else{
+                let mydata1 = {data:[{Name:this.fieldtype}]};
+                mydata1.data.forEach(element => {
+                    if (element.Name == 'PHONE') {element.QFPHONE = true} 
+                    else if(element.Name == 'STRING' || element.Name == 'TEXTAREA' || element.Name == 'EMAIL' || element.Name == 'ENCRYPTEDSTRING') {element.QFEMAILID = true}
+                    else if(element.Name == 'DOUBLE' || element.Name == 'CURRENCY' || element.Name == 'PERCENT') {element.QFNUMBER = true}
+                    else if(element.Name == 'DATE') {element.QFDATE = true}
+                    else if(element.Name == 'TIME') {element.QFTIME = true}
+                    else if(element.Name == 'DATETIME') {element.QFDATETIME = true}
+                });
+                return mydata1; 
+            }
+        }  catch (error) {
+            console.log(error+ 'Validation Error');
+            this.spinnerDataTable = false;
+        }
     }
 
     @api
     openvalidation(tab, fieldId, fieldName){
+        try{
         this.fieldtype = fieldName.split(',')[1];
         this.standardrequired = fieldName.split(',')[2];
         this.tab = tab;
         this.fieldId = fieldId;
         this.fieldName = fieldName.slice(0, fieldName.indexOf(','));
-        this.isRequiredcheck = false;
-        this.isdisabledcheck = false;
-        this.helptextcheck = false;
-        this.placeholdercheck = false;
-        this.labelcheck = false;
-        this.labelvalue = '';
-        this.helptext = '';
-        this.placeholdervalue = '';
-        this.fieldValidation = [];
-        this.salutationvalue = [];
-        this.salutation = [];
-        this.salutationindex = 0;
-        this.maximumdate ='';
-        this.minimumdate ='';
         this.spinnerDataTable = true;
-        this.minimumvalue = 0;
-        this.maximumvalue = 128;
+
         getfieldvalidation({fieldId:this.fieldId}).then(result =>{ 
-                       
             let str = result.split('?$`~');
             for(let i = 0; i<str.length; i++){
-               let Arr = str[i].split('>>');
-               let labels = Arr[0];
-               let value = Arr[1];
+
+               let labels = str[i].split('<!@!>')[0];
+               let value = str[i].split('<!@!>')[1];
+
                if(labels == 'isRequired'){
                 this.isRequiredcheck = JSON.parse(value);
                }
@@ -196,14 +165,21 @@ export default class FieldValidation extends LightningElement {
                 else if(labels == 'Maximum'){
                   this.maximumvalue = value;
                 }
+                else if(labels == 'Richtext'){
+                    this.Richtextvalue = value;
+                  }
             }
             this.opensalutation();
             this.spinnerDataTable = false;
            })
+        }  catch (error) {
+            console.log(error+ 'Validation Error');
+            this.spinnerDataTable = false;
+          }
     }
 
     validatingbtnhandle(event){
-
+        try{
         if(event.currentTarget.dataset.title == 'Close'){
             event.preventDefault();
             const selectEvent = new CustomEvent('closevalidation', {
@@ -215,6 +191,11 @@ export default class FieldValidation extends LightningElement {
             deletefield({fieldId:this.fieldId})
             .then(result => {
                 event.preventDefault();
+                const deleteEvent = new CustomEvent('updatefields', {
+                    detail: this.fieldName
+                });
+                this.dispatchEvent(deleteEvent);
+
                 const selectEvent = new CustomEvent('closevalidation', {
                     detail: this.tab
                 });
@@ -227,238 +208,51 @@ export default class FieldValidation extends LightningElement {
         else if(event.currentTarget.dataset.title == 'Save'){
             this.fieldValidation ;
             
-                this.fieldValidation = 'isRequired>>'+this.isRequiredcheck+
-                '?$`~isDisabled>>'+ this.isdisabledcheck +
-                '?$`~isLabel>>'+this.labelcheck+
-                '?$`~isHelpText>>' +this.helptextcheck+
-                '?$`~Label>>'+ this.labelvalue+
-                '?$`~HelpText>>'+ this.helptext +
-                '?$`~isPlaceholder>>'+ this.placeholdercheck+
-                '?$`~Placeholder>>'+ this.placeholdervalue +
-                '?$`~Minimum>>' +this.minimumvalue + 
-                '?$`~Maximum>>' + this.maximumvalue +
-                '?$`~isPrefix>>' + this.prefixcheck +
-                '?$`~Prefix>>' + this.prefixvalue +
-                '?$`~Decimal>>' + this.decimal + 
-                '?$`~Richtext>>'+ this.Richtextvalue +
-                '?$`~MinimumTime>>'+ this.minimumdate + 
-                '?$`~MaximumTime>>' + this.maximumdate +
-                '?$`~MinimumDateTime>>'+ this.minimumdate +
-                '?$`~MaximumDateTime>>' + this.maximumdate+
-                '?$`~MinimumDate>>'+ this.minimumdate +
-                '?$`~MaximumDate>>' + this.maximumdate ;
+                this.fieldValidation = 'isRequired<!@!>'+this.isRequiredcheck+
+                '?$`~isDisabled<!@!>'+ this.isdisabledcheck +
+                '?$`~isLabel<!@!>'+this.labelcheck+
+                '?$`~isHelpText<!@!>' +this.helptextcheck+
+                '?$`~Label<!@!>'+ this.labelvalue+
+                '?$`~HelpText<!@!>'+ this.helptext +
+                '?$`~isPlaceholder<!@!>'+ this.placeholdercheck+
+                '?$`~Placeholder<!@!>'+ this.placeholdervalue +
+                '?$`~Minimum<!@!>' +this.minimumvalue + 
+                '?$`~Maximum<!@!>' + this.maximumvalue +
+                '?$`~isPrefix<!@!>' + this.prefixcheck +
+                '?$`~Prefix<!@!>' + this.prefixvalue +
+                '?$`~Decimal<!@!>' + this.decimal + 
+                '?$`~Richtext<!@!>'+ this.Richtextvalue +
+                '?$`~MinimumTime<!@!>'+ this.minimumdate + 
+                '?$`~MaximumTime<!@!>' + this.maximumdate +
+                '?$`~MinimumDateTime<!@!>'+ this.minimumdate +
+                '?$`~MaximumDateTime<!@!>' + this.maximumdate+
+                '?$`~MinimumDate<!@!>'+ this.minimumdate +
+                '?$`~MaximumDate<!@!>' + this.maximumdate ;
+
                   for(let i = 0; i < this.salutationvalue.length; i++){
-                    this.fieldValidation = this.fieldValidation.concat('?$`~Salutation>>'+ this.salutationvalue[i]);
+                    if(typeof this.salutationvalue[i] !== 'undefined'){
+                        if(this.salutationvalue[i].replaceAll(' ', '') !== ''){
+                            this.fieldValidation = this.fieldValidation.concat('?$`~Salutation<!@!>'+ this.salutationvalue[i]);
+                        }
+                    }
                   }
 
-        //     if(this.fieldtype == 'Extra'){
-        //     if(event.currentTarget.dataset.name == "QFPHONE"){
-               
-        //     }
-        //     else if(event.currentTarget.dataset.name == "QFADDRESS"){
-        //         for(let i = 0; i <= this.salutationvalue.length; i++){
-        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
-        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
-        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
-        //         }    
-
-        //     }
-        //     else if( event.currentTarget.dataset.name == "QFNAME"){
-        //         for(let i = 0; i <= this.salutationvalue.length; i++){
-        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
-        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
-        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
-        //         }    
-        //     }
-        //     else if(event.currentTarget.dataset.name == "QFEMAILID"){
-        //         for(let i = 0; i <= this.salutationvalue.length; i++){
-        //         this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-        //          '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
-        //          + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
-        //           + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
-        //         }                      
-        //     }
-        //     else if(event.currentTarget.dataset.name == "QFNUMBER"){
-        //         for(let i = 0; i <= this.salutationvalue.length; i++){
-        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
-        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
-        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
-        //         }    
-        //     }
-        //     else if(event.currentTarget.dataset.name == "QFFULLNAME"){
-        //         for(let i = 0; i <= this.salutationvalue.length; i++){
-        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
-        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
-        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
-        //         }    
-        //     }
-        //     else if(event.currentTarget.dataset.name == "QFPRICE"){
-        //         for(let i = 0; i <= this.salutationvalue.length; i++){
-        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
-        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
-        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
-        //         }    
-        //     }
-        //     else if(event.currentTarget.dataset.name == "QFLONGTEXT"){
-        //         for(let i = 0; i <= this.salutationvalue.length; i++){
-        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
-        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
-        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
-        //         }    
-        //     }
-        //     else if(event.currentTarget.dataset.name == "QFRICHTEXT"){
-        //         for(let i = 0; i <= this.salutationvalue.length; i++){
-        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
-        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
-        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
-        //         }    
-        //     }
-        //     else if(event.currentTarget.dataset.name == "QFSHORTTEXT"){
-        //         for(let i = 0; i <= this.salutationvalue.length; i++){
-        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
-        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
-        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
-        //         }    
-        //     }
-        //     else if(event.currentTarget.dataset.name == "QFLINK"){
-        //         for(let i = 0; i <= this.salutationvalue.length; i++){
-        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
-        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
-        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
-        //         }    
-        //     }
-        //     else if(event.currentTarget.dataset.name == "QFTERMSOFSERVICE"){
-        //         for(let i = 0; i <= this.salutationvalue.length; i++){
-        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
-        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
-        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
-        //         }    
-        //     }
-        //     else if(event.currentTarget.dataset.name == "QFTIME"){
-        //         for(let i = 0; i <= this.salutationvalue.length; i++){
-        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
-        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
-        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
-        //         }    
-        //     }
-        //     else if(event.currentTarget.dataset.name == "QFDATETIME"){
-        //         for(let i = 0; i <= this.salutationvalue.length; i++){
-        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
-        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
-        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
-        //         }    
-        //     }
-        //     else if(event.currentTarget.dataset.name == "QFDATE"){
-        //         for(let i = 0; i <= this.salutationvalue.length; i++){
-        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
-        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
-        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
-        //         }    
-        //     }
-        //     else if(event.currentTarget.dataset.name == "QFRADIOBUTTON"){
-        //         for(let i = 0; i <= this.salutationvalue.length; i++){
-        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
-        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
-        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
-        //         }    
-        //     }
-        //     else if(event.currentTarget.dataset.name == "QFCHECKBOX"){
-        //         for(let i = 0; i <= this.salutationvalue.length; i++){
-        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
-        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
-        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
-        //         }    
-        //     }
-        //     else if(event.currentTarget.dataset.name == "QFSCALERATING"){
-        //         for(let i = 0; i <= this.salutationvalue.length; i++){
-        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
-        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
-        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
-        //         }    
-        //     }
-        // }
-        // else{
-        //     if(this.fieldtype == "PHONE" || this.fieldtype == 'PICKLIST'){
-        //         for(let i = 0; i <= this.salutationvalue.length; i++){
-        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
-        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
-        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
-        //         }    
-        //     }
-        //     else if(this.fieldtype == "STRING" || this.fieldtype == "TEXTAREA" || this.fieldtype == "ENCRYPTEDSTRING" || this.fieldtype == "EMAIL" ){
-        //         for(let i = 0; i <= this.salutationvalue.length; i++){
-        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
-        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
-        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
-        //         }    
-        //     }
-        //     else if(this.fieldtype == "NUMBER" || this.fieldtype == "CURRENCY" || this.fieldtype == "PERCENT"){
-        //         for(let i = 0; i <= this.salutationvalue.length; i++){
-        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
-        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
-        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
-        //         }    
-        //     }
-        //     else if(this.fieldtype == "TIME"){
-        //         for(let i = 0; i <= this.salutationvalue.length; i++){
-        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
-        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
-        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
-        //         }    
-        //     }
-        //     else if(this.fieldtype == "DATETIME"){
-        //         for(let i = 0; i <= this.salutationvalue.length; i++){
-        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
-        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
-        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
-        //         }    
-        //     }
-        //     else if(this.fieldtype == "DATE"){
-        //         for(let i = 0; i <= this.salutationvalue.length; i++){
-        //             this.fieldValidation = this.fieldValidation.concat('?$`~isPlaceholder:'+ this.placeholdercheck+'?$`~Placeholder:'+ this.placeholdervalue +
-        //              '?$`~Minimum:' +this.minimumvalue + '?$`~Maximum:' + this.maximumvalue + '?$`~isPrefix:' + this.prefixcheck + '?$`~Prefix:' + this.prefixvalue + '?$`~Salutation:' + this.salutationvalue[i]
-        //              + '?$`~Decimal:' + this.decimal + '?$`~Richtext:'+ this.Richtextvalue + '?$`~MinimumTime:'+ this.minimumdate + '?$`~MaximumTime:' + this.maximumdate + '?$`~MinimumDateTime:'+ this.minimumdate + '?$`~MaximumDateTime:' + this.maximumdate
-        //               + '?$`~MinimumDate:'+ this.minimumdate + '?$`~MaximumDate:' + this.maximumdate) 
-        //         }    
-        //     }
-        // }
-        if(this.maximumvalue > this.minimumvalue){
-            savevalidation({fieldId:this.fieldId, fieldValidation:JSON.stringify(this.fieldValidation)})
-            .then(result => {
-                event.preventDefault();
-                const selectEvent = new CustomEvent('closevalidation', {
-                    detail: this.tab
+            if(this.maximumvalue > this.minimumvalue){
+                savevalidation({fieldId:this.fieldId, fieldValidation:this.fieldValidation})
+                .then(result => {
+                    event.preventDefault();
+                    const selectEvent = new CustomEvent('closevalidation', {
+                        detail: this.tab
+                    });
+                    this.dispatchEvent(selectEvent);
+                })
+                .catch(error => {
+                    console.log(error);
                 });
-                this.dispatchEvent(selectEvent);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-        }else{
-            this.template.querySelector('c-toast-component').showToast('error','There is some error in your validations',3000);             
-        }
-           
+            } else{
+                this.template.querySelector('c-toast-component').showToast('error','There is some error in your validations',3000);             
+            }
+    
         }
         else if(event.currentTarget.dataset.title == 'Copy'){
             if(this.fieldtype == 'Extra'){
@@ -478,15 +272,12 @@ export default class FieldValidation extends LightningElement {
             this.template.querySelector('c-toast-component').showToast('error','You cannot copy Object Fields',3000);
         }
         }
+    } catch (error) {
+        console.log(error+ 'Validation Error');
+        this.spinnerDataTable = false;
+      }
     }
 
-    get showlabel() {
-        return [
-            { label: 'Show', value: 'Show' },
-            { label: 'Hide', value: 'Hide' },
-        
-        ];
-    }
     get showdecimal(){
         return [
             { label: '0', value: '0' },
@@ -497,33 +288,39 @@ export default class FieldValidation extends LightningElement {
     }
 
     validatingvalue(event){
-        if(event.currentTarget.dataset.title == 'Label'){
-        this.labelvalue = event.detail.value;
-        }
-        else if(event.currentTarget.dataset.title == 'HelpText'){
-            this.helptext = event.detail.value;
-        }
-        else if(event.currentTarget.dataset.title == 'PlaceHolder'){
-            this.placeholdervalue = event.detail.value;
-        }
-        else if(event.currentTarget.dataset.title == 'Prefix'){
-            this.prefixvalue = event.detail.value;
-        }
-        else if(event.currentTarget.dataset.title == 'Maximum'){
-            this.maximumvalue =  event.detail.value;
-        }
-        else if(event.currentTarget.dataset.title == 'Minimum'){
-            this.minimumvalue =  event.detail.value;
-        }
-        else if(event.currentTarget.dataset.title == 'MinimumDate'){
-            this.minimumdate =  event.detail.value;
-        }
-        else if(event.currentTarget.dataset.title == 'MaximumDate'){
-            this.maximumdate =  event.detail.value;
+        try{
+            if(event.currentTarget.dataset.title == 'Label'){
+            this.labelvalue = event.detail.value;
+            }
+            else if(event.currentTarget.dataset.title == 'HelpText'){
+                this.helptext = event.detail.value;
+            }
+            else if(event.currentTarget.dataset.title == 'PlaceHolder'){
+                this.placeholdervalue = event.detail.value;
+            }
+            else if(event.currentTarget.dataset.title == 'Prefix'){
+                this.prefixvalue = event.detail.value;
+            }
+            else if(event.currentTarget.dataset.title == 'Maximum'){
+                this.maximumvalue =  event.detail.value;
+            }
+            else if(event.currentTarget.dataset.title == 'Minimum'){
+                this.minimumvalue =  event.detail.value;
+            }
+            else if(event.currentTarget.dataset.title == 'MinimumDate'){
+                this.minimumdate =  event.detail.value;
+            }
+            else if(event.currentTarget.dataset.title == 'MaximumDate'){
+                this.maximumdate =  event.detail.value;
+            }
+        } catch (error) {
+            console.log(error+ 'Validation Error');
+            this.spinnerDataTable = false;
         }
     }
 
     handlevalidation(event){
+        try{
         if(event.currentTarget.dataset.title == 'Label'){
                 this.labelcheck = event.target.checked;;       
         }
@@ -542,21 +339,30 @@ export default class FieldValidation extends LightningElement {
         else if (event.currentTarget.dataset.title == 'RichText'){
             this.richtextinput = true;
         }
+    } catch (error) {
+        console.log(error+ 'Validation Error');
+        this.spinnerDataTable = false;
+      }
     }
 
-    isRequired(event){
-        this.isRequiredcheck = event.target.checked;
-        if(this.standardrequired == 'isrequired'){
-            if(this.isRequiredcheck == false){
-                this.isRequiredcheck = true;
-                this.isdisabledcheck = false;
-                this.template.querySelector('c-toast-component').showToast('error','You cannot change required of Standard Required field' ,3000);  
+    isRequired(event){ 
+        try{
+            this.isRequiredcheck = event.target.checked;
+            if(this.standardrequired == 'isrequired'){
+                if(this.isRequiredcheck == false){
+                    this.isRequiredcheck = true;
+                    this.isdisabledcheck = false;
+                    this.template.querySelector('c-toast-component').showToast('error','You cannot change required of Standard Required field' ,3000);  
+                }
+            } else {
+                
+                if(this.isRequiredcheck == true){
+                    this.isdisabledcheck = false;
+                }
             }
-        } else {
-            
-            if(this.isRequiredcheck == true){
-                this.isdisabledcheck = false;
-            }
+        } catch (error) {
+            console.log(error+ 'Validation Error');
+            this.spinnerDataTable = false;
         }
     }
 
@@ -574,26 +380,28 @@ export default class FieldValidation extends LightningElement {
             }
         }
     }
+
     RichTextData(event){
         this.Richtextvalue =  event.detail.value;
     }
+
     closerichtext(){
         this.richtextinput = false;
     }
+
     slider(event){
-        console.log(event.detail.value);
         if(event.currentTarget.dataset.title == 'Minimum'){
             this.minimumvalue = event.detail.value;
             this.minimumvalue = parseInt( this.minimumvalue);
             if(this.minimumvalue >= this.maximumvalue){
-                this.template.querySelector('c-toast-component').showToast('error',this.minimumvalue +'---<----'+this.maximumvalue ,3000);  
+                this.template.querySelector('c-toast-component').showToast('error','Minimum Value cannot higher then Maximum Value' ,3000);  
             }
         }
         else if(event.currentTarget.dataset.title == 'Maximum'){
             this.maximumvalue =  event.detail.value;
             this.maximumvalue = parseInt(this.maximumvalue);
             if(this.minimumvalue >= this.maximumvalue){
-                this.template.querySelector('c-toast-component').showToast('error',this.minimumvalue +'---<----'+this.maximumvalue ,3000);           
+                this.template.querySelector('c-toast-component').showToast('error','Maximum Value cannot lower than Minimum Value ',3000);           
             }
         }
         else if(event.currentTarget.dataset.title == 'Reset'){
@@ -610,10 +418,15 @@ export default class FieldValidation extends LightningElement {
         this.salutationindex ++; 
     }
     opensalutation(){
-        for(let i = 0; i < this.salutationvalue.length; i++){
-        this.salutation.push({id : this.salutationindex , salutation: this.salutationvalue[i]})
-        this.salutationindex ++; 
-        }
+        try{
+            for(let i = 0; i < this.salutationvalue.length; i++){
+            this.salutation.push({id : this.salutationindex , salutation: this.salutationvalue[i]})
+            this.salutationindex ++; 
+            }
+        } catch (error) {
+            console.log(error+ 'Validation Error');
+            this.spinnerDataTable = false;
+          }
     }
     deletesalutation(event){
         this.salutation.splice(event.currentTarget.dataset.id, 1);
@@ -628,9 +441,5 @@ export default class FieldValidation extends LightningElement {
     salutationvalues(event){
         this.salutationvalue[event.currentTarget.dataset.id] = event.detail.value;
         this.salutation[event.currentTarget.dataset.id] = ({id : event.currentTarget.dataset.id, salutation: this.salutationvalue[event.currentTarget.dataset.id]});
-    }
-    @api 
-    get validations(){
-        return this.validation;
     }
 }

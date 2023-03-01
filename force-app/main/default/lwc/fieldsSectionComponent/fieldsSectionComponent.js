@@ -11,14 +11,13 @@ export default class FieldsSectionComponent extends LightningElement {
     notShowField = true;
     showField = false;
     baseField = [];
-    objectoneicon;
-    objecttwoicon;
-    objectthreeicon;
+    @api objectoneicon;
+    @api objecttwoicon;
+    @api objectthreeicon;
     @track ObjectName = [];
-    @track ObjectName1;
-    @track ObjectName2;
-    @track ObjectName3;
-    @track Object2icon;
+    @api ObjectName1;
+    @api ObjectName2;
+    @api ObjectName3;
     @track accfields = [];
     @track confields = [];
     @track oppfields = [];
@@ -42,26 +41,30 @@ export default class FieldsSectionComponent extends LightningElement {
         ObjName({ id: this.formid }).then(result => {
             this.ObjectName = result.split(',');
             console.log('result name --> ' + result);
-            console.log('Object name --> ' + this.ObjectName + typeof (this.ObjectName));
             console.log('1', this.ObjectName.length);
-            if (this.ObjectName.length == 2) {
-                this.ObjectName1 = this.ObjectName[0];
-                this.ObjectName2 = this.ObjectName[1];
-                // objectoneicon = this.ObjectName[3];
-                // objecttwoicon = this.ObjectName[4];
+            if (this.ObjectName.length == 4) {
+                var Obj1 = this.ObjectName[0].replaceAll('__c', '');
+                var Obj2 = this.ObjectName[1].replaceAll('__c', '');
+                this.ObjectName1 = Obj1.replaceAll('_', ' ');
+                this.ObjectName2 = Obj2.replaceAll('_', ' ');
+                this.objectoneicon = this.ObjectName[2];
+                console.log('object one icon :- ' + this.objectoneicon);
+                this.objecttwoicon = this.ObjectName[3];
             }
-            if (this.ObjectName.length == 3) {
-                this.ObjectName1 = this.ObjectName[0];
-                this.ObjectName2 = this.ObjectName[1];
-                this.ObjectName3 = this.ObjectName[2];
-                // objectoneicon = this.ObjectName[3];
-                // objecttwoicon = this.ObjectName[4];
-                // objectthreeicon = this.ObjectName[5];
+            if (this.ObjectName.length == 6) {
+                var Obj1 = this.ObjectName[0].replaceAll('__c', '');
+                var Obj2 = this.ObjectName[1].replaceAll('__c', '');
+                var Obj3 = this.ObjectName[2].replaceAll('__c', '');
+                this.ObjectName1 = Obj1.replaceAll('_', ' ');
+                this.ObjectName2 = Obj2.replaceAll('_', ' ');
+                this.ObjectName3 = Obj3.replaceAll('_', ' ');
+                this.objectoneicon = this.ObjectName[3];
+                this.objecttwoicon = this.ObjectName[4];
+                this.objectthreeicon = this.ObjectName[5];
             } else {
-                this.ObjectName1 = this.ObjectName[0];
-                console.log(this.ObjectName1);
-                // objectoneicon = this.ObjectName[3];
-                // console.log(this.objectoneicon);
+                var Obj1 = this.ObjectName[0].replaceAll('__c', '');
+                this.ObjectName1 = Obj1.replaceAll('_', ' ');
+                this.objectoneicon = this.ObjectName[1];
             }
         }).catch(error => {
             console.log(error);
@@ -196,7 +199,7 @@ export default class FieldsSectionComponent extends LightningElement {
                 this.dispatchEvent(custEvent);
             }
         } catch (error) {
-            console.log("In the catch block ==> Method:** onDragStart ** || LWC:** fieldsSectionComponent ** ==>", {error});
+            console.log("In the catch block ==> Method:** onDragStart ** || LWC:** fieldsSectionComponent ** ==>", { error });
             console.log('above error ==>' + error);
         }
     }
@@ -244,5 +247,65 @@ export default class FieldsSectionComponent extends LightningElement {
         }
         this.oppfields = tempararyArray;
 
+    }
+
+    @api AddField(name) {
+        console.log('Deleted field name --> '+name);
+        const index = this.storeRemovedField.indexOf(name);
+        if (index !== -1) {
+            this.storeRemovedField.splice(index, 1);
+        }
+        getFields({ id: this.formid }).then(result => {
+            let LabelList = [];
+            let OnlyLabelList = [];
+            for (let i = 0; i < result.length; i++) {
+                let innerList = [];
+
+                for (let j = 0; j < result[i].length; j++) {
+
+                    let label = result[i][j].split('./.');
+                    let nottakeField = false;
+                    for (let k = 0; k < this.storeRemovedField.length; k++) {
+                        if (this.storeRemovedField[k] == label[0]) {
+                            nottakeField = true;
+                        }
+
+                    }
+                    if (nottakeField == false) {
+                        let labelObj = {
+                            Label: label[0],
+                            Type: label[1]
+                        };
+                        innerList.push(labelObj);
+                    }
+                }
+                LabelList.push(innerList);
+
+            }
+
+
+            console.log(LabelList);
+            console.log('FirstList' + LabelList[0]);
+            //console.log('RecordId is'+recordId);
+            // this.pathrecord = result;
+            console.log(typeof (result));
+            this.accfields = LabelList[0];
+            if (LabelList.length != 1) {
+                console.log(this.accfields.length);
+                this.confields = LabelList[1];
+                if (LabelList.length != 2) {
+                    console.log(this.accfields.length);
+                    this.oppfields = LabelList[2];
+                }
+
+            }
+
+            console.log('FolderURL after' + this.accfields.Label);
+            console.log('type' + this.accfields.Type);
+        }).catch(error => {
+            this.isLoaded = false;
+            console.log('OUTPUT fetch path>>: ');
+            console.log({ error });
+        });
     }
 }

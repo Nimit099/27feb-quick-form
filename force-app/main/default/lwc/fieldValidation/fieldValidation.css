@@ -111,7 +111,7 @@ label.slds-checkbox_toggle.slds-grid>* {
     text-transform: capitalize;
     text-align: center;
     color: rgba(0, 0, 0, 0.56);
-    padding: 10% 0 3% 0;
+    padding: 5% 0 5% 0;
     font-weight: bold;
     font-size: 24px
 }
@@ -321,6 +321,9 @@ label.slds-checkbox_toggle.slds-grid>* {
  .loader--ripple div {
     border-color: #00539f;
 }
+.salutationdiv{
+    margin: 0% 0% 0px 3%;
+}
 /* =========================     Spinner Ends      =========================== */
 
 @media screen and (max-width: 1600px) {
@@ -329,6 +332,9 @@ label.slds-checkbox_toggle.slds-grid>* {
         height: 45px;
     }
     .fieldvalidationbody{
-        height: 84vh;
+        height: 85vh;
+    }
+    .togglebox{
+        padding-bottom: 7px;
     }
 }

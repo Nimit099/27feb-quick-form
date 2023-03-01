@@ -1,8 +1,5 @@
-<template>
-    
-    
-    <c-toast-component></c-toast-component>
-
+<template>    
+<c-toast-component></c-toast-component>
 <template if:true={spinnerDataTable}>
     <div data-id="spinnerId" class="slds-spinner_container"
         style="overflow: hidden;">
@@ -66,32 +63,27 @@
                 <template if:true={isIndexZero}>
                     <template if:false={isIndexLast}>
                         <button data-name = "next" variant="brand" label="Next" title="Next"
-                        onclick={onaddpage1} class="btn1">Next</button>
+                        onclick={handlepagination} class="btn1">Next</button>
                     </template>
                     <template if:true={isIndexLast}>
                         <button variant="brand" label="Submit" title="Submit" 
-                        onclick={onaddpage1} class="btn1" data-name = "submit">Submit</button>
+                        onclick={handlepagination} class="btn1" data-name = "submit">Submit</button>
                     </template>
                 </template>
                 
                 <template if:false={isIndexZero}>
                     <button data-name = "previous" variant="brand" label="Previous"
-                    title="Previous"  onclick={onaddpage1} class="btn1">Previous</button>  
+                    title="Previous"  onclick={handlepagination} class="btn1">Previous</button>  
                     
                     <template if:false={isIndexLast}>
                         <button data-name = "next" variant="brand" label="Next" title="Next"
-                        onclick={onaddpage1} class="btn1">Next</button>
+                        onclick={handlepagination} class="btn1">Next</button>
                     </template>
                     <template if:true={isIndexLast}>
                         <button variant="brand" label="Submit" title="Submit" 
-                        onclick={onaddpage1} class="btn1" data-name = "submit">Submit</button>
+                        onclick={handlepagination} class="btn1" data-name = "submit">Submit</button>
                     </template>
                 </template>
-                
-                <!-- <template if:true={isIndexLast}>
-                    <button variant="brand" label="Submit" title="Submit" 
-                    onclick={onaddpage1} class="btn1" data-name = "submit"></button>
-                </template> -->
             </div>
         </div>
     </div>

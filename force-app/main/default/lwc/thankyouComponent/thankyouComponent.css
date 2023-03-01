@@ -247,8 +247,10 @@
   .form-check .slds-dropdown_left {
     right: auto;
 }
-
-
+.thanksPreview::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
 /* Richtext Model End */
 
   .slds-notify_container .slds-icon-utility-success {

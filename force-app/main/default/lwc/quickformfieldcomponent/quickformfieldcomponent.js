@@ -9,6 +9,7 @@ import EmojiRating2 from '@salesforce/resourceUrl/EmojiRating2';
 import EmojiRating3 from '@salesforce/resourceUrl/EmojiRating3';
 import EmojiRating4 from '@salesforce/resourceUrl/EmojiRating4';
 import getScaleRating from '@salesforce/apex/FormBuilderController.getScaleRating';
+
 export default class Quickformfieldcomponent extends LightningElement {
 
     // icons
@@ -41,7 +42,7 @@ export default class Quickformfieldcomponent extends LightningElement {
     @track onfocus = false;
     @track getFieldCSS1;
     @track getLabelCSS1;
-    hovercssproperty;
+    @api hovercssproperty;
     focuscssproperty;
     @api labelvalue;
     @api labelcheck;
@@ -51,6 +52,7 @@ export default class Quickformfieldcomponent extends LightningElement {
     @api isdisabled;
     @api placeholder;
     @api fieldtype;
+    @api termsAndConditionValue;
 
     connectedCallback() {
         getScaleRating()
@@ -61,15 +63,16 @@ export default class Quickformfieldcomponent extends LightningElement {
                 console.log(err);
             })
         console.log('c callback ');
+
         this.onfocus = false;
-        getHoverCSS({ id: this.formid })
-            .then(result => {
-                console.log(result);
-                console.log('FieldCSS->> ' + result);
-                this.hovercssproperty = result;
-            }).catch(error => {
-                console.log({ error });
-            })
+        // getHoverCSS({ id: this.formid })
+        //     .then(result => {
+        //         console.log(result);
+        //         console.log('FieldCSS->> ' + result);
+        //         this.hovercssproperty = result;
+        //     }).catch(error => {
+        //         console.log({ error });
+        //     })
 
         getFocusCSS({ id: this.formid })
             .then(result => {
@@ -102,18 +105,6 @@ export default class Quickformfieldcomponent extends LightningElement {
                     element.style.setProperty("--c", pcolor);
                 }
                 this.template.querySelector('select').style = str;
-                console.log('before textarea');
-                // let array2 = this.template.querySelectorAll('.areatext');
-                // console.log({array2});
-                // console.log('after queryselector -> '+array2.length);
-                // // let Arr3 = str.split(';color:');
-                // // let Arr4 = Arr3[1].split(';');
-                // // let pcolor2 = Arr4[0];
-                // for (let i = 0; i < array2.length; i++) {
-                //     const element = array2[i];
-                //     element.style=str;
-                //     // element.style.setProperty("--c",pcolor2);
-                // }
             }).catch(error => {
                 console.log('quickformfield --> ' + { error });
             })
@@ -167,15 +158,17 @@ export default class Quickformfieldcomponent extends LightningElement {
     }
 
     @api FieldCSSUpdate(CSSString) {
-        getFieldCSS({ id: this.formid })
-            .then(result => {
-                console.log(result);
-                this.getFieldCSS1 = result;
-                console.log('FieldCSS->> ' + this.getFieldCSS1);
-                console.log(this.template.querySelectorAll('input'));
-                let array = this.template.querySelectorAll('input');
+
+        console.log('FieldCSS->> ' + CSSString);
+        console.log(this.template.querySelectorAll('.slds-input'));
+        let array = this.template.querySelectorAll('.slds-input');
                 console.log(array.length);
-                let str = this.getFieldCSS1;
+        let str = '';
+        if (CSSString == undefined || CSSString == null || CSSString == '') {
+            str = this.getFieldCSS1;
+        } else {
+            str = CSSString;
+        }
                 let Arr = str.split(';color:');
                 let Arr2 = Arr[1].split(';');
                 let pcolor = Arr2[0];
@@ -184,34 +177,7 @@ export default class Quickformfieldcomponent extends LightningElement {
                     element.style = str;
                     element.style.setProperty("--c", pcolor);
                 }
-                let array2 = this.template.querySelectorAll('.textarea');
-                let Arr3 = str.split(';color:');
-                let Arr4 = Arr3[1].split(';');
-                let pcolor2 = Arr4[0];
-                for (let i = 0; i < array2.length; i++) {
-                    const element = array2[i];
-                    element.style = str;
-                    element.style.setProperty("--c", pcolor2);
-                }
                 this.template.querySelector('select').style = str;
-            }).catch(error => {
-                console.log({ error });
-            })
-
-        // console.log('FieldCSS->> '+CSSString);
-        //     console.log(this.template.querySelectorAll('input'));
-        //     let array = this.template.querySelectorAll('input');
-        //     console.log(array.length);
-        //     let str = this.getFieldCSS1;
-        //     let Arr = str.split(';color:');
-        //     let Arr2 = Arr[1].split(';');
-        //     let pcolor = Arr2[0];
-        //     for (let i = 0; i < array.length; i++) {
-        //         const element = array[i];
-        //         element.style=str;
-        //         element.style.setProperty("--c",pcolor);
-        //     }
-        //     this.template.querySelector('select').style = str;
 
     }
 
@@ -241,10 +207,6 @@ export default class Quickformfieldcomponent extends LightningElement {
             })
     }
 
-    ApplyCSS(event) {
-        // event.target.style = "color:blue";
-    }
-
     @api handleeffect(type, property) {
         if (type == 'hover') {
             this.hovercssproperty = property;
@@ -262,12 +224,7 @@ export default class Quickformfieldcomponent extends LightningElement {
         if (this.onfocus) {
             this.handlefocus(event)
         } else {
-            // for (let i = 0; i < array.length; i++) {
-            //     const element = array[i];
-            //     element.style=str;
-            // }
             event.target.style = str;
-            this.template.querySelector('select').style = str;
         }
 
     }
@@ -276,18 +233,9 @@ export default class Quickformfieldcomponent extends LightningElement {
         console.log('handlefocus ***');
         console.log('this.onfocus --> ', this.onfocus);
         console.log('FieldCSS->> ' + this.focuscssproperty);
-        // console.log(this.template.querySelectorAll('input'));
-        // let array = this.template.querySelectorAll('input');
-        // console.log(array.length);
         let str = this.focuscssproperty;
-        // for (let i = 0; i < array.length; i++) {
-        //     const element = array[i];
-        //     element.style=str;
-        // }
-        // this.template.querySelector('select').style = str;
-        this.onfocus = true;
-        this.fevent = event;
         event.target.style = str;
+        this.onfocus = true;
         console.log('this.onfocus --> ', this.onfocus);
     }
 
@@ -352,6 +300,7 @@ export default class Quickformfieldcomponent extends LightningElement {
     }
 
     get isTrueFullName() {
+
         return this.tView == 'QFFULLNAME' || this.FieldLabel == 'QFFULLNAME';
     }
     get isTrueName() {

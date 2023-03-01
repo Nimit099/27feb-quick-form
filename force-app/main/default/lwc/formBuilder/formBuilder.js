@@ -23,6 +23,10 @@ import Delete_icon from '@salesforce/resourceUrl/Delete_icon';
 import getFormCSS from '@salesforce/apex/FormBuilderController.getFormCSS';
 import getPageCSS from '@salesforce/apex/FormBuilderController.getPageCSS';
 import getButtonCSS from '@salesforce/apex/FormBuilderController.getButtonCSS';
+import getFieldCSS from '@salesforce/apex/FormBuilderController.getFieldCSS';
+import getLabelCSS from '@salesforce/apex/FormBuilderController.getLabelCSS';
+import getHoverCSS from '@salesforce/apex/FormBuilderController.getHoverCSS';
+import getFocusCSS from '@salesforce/apex/FormBuilderController.getFocusCSS';
 import StoreFormStyles from '@salesforce/apex/FormBuilderController.StoreFormStyles';
 import StoreStyles from '@salesforce/apex/FormBuilderController.StoreStyles';
 import right from '@salesforce/resourceUrl/right';
@@ -123,6 +127,8 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
     @track isReorderingDrag = false;
     @track startFielId = '';
 
+    @track hovercssproperty;
+
     connectedCallback() {
 
         this.spinnerDataTable = true;
@@ -159,10 +165,17 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
         .catch(error => {
             console.log(error);
         });
+        getHoverCSS({ id: this.formid })
+        .then(result => {
+            console.log(result);
+            console.log('HoverCSS->> ' + result);
+            this.hovercssproperty = result;
+        }).catch(error => {
+            console.log({ error });
+        })
     }
 
     renderedCallback() {
-
         console.log('inside the renderedcallBack--->>>');
         console.log(this.removeObjFields.length);
         this.tempararyfun();
@@ -552,7 +565,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
             console.log('*** startFielId ==>' + this.startFielId);
             console.log('*** SenddataObj ==>' + JSON.stringify(SenddataObj));
             console.log('event.target.dataset JSON==>', JSON.stringify(event.target.dataset));
-            console.log('event.target.dataset ==>' , event.target.dataset);
+            console.log('event.target.dataset ==>', event.target.dataset);
             console.log('evenet ==>', event.target);
             console.log('On drag start-->');
 
@@ -574,7 +587,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
     async onDrop(event) {
 
         if (this.isReorderingDrag) {
-            this.spinnerDataTable = true;
+            // this.spinnerDataTable = true;
             // event.dataTransfer.getData('text/plain', JSON.stringify(event.target.dataset));
             var dropFieldId = event.target.dataset.fieldId;
 
@@ -584,16 +597,16 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
 
             reOrderField({ dropFieldId: dropFieldId, currentFieldId: this.startFielId })
                 .then((result) => {
-                    console.log("*** result from apex class ==>" , result);
+                    console.log("*** result from apex class ==>", result);
                     this.setPageField(result);
                     
                 })
                 .catch((error) => {
                     console.log('*** Error From reOrderField ==>');
                     console.log({ error });
-                    this.spinnerDataTable = false;
+                    // this.spinnerDataTable = false;
                 });
-            this.spinnerDataTable = false;
+            // this.spinnerDataTable = false;
             
         } else {
             var dropzone = this.template.querySelectorAll('.example-dropzone');
@@ -781,6 +794,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
 
 
     setPageField(fieldList) {
+        try {
         console.log('in set PageField');
         let outerlist = [];
         let isIndexZero = false;
@@ -820,23 +834,22 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
                     let labelcheck;
                     let helptextcheck;
                     let placeholdercheck;
-                    let readonlycheck;
                     let prefixcheck;
                     let prefixvalue;
                     let labelvalue;
                     let helptext;
                     let placeholdervalue;
                     let salutationvalue = [];
+                    let Richtext;
 
                     if (fieldList[j].Field_Validations__c) {
                         fieldList[j].Field_Validations__c = fieldList[j].Field_Validations__c.split('?$`~');
                         for (let i = 0; i < fieldList[j].Field_Validations__c.length; i++) {
-                            fieldList[j].Field_Validations__c[i] = fieldList[j].Field_Validations__c[i].split('>>');
+                            fieldList[j].Field_Validations__c[i] = fieldList[j].Field_Validations__c[i].split('<!@!>');
                             let labels = fieldList[j].Field_Validations__c[i][0];
                             let value = fieldList[j].Field_Validations__c[i][1];
 
                             if (labels == 'isRequired') {
-                                console.log(value + ' NImit check');
                                 isRequiredcheck = JSON.parse(value);
                             } else if (labels == 'isDisabled') {
                                 isdisabledcheck = JSON.parse(value);
@@ -846,8 +859,6 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
                                 helptextcheck = JSON.parse(value);
                             } else if (labels == 'isPlaceholder') {
                                 placeholdercheck = JSON.parse(value);
-                            } else if (labels == 'isReadonly') {
-                                readonlycheck = JSON.parse(value);
                             } else if (labels == 'isPrefix') {
                                 prefixcheck = JSON.parse(value);
                             } else if (labels == 'Prefix') {
@@ -860,11 +871,13 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
                                 placeholdervalue = value;
                             } else if (labels == 'Salutation') {
                                 salutationvalue.push(value);
+                            }else if (labels == 'Richtext') {
+                                Richtext = value;
                             }
                         }
                         fieldList[j].Field_Validations__c = ({
                             isRequired: isRequiredcheck, isDisabled: isdisabledcheck, isLabel: labelcheck, isHelptext: helptextcheck, isPlaceholder: placeholdercheck,
-                            isReadonly: readonlycheck, isPrefix: prefixcheck, Prefix: prefixvalue, Label: labelvalue, HelpText: helptext, Placeholder: placeholdervalue, Salutation: salutationvalue, fieldtype: fieldtype
+                            isPrefix: prefixcheck, Prefix: prefixvalue, Label: labelvalue, HelpText: helptext, Placeholder: placeholdervalue, Salutation: salutationvalue, fieldtype: fieldtype, Richtext: Richtext
                         });
                     }
                     innerlist.push(fieldList[j]);
@@ -878,104 +891,15 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
             outerlist.push(temp);
         }
         this.MainList = outerlist;
-        console.log('***Main List ==>', JSON.stringify(outerlist));
+            // console.log('***Main List ==>', JSON.stringify(outerlist));
+            console.log('***Main List ==>', JSON.stringify(this.MainList));
+            console.log('before renderedCallback');
+        } catch (error) {
+            console.log("In the catch block ==> Method :** handleAddPage ** || LWC:** formBuilder ** ==>", { error });
+            console.log('above error ==>' + error);
     }
 
-    // setPageField(fieldList) {
-    //     console.log('in set PageField');
-    //     let outerlist = [];
-    //     let isIndexZero = false;
-    //     let islast = false;
-    //     let isnotlast = false;
-    //     for (let i = 0; i < this.PageList.length; i++) {
-    //         let innerlist = [];
-    //         if (i == 0) {
-    //             isIndexZero = true;
-    //         } else if (i == this.PageList.length - 1) {
-    //             islast = true;
-    //         } else if (i != this.PageList.length - 1) {
-    //             isnotlast = true;
-    //         }
-    //         for (let j = 0; j < fieldList.length; j++) {
-    //             if (this.PageList[i].Id == fieldList[j].Form_Page__c) {
-    //                 console.log('inside inner loop');
-    //                 let fieldofObj = fieldList[j].Name.split(',');
-    //                 let fieldtype = fieldofObj[1];
-    //                 console.log(fieldtype + 'fieldtpys');
-    //                 console.log('in setpage field----->' + fieldofObj);
-    //                 if (fieldofObj.length == 2) {
-    //                     console.log(fieldofObj.length);
-    //                     if (fieldofObj[1] != 'Extra' && fieldofObj[1] != undefined && fieldofObj[1] != 'undefined') {
-    //                         console.log(fieldofObj[0]);
-    //                         this.removeObjFields.push(fieldofObj[0]);
-    //                     }
-    //                 }
-
-    //                 let isdisabledcheck;
-    //                 let isRequiredcheck;
-    //                 let labelcheck;
-    //                 let helptextcheck;
-    //                 let placeholdercheck;
-    //                 let readonlycheck;
-    //                 let prefixcheck;
-    //                 let prefixvalue;
-    //                 let labelvalue;
-    //                 let helptext;
-    //                 let placeholdervalue;
-    //                 let salutationvalue = [];
-
-    //                 if (fieldList[j].Field_Validations__c) {
-    //                     fieldList[j].Field_Validations__c = fieldList[j].Field_Validations__c.split(',');
-    //                     for (let i = 0; i < fieldList[j].Field_Validations__c.length; i++) {
-    //                         fieldList[j].Field_Validations__c[i] = fieldList[j].Field_Validations__c[i].split(':');
-    //                         let labels = fieldList[j].Field_Validations__c[i][0];
-    //                         let value = fieldList[j].Field_Validations__c[i][1];
-
-    //                         if (labels == 'isRequired') {
-    //                             isRequiredcheck = JSON.parse(value);
-    //                         } else if (labels == 'isDisabled') {
-    //                             isdisabledcheck = JSON.parse(value);
-    //                         } else if (labels == 'isLabel') {
-    //                             labelcheck = JSON.parse(value);
-    //                         } else if (labels == 'isHelpText') {
-    //                             helptextcheck = JSON.parse(value);
-    //                         } else if (labels == 'isPlaceholder') {
-    //                             placeholdercheck = JSON.parse(value);
-    //                         } else if (labels == 'isReadonly') {
-    //                             readonlycheck = JSON.parse(value);
-    //                         } else if (labels == 'isPrefix') {
-    //                             prefixcheck = JSON.parse(value);
-    //                         } else if (labels == 'Prefix') {
-    //                             prefixvalue = value.replaceAll('"', '');
-    //                         } else if (labels == 'Label') {
-    //                             labelvalue = value.replaceAll('"', '');
-    //                         } else if (labels == 'HelpText') {
-    //                             helptext = value.replaceAll('"', '');
-    //                         } else if (labels == 'Placeholder') {
-    //                             placeholdervalue = value.replaceAll('"', '');
-    //                         } else if (labels == 'Salutation') {
-    //                             salutationvalue.push(value.replaceAll('"', ''));
-    //                         }
-    //                     }
-    //                     fieldList[j].Field_Validations__c = ({
-    //                         isRequired: isRequiredcheck, isDisabled: isdisabledcheck, isLabel: labelcheck, isHelptext: helptextcheck, isPlaceholder: placeholdercheck,
-    //                         isReadonly: readonlycheck, isPrefix: prefixcheck, Prefix: prefixvalue, Label: labelvalue, HelpText: helptext, Placeholder: placeholdervalue, Salutation: salutationvalue, fieldtype: fieldtype
-    //                     });
-    //                 }
-    //                 innerlist.push(fieldList[j]);
-    //             }
-    //         }
-
-    //         let temp = { pageName: this.PageList[i].Name, pageId: this.PageList[i].Id, isIndexZero: isIndexZero, isIndexLast: islast, isIndexIsNotLast: isnotlast, FieldData: innerlist };
-    //         isIndexZero = false;
-    //         islast = false;
-    //         isnotlast = false;
-    //         outerlist.push(temp);
-    //     }
-    //     this.spinnerDataTable = false;
-    //     this.MainList = outerlist;
-    //     console.log('***Main List ==>', JSON.stringify(outerlist));
-    // }
+    }
 
     tempararyfun() {
         for (let i = 0; i < this.removeObjFields.length; i++) {
@@ -1090,20 +1014,16 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
 
 
     handleAddPage() {
+        try {
         console.log('total pages--------->' + this.PageList.length);
         console.log('handle add page............');
         this.isModalOpen1 = true;
-        // createPage({totalPages:this.PageList.length, formId:this.ParentMessage}).then(result=>{
-        //     this.FieldList = result.fieldList;
-        //     console.log('inside the result in page break-->');
-        //     console.log(result);
-        //     this.PageList = result.pageList;
-        //     this.setPageField(result.fieldList);
-        //     this.showToast('Form Page create Successfully','success');
-        // }).catch(err=>{
-        //     console.log({err});
-        // })
+        } catch (error) {
+            console.log("In the catch block ==> Method :** handleAddPage ** || LWC:** formBuilder ** ==>", { error });
+            console.log('above error ==>' + error);
     }
+    }
+
     pageeeee
     @track pagetitle;
     @track pagenumber;
@@ -1198,6 +1118,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
     }
 
     handleValidation1() {
+        try {
         let nameCmp1 = this.template.querySelector(".nameCls1");
         if (!nameCmp1.value || nameCmp1.value.trim().length == 0) {
             console.log('test for form titel');
@@ -1209,7 +1130,10 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
             this.handlecreatePage();
         }
         nameCmp1.reportValidity();
-
+        } catch (error) {
+            console.log("In the catch block ==> Method :** handleValidation1 ** || LWC:** formBuilder ** ==>", { error });
+            console.log('above error ==>' + error);
+        }
     }
 
     handleValidation2() {
@@ -1227,6 +1151,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
     }
 
     handlecreatePage() {
+        try {
         console.log('total pages--------->' + this.PageList.length);
         createPage({ pageNumber: this.pagenumber, totalPages: this.PageList.length, formId: this.ParentMessage, pagename: this.pagetitle }).then(result => {
             this.FieldList = result.fieldList;
@@ -1246,6 +1171,11 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
         })
         this.isModalOpen1 = false;
         this.handleModalClose();
+
+        } catch (error) {
+            console.log("In the catch block ==> Method :** handlecreatePage ** || LWC:** formBuilder ** ==>", { error });
+            console.log('above error ==>' + error);
+        }
     }
 
     handleModalClose() {
@@ -1479,7 +1409,6 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
     }
 
     openfieldvalidation(event) {
-
         this.fieldId = event.currentTarget.dataset.id;
         this.fieldName = event.currentTarget.dataset.fieldName;
         this.activesidebar = false;
@@ -1501,6 +1430,18 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
         }
         else if(this.tab == 'tab-3'){
             this.activeDesignsidebar = true;
+        }
+    }
+    afterfielddelete(event) {
+        console.log('after delete event --> ' + event.detail);
+        var name = event.detail;
+        const temp = this.template.querySelectorAll('.childref');
+        console.log('length temp --> ' + temp.length);
+        console.log('queryselector childcomponent --> ' + this.template.querySelectorAll('.childref'));
+        for (let i = 0; i < temp.length; i++) {
+            const element = temp[i];
+            console.log('element :- ' + element);
+            element.AddField(name);
         }
     }
 }

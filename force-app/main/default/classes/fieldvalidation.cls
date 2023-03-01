@@ -27,6 +27,8 @@ public with sharing class fieldvalidation {
     @AuraEnabled
     public static void savevalidation(Id fieldId, String fieldValidation){
         try {
+            System.debug(fieldValidation);
+            fieldValidation = fieldValidation.replaceAll('"', '');
             Form_Fields__c field = [SELECT Id,Field_Validations__c	FROM Form_Fields__c WHERE Id =: fieldId];
             field.Field_Validations__c = fieldValidation;
             update field;

@@ -785,75 +785,75 @@ public with sharing class FormBuilderController {
                 field.Form_Page__c = Form_Page_Id;
                 field.Field_Order__c = Position+1;
                 if( Name.split(',')[0].replace('QF','') == 'RADIOBUTTON'|| Name.split(',')[0].replace('QF','') == 'CHECKBOX'){
-                    field.Field_Validations__c =  'isRequired>>false'+
-                    '?$`~isDisabled>>false' +
-                    '?$`~isLabel>>true'+
-                    '?$`~isHelpText>>false'+
-                    '?$`~Label>>'+ Name.split(',')[0].replace('QF','')+
-                    '?$`~HelpText>>' +
-                    '?$`~isPlaceholder>>false'+
-                    '?$`~Placeholder>>'+
-                    '?$`~Minimum>>0' + 
-                    '?$`~Maximum>>128' + 
-                    '?$`~isPrefix>>false' + 
-                    '?$`~Prefix>>'+ 
-                    '?$`~Decimal>>' + 
-                    '?$`~Richtext>>' + 
-                    '?$`~MinimumTime>>' +
-                    '?$`~MaximumTime>>' +
-                    '?$`~MinimumDateTime>>' +
-                    '?$`~MaximumDateTime>>'+
-                    '?$`~MinimumDate>>' +
-                    '?$`~MaximumDate>>'+
-                    '?$`~Salutation>>1';
+                    field.Field_Validations__c =  'isRequired<!@!>false'+
+                    '?$`~isDisabled<!@!>false' +
+                    '?$`~isLabel<!@!>true'+
+                    '?$`~isHelpText<!@!>false'+
+                    '?$`~Label<!@!>'+ Name.split(',')[0].replace('QF','')+
+                    '?$`~HelpText<!@!>' +
+                    '?$`~isPlaceholder<!@!>false'+
+                    '?$`~Placeholder<!@!>'+
+                    '?$`~Minimum<!@!>0' + 
+                    '?$`~Maximum<!@!>128' + 
+                    '?$`~isPrefix<!@!>false' + 
+                    '?$`~Prefix<!@!>'+ 
+                    '?$`~Decimal<!@!>' + 
+                    '?$`~Richtext<!@!>' + 
+                    '?$`~MinimumTime<!@!>' +
+                    '?$`~MaximumTime<!@!>' +
+                    '?$`~MinimumDateTime<!@!>' +
+                    '?$`~MaximumDateTime<!@!>'+
+                    '?$`~MinimumDate<!@!>' +
+                    '?$`~MaximumDate<!@!>'+
+                    '?$`~Salutation<!@!>1';
                 }
                 else if(Name.split(',')[0].replace('QF','') == 'SCALERATING'){
-                    field.Field_Validations__c =  'isRequired>>false'+
-                    '?$`~isDisabled>>false' +
-                    '?$`~isLabel>>true'+
-                    '?$`~isHelpText>>false'+
-                    '?$`~Label>>'+ Name.split(',')[0].replace('QF','')+
-                    '?$`~HelpText>>' +
-                    '?$`~isPlaceholder>>false'+
-                    '?$`~Placeholder>>'+
-                    '?$`~Minimum>>0' + 
-                    '?$`~Maximum>>128' + 
-                    '?$`~isPrefix>>false' + 
-                    '?$`~Prefix>>'+ 
-                    '?$`~Decimal>>' + 
-                    '?$`~Richtext>>' + 
-                    '?$`~MinimumTime>>' +
-                    '?$`~MaximumTime>>' +
-                    '?$`~MinimumDateTime>>' +
-                    '?$`~MaximumDateTime>>'+
-                    '?$`~MinimumDate>>' +
-                    '?$`~MaximumDate>>'+
-                    '?$`~Salutation>>Very Poor?$`~Salutation>>Poor?$`~Salutation>>Good?$`~Salutation>>Very Good?$`~Salutation>>Excellent';
+                    field.Field_Validations__c =  'isRequired<!@!>false'+
+                    '?$`~isDisabled<!@!>false' +
+                    '?$`~isLabel<!@!>true'+
+                    '?$`~isHelpText<!@!>false'+
+                    '?$`~Label<!@!>'+ Name.split(',')[0].replace('QF','')+
+                    '?$`~HelpText<!@!>' +
+                    '?$`~isPlaceholder<!@!>false'+
+                    '?$`~Placeholder<!@!>'+
+                    '?$`~Minimum<!@!>0' + 
+                    '?$`~Maximum<!@!>128' + 
+                    '?$`~isPrefix<!@!>false' + 
+                    '?$`~Prefix<!@!>'+ 
+                    '?$`~Decimal<!@!>' + 
+                    '?$`~Richtext<!@!>' + 
+                    '?$`~MinimumTime<!@!>' +
+                    '?$`~MaximumTime<!@!>' +
+                    '?$`~MinimumDateTime<!@!>' +
+                    '?$`~MaximumDateTime<!@!>'+
+                    '?$`~MinimumDate<!@!>' +
+                    '?$`~MaximumDate<!@!>'+
+                    '?$`~Salutation<!@!>Very Poor?$`~Salutation<!@!>Poor?$`~Salutation<!@!>Good?$`~Salutation<!@!>Very Good?$`~Salutation<!@!>Excellent';
                 }
                 else{
-                    field.Field_Validations__c =  'isRequired>>false'+
-                    '?$`~isDisabled>>false' +
-                    '?$`~isLabel>>true'+
-                    '?$`~isHelpText>>false'+
-                    '?$`~Label>>'+ Name.split(',')[0].replace('QF','')+
-                    '?$`~HelpText>>' +
-                    '?$`~isPlaceholder>>false'+
-                    '?$`~Placeholder>>'+
-                    '?$`~Minimum>>0' + 
-                    '?$`~Maximum>>128' + 
-                    '?$`~isPrefix>>false' + 
-                    '?$`~Prefix>>'+ 
-                    '?$`~Decimal>>' + 
-                    '?$`~Richtext>>' + 
-                    '?$`~MinimumTime>>' +
-                    '?$`~MaximumTime>>' +
-                    '?$`~MinimumDateTime>>' +
-                    '?$`~MaximumDateTime>>'+
-                    '?$`~MinimumDate>>' +
-                    '?$`~MaximumDate>>'+
-                    '?$`~Salutation>>';
+                    field.Field_Validations__c =  'isRequired<!@!>false'+
+                    '?$`~isDisabled<!@!>false' +
+                    '?$`~isLabel<!@!>true'+
+                    '?$`~isHelpText<!@!>false'+
+                    '?$`~Label<!@!>'+ Name.split(',')[0].replace('QF','')+
+                    '?$`~HelpText<!@!>' +
+                    '?$`~isPlaceholder<!@!>false'+
+                    '?$`~Placeholder<!@!>'+
+                    '?$`~Minimum<!@!>0' + 
+                    '?$`~Maximum<!@!>128' + 
+                    '?$`~isPrefix<!@!>false' + 
+                    '?$`~Prefix<!@!>'+ 
+                    '?$`~Decimal<!@!>' + 
+                    '?$`~Richtext<!@!>' + 
+                    '?$`~MinimumTime<!@!>' +
+                    '?$`~MaximumTime<!@!>' +
+                    '?$`~MinimumDateTime<!@!>' +
+                    '?$`~MaximumDateTime<!@!>'+
+                    '?$`~MinimumDate<!@!>' +
+                    '?$`~MaximumDate<!@!>'+
+                    '?$`~Salutation<!@!>';
                 }
-            
+
                 insert field;
             }        
         fieldList=[SELECT Id,Name,Form__c,Form_Page__c,Field_Order__c,Field_Validations__c FROM Form_Fields__c WHERE Form__c =: Form_Id ORDER BY Field_Order__c ASC];
@@ -902,7 +902,7 @@ public with sharing class FormBuilderController {
                 }
                 update updateList;
 
-                formFields=[SELECT Id,Name,Form__c,Form_Page__c,Field_Order__c FROM Form_Fields__c ORDER BY Field_Order__c ASC];
+                formFields=[SELECT Id,Name,Form__c,Form_Page__c,Field_Order__c, Field_Validations__c FROM Form_Fields__c ORDER BY Field_Order__c ASC];
                 pageWrapper pw = new pageWrapper();
                 pw.fieldList = formFields;
                 pw.pageList = [SELECT Id, Name, Page_Number__c FROM Form_Page__c WHERE Form__c=:FormId ORDER BY Page_Number__c ASC];
@@ -926,31 +926,31 @@ public with sharing class FormBuilderController {
     public static String ObjName(String id){
         try {
             Form__c nform = [SELECT Id, Mapped_Objects__c FROM Form__c WHERE Id = :id];
-            // Set<String> objectset = new Set<String>{'Account', 'Address', 'AlternativePaymentMethod', 'Announcement', 'AppAnalyticsQueryRequest', 'AppointmentTopicTimeSlot', 'ApptBundleAggrDurDnscale', 'ApptBundleAggrPolicy', 'ApptBundleConfig', 'ApptBundlePolicy', 'ApptBundlePolicySvcTerr', 'ApptBundlePropagatePolicy', 'ApptBundleRestrictPolicy', 'ApptBundleSortPolicy', 'Asset', 'AssetDowntimePeriod', 'AssetRelationship', 'AssetWarranty', 'AssociatedLocation', 'AttributeDefinition', 'AuthorizationForm', 'AuthorizationFormConsent', 'AuthorizationFormDataUse', 'AuthorizationFormText', 'BusinessBrand', 'CalendarView', 'Campaign', 'CampaignMember', 'CardPaymentMethod', 'Case', 'CollaborationGroup', 'CollaborationGroupRecord', 'CommSubscription', 'CommSubscriptionChannelType', 'CommSubscriptionConsent', 'CommSubscriptionTiming', 'ConsumptionRate', 'ConsumptionSchedule', 'Contact', 'ContactPointAddress', 'ContactPointConsent', 'ContactPointEmail', 'ContactPointPhone', 'ContactPointTypeConsent', 'ContactRequest', 'ContentVersion', 'Contract', 'ContractGroupPlan', 'ContractGroupPlanGroupClass', 'ContractLineItem', 'Customer', 'DataUseLegalBasis', 'DataUsePurpose', 'DigitalWallet', 'DuplicateRecordItem', 'DuplicateRecordSet', 'EngagementChannelType', 'Entitlement', 'EntitlementContact', 'Error_Handler__c', 'Event', 'Expense', 'ExpenseReport', 'ExpenseReportEntry', 'ExpressionFilter', 'ExpressionFilterCriteria', 'FinanceTransaction', 'FlowRecordRelation', 'Form_Fields__c', 'Form_Page__c', 'Form_Submission__c', 'Form__c', 'GroupCensus', 'GroupCensusMember', 'GroupCensusMemberPlan', 'GroupClass', 'GroupClassContribution', 'Idea', 'Image', 'Individual', 'InsuranceContract', 'JobProfile', 'Lead', 'LegalEntity', 'ListEmail', 'ListEmailIndividualRecipient', 'ListEmailRecipientSource', 'Location', 'LocationGroup', 'LocationGroupAssignment', 'Macro', 'MacroInstruction', 'MaintenanceAsset', 'MaintenancePlan', 'MaintenanceWorkRule', 'Notification__c', 'Opportunity', 'Order', 'OrgMetric', 'OrgMetricScanResult','OrgMetricScanSummary','PartyConsent','Payment','PaymentAuthAdjustment','PaymentAuthorization','PaymentGateway','PaymentGatewayLog','PaymentGroup','PaymentLineInvoice','Pricebook2','ProcessException','Product2','ProductConsumed','ProductConsumptionSchedule','ProductItem','ProductRequest','ProductRequestLineItem','ProductRequired','ProductServiceCampaign','ProductServiceCampaignItem','ProductTransfer','ProductWarrantyTerm','ProfileSkill','ProfileSkillEndorsement','ProfileSkillUser','PromptAction','PromptError','QuickText','Recommendation','RecommendationResponse','RecordAction','Refund','RefundLinePayment','ResourceAbsence','ReturnOrder','ReturnOrderLineItem','SchedulingConstraint','Scorecard','ScorecardAssociation','ScorecardMetric','SearchPromotionRule','Seller','SerializedProduct','ServiceAppointment','ServiceContract','ServiceCrew','ServiceCrewMember','ServiceResource','ServiceResourcePreference','ServiceTerritory','ServiceTerritoryLocation','SetupAssistantStep','Shift','ShiftTemplate','Shipment','ShipmentItem','Solution','Task','Thankyou_Page__c','TimeSheet','TimeSheetEntry','TravelMode','UnitOfMeasure','UserEmailPreferredPerson','WarrantyTerm','WorkAccess','WorkBadge','WorkBadgeDefinition','WorkOrder','WorkOrderLineItem','WorkPlan','WorkPlanSelectionRule','WorkPlanTemplate','WorkPlanTemplateEntry','WorkStep','WorkStepTemplate','WorkThanks','WorkType','WorkTypeGroup','WorkTypeGroupMember'};
-            // List<String> obj1 = nform.Mapped_Objects__c.split(',');
+            Set<String> objectset = new Set<String>{'Account', 'Address', 'AlternativePaymentMethod', 'Announcement', 'AppAnalyticsQueryRequest', 'AppointmentTopicTimeSlot', 'ApptBundleAggrDurDnscale', 'ApptBundleAggrPolicy', 'ApptBundleConfig', 'ApptBundlePolicy', 'ApptBundlePolicySvcTerr', 'ApptBundlePropagatePolicy', 'ApptBundleRestrictPolicy', 'ApptBundleSortPolicy', 'Asset', 'AssetDowntimePeriod', 'AssetRelationship', 'AssetWarranty', 'AssociatedLocation', 'AttributeDefinition', 'AuthorizationForm', 'AuthorizationFormConsent', 'AuthorizationFormDataUse', 'AuthorizationFormText', 'BusinessBrand', 'CalendarView', 'Campaign', 'CampaignMember', 'CardPaymentMethod', 'Case', 'CollaborationGroup', 'CollaborationGroupRecord', 'CommSubscription', 'CommSubscriptionChannelType', 'CommSubscriptionConsent', 'CommSubscriptionTiming', 'ConsumptionRate', 'ConsumptionSchedule', 'Contact', 'ContactPointAddress', 'ContactPointConsent', 'ContactPointEmail', 'ContactPointPhone', 'ContactPointTypeConsent', 'ContactRequest', 'ContentVersion', 'Contract', 'ContractGroupPlan', 'ContractGroupPlanGroupClass', 'ContractLineItem', 'Customer', 'DataUseLegalBasis', 'DataUsePurpose', 'DigitalWallet', 'DuplicateRecordItem', 'DuplicateRecordSet', 'EngagementChannelType', 'Entitlement', 'EntitlementContact', 'Error_Handler__c', 'Event', 'Expense', 'ExpenseReport', 'ExpenseReportEntry', 'ExpressionFilter', 'ExpressionFilterCriteria', 'FinanceTransaction', 'FlowRecordRelation','GroupCensus', 'GroupCensusMember', 'GroupCensusMemberPlan', 'GroupClass', 'GroupClassContribution', 'Idea', 'Image', 'Individual', 'InsuranceContract', 'JobProfile', 'Lead', 'LegalEntity', 'ListEmail', 'ListEmailIndividualRecipient', 'ListEmailRecipientSource', 'Location', 'LocationGroup', 'LocationGroupAssignment', 'Macro', 'MacroInstruction', 'MaintenanceAsset', 'MaintenancePlan', 'MaintenanceWorkRule', 'Opportunity', 'Order', 'OrgMetric', 'OrgMetricScanResult','OrgMetricScanSummary','PartyConsent','Payment','PaymentAuthAdjustment','PaymentAuthorization','PaymentGateway','PaymentGatewayLog','PaymentGroup','PaymentLineInvoice','Pricebook2','ProcessException','Product2','ProductConsumed','ProductConsumptionSchedule','ProductItem','ProductRequest','ProductRequestLineItem','ProductRequired','ProductServiceCampaign','ProductServiceCampaignItem','ProductTransfer','ProductWarrantyTerm','ProfileSkill','ProfileSkillEndorsement','ProfileSkillUser','PromptAction','PromptError','QuickText','Recommendation','RecommendationResponse','RecordAction','Refund','RefundLinePayment','ResourceAbsence','ReturnOrder','ReturnOrderLineItem','SchedulingConstraint','Scorecard','ScorecardAssociation','ScorecardMetric','SearchPromotionRule','Seller','SerializedProduct','ServiceAppointment','ServiceContract','ServiceCrew','ServiceCrewMember','ServiceResource','ServiceResourcePreference','ServiceTerritory','ServiceTerritoryLocation','SetupAssistantStep','Shift','ShiftTemplate','Shipment','ShipmentItem','Solution','Task','TimeSheet','TimeSheetEntry','TravelMode','UnitOfMeasure','UserEmailPreferredPerson','WarrantyTerm','WorkAccess','WorkBadge','WorkBadgeDefinition','WorkOrder','WorkOrderLineItem','WorkPlan','WorkPlanSelectionRule','WorkPlanTemplate','WorkPlanTemplateEntry','WorkStep','WorkStepTemplate','WorkThanks','WorkType','WorkTypeGroup','WorkTypeGroupMember'};
+            List<String> obj1 = nform.Mapped_Objects__c.split(',');
             String result = nform.Mapped_Objects__c;
             Integer n =0;
-            // for (String a : obj1) {
-            //     String str = '';
-            //     if (objectset.contains(a)) {
-            //         str = 'standard:'+a.toLowerCase();
-            //     } 
-            //     else {
-            //         if (n==0) {
-            //             str = 'standard:custom3';
-            //             n++;
-            //         }
-            //         else if(n==1){
-            //             str = 'standard:custom10';
-            //             n++;
-            //         }
-            //         else{
-            //             str = 'standard:custom11';
-            //             n++;
-            //         }
-            //     }
-            //     result = result+','+str;
-            // }
+            for (String a : obj1) {
+                String str = '';
+                if (objectset.contains(a)) {
+                    str = 'standard:'+a.toLowerCase();
+                } 
+                else {
+                    if (n==0) {
+                        str = 'custom:custom3';
+                        n++;
+                    }
+                    else if(n==1){
+                        str = 'custom:custom10';
+                        n++;
+                    }
+                    else{
+                        str = 'custom:custom11';
+                        n++;
+                    }
+                }
+                result = result+','+str;
+            }
             return result;
         } catch (Exception e) {
             throw new AuraHandledException(e.getMessage());
@@ -971,6 +971,8 @@ public with sharing class FormBuilderController {
             List<Form_Page__c> AllFormPages = [SELECT ID From Form_Page__c where Form__c =: FormDetail.Id ORDER BY Page_Number__c] ;
             boolean hasRequiredField = false;
             List<Form_Fields__c> fieldContainsRequireCheck = [SELECT Name From Form_Fields__c where Form_Page__c=:AllFormPages.get(0).Id];
+            List<Form_Fields__c> allFieldsOfForm = [SELECT Name, Form__c, Form_Page__c FROM Form_Fields__c WHERE Form__c =: FormDetail.Id];
+
             for(Form_Fields__c it: fieldContainsRequireCheck){
                 List<String> temp=  it.Name.split(',');
                 if (temp.size()==3) {
@@ -979,61 +981,59 @@ public with sharing class FormBuilderController {
                     }
                 }
             }
+
             if(hasRequiredField == false){
-                Integer iteration=0;
-                List<Form_Fields__c> Fields = new List<Form_Fields__c>();
-                for (String type : types) {
-                    Position = 0;
-                    Form_Page__c page_Id = AllFormPages.get(iteration);
-                    Map<String, Schema.SObjectType> schemaMap = Schema.getGlobalDescribe();
-                    Schema.SObjectType leadSchema = schemaMap.get(type);
-                    Map<String, Schema.SObjectField> fieldMap = leadSchema.getDescribe().fields.getMap();
-                    for (String fieldName: fieldMap.keySet()) {
-                        if (fieldMap.get(fieldName).getDescribe().isUpdateable()){
-                            
-                            
-                            if( fieldMap.get(fieldName).getDescribe().isNillable()==false){
-                                Position=Position+1;
-                                System.debug('##Field API Name='+fieldName);
-                                Form_Fields__c field = new Form_Fields__c();
-                                //requiredFieldList.add(fieldMap.get(fieldName).getDescribe().getLabel()+'./.'+ fieldMap.get(fieldName).getDescribe().getType());
-                                field.Mapped_Obj__c = type;
-                                field.Field_Mapping__c = fieldName;
-                                field.Name= fieldMap.get(fieldName).getDescribe().getLabel()+','+fieldMap.get(fieldName).getDescribe().getType()+',isrequired';
-                                field.Form__c =  FormDetail.Id;
-                                field.Form_Page__c = page_Id.Id;
-                                field.Field_Order__c = Position+1;
-                                field.Field_Validations__c =  'isRequired>>true'+
-                                '?$`~isDisabled>>false' +
-                                '?$`~isLabel>>true'+
-                                '?$`~isHelpText>>false'+
-                                '?$`~Label>>'+fieldName.split(',')[0]+
-                                '?$`~HelpText>>' +
-                                '?$`~isPlaceholder>>false'+
-                                '?$`~Placeholder>>'+
-                                '?$`~Minimum>>0' + 
-                                '?$`~Maximum>>128' + 
-                                '?$`~isPrefix>>false' + 
-                                '?$`~Prefix>>'+ 
-                                '?$`~Decimal>>' + 
-                                '?$`~Richtext>>' + 
-                                '?$`~MinimumTime>>' +
-                                '?$`~MaximumTime>>' +
-                                '?$`~MinimumDateTime>>' +
-                                '?$`~MaximumDateTime>>'+
-                                '?$`~MinimumDate>>' +
-                                '?$`~MaximumDate>>'+
-                                '?$`~Salutation>>';
-                                
-                                Fields.add(field);
+                if (allFieldsOfForm.size() == 0) {
+                    Integer iteration=0;
+                    List<Form_Fields__c> Fields = new List<Form_Fields__c>();
+                    for (String type : types) {
+                        Position = 0;
+                        Form_Page__c page_Id = AllFormPages.get(iteration);
+                        Map<String, Schema.SObjectType> schemaMap = Schema.getGlobalDescribe();
+                        Schema.SObjectType leadSchema = schemaMap.get(type);
+                        Map<String, Schema.SObjectField> fieldMap = leadSchema.getDescribe().fields.getMap();
+                        for (String fieldName: fieldMap.keySet()) {
+                            if (fieldMap.get(fieldName).getDescribe().isUpdateable()){
+                                if( fieldMap.get(fieldName).getDescribe().isNillable()==false){
+                                    Position=Position+1;
+                                    System.debug('##Field API Name='+fieldName);
+                                    Form_Fields__c field = new Form_Fields__c();
+                                    //requiredFieldList.add(fieldMap.get(fieldName).getDescribe().getLabel()+'./.'+ fieldMap.get(fieldName).getDescribe().getType());
+                                    field.Mapped_Obj__c = type;
+                                    field.Field_Mapping__c = fieldName;
+                                    field.Name= fieldMap.get(fieldName).getDescribe().getLabel()+','+fieldMap.get(fieldName).getDescribe().getType()+',isrequired';
+                                    field.Form__c =  FormDetail.Id;
+                                    field.Form_Page__c = page_Id.Id;
+                                    field.Field_Order__c = Position+1;
+                                     field.Field_Validations__c =  'isRequired<!@!>true'+
+                                        '?$`~isDisabled<!@!>false' +
+                                        '?$`~isLabel<!@!>true'+
+                                        '?$`~isHelpText<!@!>false'+
+                                        '?$`~Label<!@!>'+fieldName.split(',')[0]+
+                                        '?$`~HelpText<!@!>' +
+                                        '?$`~isPlaceholder<!@!>false'+
+                                        '?$`~Placeholder<!@!>'+
+                                        '?$`~Minimum<!@!>0' + 
+                                        '?$`~Maximum<!@!>128' + 
+                                        '?$`~isPrefix<!@!>false' + 
+                                        '?$`~Prefix<!@!>'+ 
+                                        '?$`~Decimal<!@!>' + 
+                                        '?$`~Richtext<!@!>' + 
+                                        '?$`~MinimumTime<!@!>' +
+                                        '?$`~MaximumTime<!@!>' +
+                                        '?$`~MinimumDateTime<!@!>' +
+                                        '?$`~MaximumDateTime<!@!>'+
+                                        '?$`~MinimumDate<!@!>' +
+                                        '?$`~MaximumDate<!@!>'+
+                                        '?$`~Salutation<!@!>';
+                                    Fields.add(field);
+                                }
                             }
-                            
                         }
+                        iteration=iteration+1;
                     }
-                    iteration=iteration+1;
+                    insert Fields;
                 }
-            
-                insert Fields;
             }
             // List<Form_Fields__c> fieldList=[SELECT Id,Name,Form__c,Form_Page__c,Field_Order__c, Field_Validations__c FROM Form_Fields__c];
             // return fieldList;
@@ -1124,7 +1124,7 @@ public with sharing class FormBuilderController {
                     newFormPage.Page_Number__c = totalPages + 1;
                 }
             insert newFormPage;
-            List<Form_Fields__c> formFields=[SELECT Id,Name,Form__c,Form_Page__c,Field_Order__c FROM Form_Fields__c ORDER BY Field_Order__c ASC];
+            List<Form_Fields__c> formFields=[SELECT Id,Name,Form__c,Form_Page__c,Field_Order__c, Field_Validations__c FROM Form_Fields__c ORDER BY Field_Order__c ASC];
             pageWrapper pw = new pageWrapper();
             pw.fieldList = formFields;
             pw.pageList = [SELECT Id, Name, Page_Number__c FROM Form_Page__c WHERE Form__c=:FormId ORDER BY Page_Number__c ASC];
@@ -1176,7 +1176,7 @@ public with sharing class FormBuilderController {
             pagesToUpdate.add(updatedPage);
             pagesToUpdate.addAll(pagesAfter);
             update pagesToUpdate;
-            List<Form_Fields__c> formFields = [SELECT Id, Name, Form__c, Form_Page__c, Field_Order__c FROM Form_Fields__c ORDER BY Field_Order__c ASC];
+            List<Form_Fields__c> formFields = [SELECT Id, Name, Form__c, Form_Page__c, Field_Validations__c, Field_Order__c FROM Form_Fields__c ORDER BY Field_Order__c ASC];
             pageWrapper pw = new pageWrapper();
             pw.fieldList = formFields;
             pw.pageList = [SELECT Id, Name, Page_Number__c FROM Form_Page__c WHERE Form__c = :formId ORDER BY Page_Number__c ASC];
@@ -1198,7 +1198,7 @@ public with sharing class FormBuilderController {
             Form_Page__c form = [SELECT Name FROM Form_Page__c WHERE Id =: id];
             form.Name = rename;
             update form;     
-            List<Form_Fields__c> formFields=[SELECT Id,Name,Form__c,Form_Page__c,Field_Order__c FROM Form_Fields__c ORDER BY Field_Order__c ASC];
+            List<Form_Fields__c> formFields=[SELECT Id,Name,Form__c,Form_Page__c,Field_Order__c, Field_Validations__c FROM Form_Fields__c ORDER BY Field_Order__c ASC];
             pageWrapper pw = new pageWrapper();
             pw.fieldList = formFields;
             pw.pageList = [SELECT Id, Name, Page_Number__c FROM Form_Page__c WHERE Form__c=:FormId ORDER BY Page_Number__c ASC];
@@ -1243,7 +1243,7 @@ public with sharing class FormBuilderController {
                 }
                 update pagesToUpdate;
             }
-            List<Form_Fields__c> formFields=[SELECT Id,Name,Form__c,Form_Page__c,Field_Order__c FROM Form_Fields__c ORDER BY Field_Order__c ASC];
+            List<Form_Fields__c> formFields=[SELECT Id,Name,Form__c,Form_Page__c,Field_Order__c, Field_Validations__c FROM Form_Fields__c ORDER BY Field_Order__c ASC];
             pageWrapper pw = new pageWrapper();
             pw.fieldList = formFields;
             pw.pageList = [SELECT Id, Name, Page_Number__c FROM Form_Page__c WHERE Form__c=:FormId ORDER BY Page_Number__c ASC];
