@@ -281,11 +281,10 @@ div.child2{
     display: flex;
     flex-direction: row;
     justify-content: var(--btnJustify, center);
+    font-size: 15px;
+    gap: 20px;;
 }
 
- .footer {
-    font-size: 15px;
-}
 
  .footer .slds-button {
     text-align: center;
@@ -492,7 +491,7 @@ border-radius: 28px;
 
 }
 .captchafield{
-    height: 5vh;
+    /* height: 5vh; */
 }
 .backbutton{
     width: 160px;

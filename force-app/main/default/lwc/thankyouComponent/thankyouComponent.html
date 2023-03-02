@@ -4,16 +4,16 @@
         <c-toast-component></c-toast-component>
         </template>
         <!-- ============== error toast=========== -->
-    <template if:true={spinner}>
-        <div data-id = "spinnerId" class="slds-spinner_container spinner">
-            <div class="spinner-main-div">
-                <div class="loader--ripple">
-                    <div></div>
-                    <div></div>
+     <template if:true={spinner}>
+            <div data-id="spinnerId" class="slds-spinner_container spinnerclass">
+                <div class="spinner-main-div">
+                    <div class="loader--ripple">
+                        <div></div>
+                        <div></div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </template>
+        </template> 
     <div class="thanksMainDiv">
         <!-- <template if:true={editlabelcheck}>
         <section data-id="Modal" role="dialog" tabindex="-1" aria-labelledby="ModalHeading" aria-modal="true" aria-describedby="ModalBody" class="slds-modal editlabel" onclick={hideFolderList}>

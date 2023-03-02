@@ -100,6 +100,9 @@ export default class FieldValidation extends LightningElement {
         this.fieldId = fieldId;
         this.fieldName = fieldName.slice(0, fieldName.indexOf(','));
         this.spinnerDataTable = true;
+        this.salutationvalue = [];
+        this.salutation = [];
+        this.salutationindex = 0;
 
         getfieldvalidation({fieldId:this.fieldId}).then(result =>{ 
             let str = result.split('?$`~');
@@ -188,22 +191,26 @@ export default class FieldValidation extends LightningElement {
             this.dispatchEvent(selectEvent);
         }
         else if(event.currentTarget.dataset.title == 'Delete'){
-            deletefield({fieldId:this.fieldId})
-            .then(result => {
-                event.preventDefault();
-                const deleteEvent = new CustomEvent('updatefields', {
-                    detail: this.fieldName
-                });
-                this.dispatchEvent(deleteEvent);
+            if(this.standardrequired != 'isrequired'){
+                deletefield({fieldId:this.fieldId})
+                .then(result => {
+                    event.preventDefault();
+                    const deleteEvent = new CustomEvent('updatefields', {
+                        detail: this.fieldName
+                    });
+                    this.dispatchEvent(deleteEvent);
 
-                const selectEvent = new CustomEvent('closevalidation', {
-                    detail: this.tab
+                    const selectEvent = new CustomEvent('closevalidation', {
+                        detail: this.tab
+                    });
+                    this.dispatchEvent(selectEvent);
+                })
+                .catch(error => {
+                    console.log(error);
                 });
-                this.dispatchEvent(selectEvent);
-            })
-            .catch(error => {
-                console.log(error);
-            });
+            } else {
+                this.template.querySelector('c-toast-component').showToast('error','You cannot delete Standard required fields',3000);             
+            }
         }
         else if(event.currentTarget.dataset.title == 'Save'){
             this.fieldValidation ;
@@ -263,6 +270,7 @@ export default class FieldValidation extends LightningElement {
                     detail: this.tab
                 });
                 this.dispatchEvent(selectEvent);
+
             })
             .catch(error => {
                 console.log(error);

@@ -436,8 +436,11 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
                     this.template.querySelector('.fieldvalidationdiv').style = "display:none;";
                     this.fieldvalidationdiv = false;
                 }
+                if(this.activesidebar == false){
+                    this.spinnerDataTable = true;
+                }
                 // this.activeDropZone = true
-                // this.spinnerDataTable = true;
+            
                 this.activesidebar = true;
                 this.activeDesignsidebar = false;
                 this.activeNotification = false;
@@ -1200,10 +1203,11 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
             var pagelength = result.pageList.length == this.PageList.length;
             this.PageList = result.pageList;
             this.setPageField(result.fieldList);
-            if (pagelength) {
-                this.showToast('sorry page can not deleted', 'fail')
+              if (pagelength) {
+                this.template.querySelector('c-toast-component').showToast('error', 'You cannot delete the page', 3000);
+
             } else {
-                this.showToast('page Delete successfully');
+                this.template.querySelector('c-toast-component').showToast('success', 'Page deleted successfully', 3000);
             }
         })
     }

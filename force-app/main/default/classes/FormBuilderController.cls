@@ -855,6 +855,12 @@ public with sharing class FormBuilderController {
                 }
 
                 insert field;
+                
+                if( Name.split(',')[1] == 'Extra'){
+                field.Mapped_Obj__c = 'Extra';
+                field.Field_Mapping__c = field.Id+'<!@!>'+'Extra';
+                }
+                update field;
             }        
         fieldList=[SELECT Id,Name,Form__c,Form_Page__c,Field_Order__c,Field_Validations__c FROM Form_Fields__c WHERE Form__c =: Form_Id ORDER BY Field_Order__c ASC];
         return fieldList;
