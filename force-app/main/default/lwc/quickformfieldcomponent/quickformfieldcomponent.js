@@ -53,8 +53,11 @@ export default class Quickformfieldcomponent extends LightningElement {
     @api placeholder;
     @api fieldtype;
     @api termsAndConditionValue;
-
+    @api fieldName;
+    @track fieldcount = true;
+    d = false;
     connectedCallback() {
+        this.fieldstype = this.tView.split(',')[1];
         getScaleRating()
             .then(result => {
                 this.scaleRating = result;
@@ -265,7 +268,9 @@ export default class Quickformfieldcomponent extends LightningElement {
     }
     get isTrueEmail() {
         this.tView = this.tView.split(',')[0];
-        return this.tView == 'QFEMAILID' || this.FieldLabel == 'QFEMAILID';
+      
+            return this.tView == 'QFEMAILID' || this.FieldLabel == 'QFEMAILID';
+        
     }
 
     get isTrueFullName() {
@@ -273,16 +278,24 @@ export default class Quickformfieldcomponent extends LightningElement {
         return this.tView == 'QFFULLNAME' || this.FieldLabel == 'QFFULLNAME';
     }
     get isTrueName() {
+       
         return this.tView == 'QFNAME' || this.FieldLabel == 'QFNAME';
+        
     }
     get isTrueAddress() {
-        return this.tView == 'QFADDRESS' || this.FieldLabel == 'QFADDRESS';
+       
+            return this.tView == 'QFADDRESS' || this.FieldLabel == 'QFADDRESS';
+        
     }
     get isTruePhone() {
-        return this.tView == 'QFPHONE';
+       
+            return this.tView == 'QFPHONE';
+        
     }
     get isTrueCheckBox() {
-        return this.tView == 'QFCHECKBOX';
+       
+            return this.tView == 'QFCHECKBOX';
+        
     }
     get isTruePageBreak() {
         return this.tView == 'QFPAGEBREAK';
@@ -291,7 +304,9 @@ export default class Quickformfieldcomponent extends LightningElement {
         return this.tView == 'QFSHORTTEXT';
     }
     get isTrueLongText() {
-        return this.tView == 'QFLONGTEXT';
+       
+            return this.tView == 'QFLONGTEXT';
+        
     }
     get isTrueFileUpload() {
         return this.tView == 'QFFILEUPLOAD';
@@ -303,7 +318,9 @@ export default class Quickformfieldcomponent extends LightningElement {
         return this.tView == 'QFDROPDOWN';
     }
     get isTrueNumber() {
-        return this.tView == 'QFNUMBER';
+        
+            return this.tView == 'Number';
+        
     }
     get isTruePrice() {
         return this.tView == 'QFPRICE';
@@ -311,14 +328,20 @@ export default class Quickformfieldcomponent extends LightningElement {
 
 
     get isTrueDate() {
-        return this.tView == 'QFDATE';
+      
+            return this.tView == 'QFDATE';
+        
     }
 
     get isTrueTime() {
-        return this.tView == 'QFTIME';
+        
+            return this.tView == 'QFTIME';
+        
     }
     get isTrueDateTime() {
-        return this.tView == 'QFDATETIME';
+
+            return this.tView == 'QFDATETIME';
+        
     }
     get isTrueRating() {
         return this.tView == 'QFRATING';
@@ -333,39 +356,151 @@ export default class Quickformfieldcomponent extends LightningElement {
         return this.tView == 'QFTERMSOFSERVICE';
     }
     get isTrueLink() {
-        return this.tView == 'QFLINK';
+            return this.tView == 'QFLINK';
+        
     }
     get isTrueSign() {
         return this.tView == 'QFSIGNATURE';
+    }
+    get isTruePassword(){
+       
+            return this.tView == 'Password';
+    
     }
     get isTrueRichText() {
         console.log('inside the true rich text');
         return this.tView == 'QFRICHTEXT';
     }
-
+    get isTruePercent(){
+        
+            return this.tView == 'Percent';
+        
+    }
+    get isTrueCurrency(){
+       
+            return this.tView == 'Currency';
+        
+    }
     get isTruePageBreak() {
         return this.tView == 'QFPAGEBREAK';
     }
-    get fieldstypes(){
-        console.log(this.fieldstype + 'fieldstype');
-        if(this.fieldstype == 'URL'){return 'url'}
-        else if(this.fieldstype == 'ENCRYPTEDSTRING' ){return this.fieldstype ='password'}
-        else if(this.fieldstype == 'TEXTAREA'){return this.fieldstype = 'textarea'}
-        else if(this.fieldstype == 'STRING'){return this.fieldstype = 'text'}
-        else if(this.fieldstype == 'EMAIL'){return this.fieldstype = 'email'}
-        else if(this.fieldstype == 'DATETIME'){return this.fieldstype = 'datetime'}
-        else if(this.fieldstype == 'CURRENCY'){return this.fieldstype = 'currency'}
-        else if(this.fieldstype == 'TIME'){return this.fieldstype = 'time'}
-        else if(this.fieldstype == 'PICKLIST'){return this.fieldstype = 'picklist'}
-        else if(this.fieldstype == 'PHONE'){return this.fieldstype = 'phone'}
-        else if(this.fieldstype == 'PERCENT'){return this.fieldstype = 'percent'}
-        else if(this.fieldstype == 'DOUBLE'){return this.fieldstype = 'number'}
-        else if(this.fieldstype == 'MULTIPICKLIST'){return this.fieldstype = 'multipicklist'}
-        else if(this.fieldstype == 'DATE'){return this.fieldstype = 'date'}
-        else if(this.fieldstype == 'BOOLEAN'){return this.fieldstype = 'checkbox'}
-        else if(this.fieldstype == 'Lookup'){return this.fieldstype = 'Text'}
-        
+
+
+
+
+    get sTrueEmail() {
+        if( this.fieldstype == 'EMAIL'  ){
+            console.log('fiedsd');
+            this.fieldcount = false;
+            return true;
+        }
     }
+
+    get sTrueName() {
+        if( this.fieldstype == 'STRING'  ){
+            this.fieldcount = false;
+            return true;
+        }
+    }
+    get sTrueAddress() {
+        if( this.fieldstype == 'QFADDRESS'  ){
+            this.fieldcount = false;
+            return true;
+        }
+    }
+    get sTruePhone() {
+        if( this.fieldstype == 'PHONE'  ){
+            this.fieldcount = false;
+            return true;
+        }
+    }
+    get sTrueCheckBox() {
+        if( this.fieldstype == 'BOOLEAN'  ){
+            this.fieldcount = false;
+            return true;
+        }
+    }
+    get sTrueLongText() {
+        if( this.fieldstype == 'TEXTAREA'  ){
+            this.fieldcount = false;
+            return true;
+        }
+    }
+
+    get sTrueNumber() {
+        if( this.fieldstype == 'DOUBLE'  ){
+            this.fieldcount = false;
+            return true;
+        }
+    }
+
+    get sTrueDate() {
+        if( this.fieldstype == 'DATE'  ){
+            this.fieldcount = false;
+            return true;
+        }
+    }
+
+    get sTrueTime() {
+        if( this.fieldstype == 'TIME'  ){
+            this.fieldcount = false;
+            return true;
+        }
+    }
+    get sTrueDateTime() {
+        if( this.fieldstype == 'DATETIME'  ){
+            this.fieldcount = false;
+            return true;
+        }
+    }
+
+    get sTrueLink() {
+        if( this.fieldstype == 'URL'  ){
+            this.fieldcount = false;
+            return true;
+        }
+    }
+
+    get sTruePassword(){
+        if( this.fieldstype == 'ENCRYPTEDSTRING'  ){
+            this.fieldcount = false;
+            return true;
+        }
+    }
+
+    get sTruePercent(){
+        if( this.fieldstype == 'PERCENT'  ){
+            this.fieldcount = false;
+            return true;
+        }
+    }
+    get sTrueCurrency(){
+        if( this.fieldstype == 'CURRENCY'  ){
+            this.fieldcount = false;
+            return true;
+        }
+    }
+
+    // get fieldstypes(){
+    //     console.log(this.fieldstype + 'fieldstype');
+    //     if(this.fieldstype == 'URL'){return 'url'}//
+    //     else if(this.fieldstype == 'ENCRYPTEDSTRING' ){return this.fieldstype ='password'}//
+    //     else if(this.fieldstype == 'TEXTAREA'){return this.fieldstype = 'textarea'}//
+    //     else if(this.fieldstype == 'STRING'){return this.fieldstype = 'text'}//
+    //     else if(this.fieldstype == 'EMAIL'){return this.fieldstype = 'email'}//
+    //     else if(this.fieldstype == 'DATETIME'){return this.fieldstype = 'datetime'}//
+    //     else if(this.fieldstype == 'CURRENCY'){return this.fieldstype = 'currency'}//
+    //     else if(this.fieldstype == 'TIME'){return this.fieldstype = 'time'}//
+    //     else if(this.fieldstype == 'PICKLIST'){return this.fieldstype = 'picklist'}
+    //     else if(this.fieldstype == 'PHONE'){return this.fieldstype = 'phone'}//
+    //     else if(this.fieldstype == 'PERCENT'){return this.fieldstype = 'percent'}//
+    //     else if(this.fieldstype == 'DOUBLE'){return this.fieldstype = 'number'}//
+    //     else if(this.fieldstype == 'MULTIPICKLIST'){return this.fieldstype = 'multipicklist'}
+    //     else if(this.fieldstype == 'DATE'){return this.fieldstype = 'date'}//
+    //     else if(this.fieldstype == 'BOOLEAN'){return 'checkbox'}//
+    //     else if(this.fieldstype == 'Lookup'){return this.fieldstype = 'Text'}
+        
+    // }
 
     OnFieldClick(event) {
 

@@ -449,19 +449,12 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
             };
             let encodedDef = btoa(JSON.stringify(cmpDef));
             console.log('OUTPUT : ', encodedDef);
-            this[NavigationMixin.Navigate]({
-                type: "standard__app",
+              this[NavigationMixin.Navigate]({
+                type: "standard__webPage",
                 attributes: {
-                    appTarget: 'c__Quick_Form',
+                  url: "/one/one.app#" + encodedDef
                 }
-            });
-            //   this[NavigationMixin.Navigate]({
-            //     type: "standard__webPage",
-            //     attributes: {
-            //       url: "/one/one.app#" + encodedDef
-            //     }
-            //   });
-
+              });
         }
         else if (event.currentTarget.dataset.title == 'tab-2' || event.currentTarget.dataset.title == 'tab-3') {
             console.log('in tab-2 or tab-3 code-->');

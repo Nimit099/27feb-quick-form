@@ -8,6 +8,8 @@ import pulsicon from '@salesforce/resourceUrl/Puls_icon';
 //import add from '@salesforce/resourceUrl/Puls_icon';
 
 export default class NotificationComponent extends LightningElement {
+    formats = ['font', 'size', 'bold', 'italic', 'underline', 'strike', 'list', 'indent', 'align', 'link', 'clean', 'table', 
+    'header', 'color', 'background'];
     pulsicon_img = pulsicon;   
     @api myVal = "";
     @api errorMessage = "You haven't composed anything yet." ;

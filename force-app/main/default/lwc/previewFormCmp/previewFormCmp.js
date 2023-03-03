@@ -48,7 +48,6 @@ export default class PreviewFormCmp extends NavigationMixin(LightningElement) {
             for (let i = 0; i < buttoncss.length; i++) {
                 buttoncss[i] = buttoncss[i].split(':');
                 let label = buttoncss[i][0];
-
                 if (label == 'justify-content') {
                     value = 'justify-content:' + buttoncss[i][1];
                 }
@@ -78,7 +77,7 @@ export default class PreviewFormCmp extends NavigationMixin(LightningElement) {
         try {
             console.log(this.formid);
             console.log(this.formid);
-            this.spinnerDataTable = false;
+            this.spinnerDataTable = true;
             formdetails({ id: this.formid })
                 .then(result => {
                     console.log(result);

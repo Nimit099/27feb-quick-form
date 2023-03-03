@@ -34,7 +34,7 @@ public with sharing class QuickFormHome {
 
     public static List<Form__c> getFormRecords() {
         try {
-            List<Form__c> forms = [SELECT Id,Name,Total_Submissions__c, Status__c FROM Form__c];
+            List<Form__c> forms = [SELECT Id,Name,Total_Submissions__c, Status__c FROM Form__c order by createdDate  DESC NULLS LAST];
             return forms;
         } catch (Exception e) {
             throw new AuraHandledException(e.getMessage());
@@ -67,7 +67,7 @@ public with sharing class QuickFormHome {
 
     public static List<Form__c> searchForms(String searchkey) {
         try {
-          return [SELECT Id, Name, Status__c, Total_Submissions__c FROM Form__c WHERE Name LIKE:'%'+searchkey+'%'];
+          return [SELECT Id, Name, Status__c, Total_Submissions__c FROM Form__c WHERE Name LIKE:'%'+searchkey+'%' order by createdDate  DESC NULLS LAST];
         } catch (Exception e) {
           throw new AuraHandledException(e.getMessage());
         }
@@ -88,7 +88,7 @@ public with sharing class QuickFormHome {
     public static List<Form__c> getFormsByStatus(Id id, String searchkey){
         try {
 
-            Form__c form = [SELECT Id, Name, Status__c, Total_Submissions__c FROM Form__c WHERE Id =: id];
+            Form__c form = [SELECT Id, Name, Status__c, Total_Submissions__c FROM Form__c WHERE Id =: id order by createdDate  DESC NULLS LAST];
 
             if (form.Status__c == true) {
                 form.Status__c = false;
@@ -107,9 +107,11 @@ public with sharing class QuickFormHome {
             // return forms;
             // }
             String searchkeyword = '%'+searchkey+'%'; 
-            String query = 'SELECT Id, Name, Status__c, Total_Submissions__c FROM Form__c';
+            String query = 'SELECT Id, Name, Status__c, Total_Submissions__c FROM Form__c ';
             if (searchkey != null && searchkey != '' && searchkey != 'undefined') {
-                query += ' WHERE Name LIKE :searchkeyword';
+                query += ' WHERE Name LIKE :searchkeyword order by createdDate  DESC NULLS LAST';
+            }else { 
+                query += ' order by createdDate  DESC NULLS LAST '; 
             }
             List<Form__c> forms = Database.query(query);
             return forms;
@@ -132,7 +134,7 @@ public with sharing class QuickFormHome {
     @AuraEnabled
     public static List<Form__c> deleteFormRecord(Id id, String searchkey){
         try {
-            Form__c form = [SELECT Id, Name, Status__c, Total_Submissions__c FROM Form__c WHERE Id =: id];
+            Form__c form = [SELECT Id, Name, Status__c, Total_Submissions__c FROM Form__c WHERE Id =: id order by createdDate  DESC NULLS LAST];
             delete form;
             
             // if(searchkey == null || searchkey == '' || searchkey == 'undefined'){
@@ -146,7 +148,9 @@ public with sharing class QuickFormHome {
             String searchkeyword = '%'+searchkey+'%'; 
             String query = 'SELECT Id, Name, Status__c, Total_Submissions__c FROM Form__c';
             if (searchkey != null && searchkey != '' && searchkey != 'undefined') {
-                query += ' WHERE Name LIKE :searchkeyword';
+                query += ' WHERE Name LIKE :searchkeyword order by createdDate  DESC NULLS LAST';
+            }else {
+                 query += ' order by createdDate  DESC NULLS LAST ';
             }
             List<Form__c> forms = Database.query(query);
             return forms;
@@ -169,13 +173,15 @@ public with sharing class QuickFormHome {
     @AuraEnabled
     public static List<Form__c> renameFormRecord(Id id, String rename, String searchkey){
         try {
-            Form__c form = [SELECT Name FROM Form__c WHERE Id =: id];
+            Form__c form = [SELECT Name FROM Form__c WHERE Id =: id order by createdDate  DESC NULLS LAST];
             form.Name = rename;
             update form;        
             String searchkeyword = '%'+searchkey+'%'; 
             String query = 'SELECT Id, Name, Status__c, Total_Submissions__c FROM Form__c';
             if (searchkey != null && searchkey != '' && searchkey != 'undefined') {
-                query += ' WHERE Name LIKE :searchkeyword';
+                query += ' WHERE Name LIKE :searchkeyword order by createdDate  DESC NULLS LAST';
+            }else { 
+                query += ' order by createdDate  DESC NULLS LAST '; 
             }
             List<Form__c> forms = Database.query(query);
             return forms;
