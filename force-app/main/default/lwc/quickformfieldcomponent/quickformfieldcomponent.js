@@ -36,7 +36,7 @@ export default class Quickformfieldcomponent extends LightningElement {
     @track fieldHelpText = 'please fill the help text';
     @track fieldValidations = '';
     FieldLabel;
-    FieldType;
+    @api fieldstype;
     count;
     @track Address = 'Address';
     @track onfocus = false;
@@ -346,6 +346,26 @@ export default class Quickformfieldcomponent extends LightningElement {
     get isTruePageBreak() {
         return this.tView == 'QFPAGEBREAK';
     }
+    get fieldstypes(){
+        console.log(this.fieldstype + 'fieldstype');
+        if(this.fieldstype == 'URL'){return 'url'}
+        else if(this.fieldstype == 'ENCRYPTEDSTRING' ){return this.fieldstype ='password'}
+        else if(this.fieldstype == 'TEXTAREA'){return this.fieldstype = 'textarea'}
+        else if(this.fieldstype == 'STRING'){return this.fieldstype = 'text'}
+        else if(this.fieldstype == 'EMAIL'){return this.fieldstype = 'email'}
+        else if(this.fieldstype == 'DATETIME'){return this.fieldstype = 'datetime'}
+        else if(this.fieldstype == 'CURRENCY'){return this.fieldstype = 'currency'}
+        else if(this.fieldstype == 'TIME'){return this.fieldstype = 'time'}
+        else if(this.fieldstype == 'PICKLIST'){return this.fieldstype = 'picklist'}
+        else if(this.fieldstype == 'PHONE'){return this.fieldstype = 'phone'}
+        else if(this.fieldstype == 'PERCENT'){return this.fieldstype = 'percent'}
+        else if(this.fieldstype == 'DOUBLE'){return this.fieldstype = 'number'}
+        else if(this.fieldstype == 'MULTIPICKLIST'){return this.fieldstype = 'multipicklist'}
+        else if(this.fieldstype == 'DATE'){return this.fieldstype = 'date'}
+        else if(this.fieldstype == 'BOOLEAN'){return this.fieldstype = 'checkbox'}
+        else if(this.fieldstype == 'Lookup'){return this.fieldstype = 'Text'}
+        
+    }
 
     OnFieldClick(event) {
 
@@ -436,7 +456,7 @@ export default class Quickformfieldcomponent extends LightningElement {
                 }
             }
         }
-
+        
         function draw() {
             ctx.beginPath();
             ctx.moveTo(prevX, prevY);

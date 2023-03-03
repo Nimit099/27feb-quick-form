@@ -497,6 +497,7 @@ export default class Qf extends NavigationMixin(LightningElement) {
         let cmpDef = {
           componentDef: "c:previewFormCmp",
           attributes:{
+              activepreviews:true,
               formid:this.formId!=""?this.formId:"No Record Created",
           }
         };

@@ -270,9 +270,10 @@
                         </div>
                     </template>
                     <div class="slds-form-element__control">
-                        <input onmousemove={handlehover} onmouseout={handleblur} onfocusin={handlefocus}
-                            onblur={handleblur1} placeholder={placeholder} type={FieldType} value=""
-                            onclick={OnFieldClick} class="slds-input" disabled={isdisabled} />
+                        <lightning-input type={fieldstypes}></lightning-input>
+                        <!-- <input onmousemove={handlehover} onmouseout={handleblur} onfocusin={handlefocus}
+                            onblur={handleblur1} placeholder={placeholder}  value=""
+                            onclick={OnFieldClick} class="slds-input" disabled={isdisabled} /> -->
                     </div>
 
                 </label>

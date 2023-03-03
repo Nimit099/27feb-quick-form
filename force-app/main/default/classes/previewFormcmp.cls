@@ -1,14 +1,17 @@
-public with sharing class previewFormcmp {
+global without sharing class previewFormcmp {
 
     @AuraEnabled
-    public static Form__c formdetails(Id id){
+    global static Form__c formdetails(Id id){
         try{
+            System.debug( id + 'publish preview');
         Form__c nform = [SELECT Id,Progress_Indicator__c,Captcha_Type__c,Button_CSS__c,Button_Position__c,
         Page_CSS__c,Form_Styling__c  FROM Form__c WHERE Id =: id];
+        System.debug(nform);
         return nform;
         } catch (Exception e) {
             throw new AuraHandledException(e.getMessage());
         }
+        
     }
 
     @AuraEnabled

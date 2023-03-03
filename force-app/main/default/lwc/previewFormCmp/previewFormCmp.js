@@ -33,9 +33,10 @@ export default class PreviewFormCmp extends NavigationMixin(LightningElement) {
     @track verify;
     @track buttonscss;
     @track PageCSS;
-    @api activepreview;
+    @api activepreviews=false;
 
     renderedCallback() {
+        console.log(this.activepreviews + 'preview');
         if (this.Mainlist.length > 0) {
             let value;
             let arr = this.template.querySelectorAll('.btn1');
@@ -61,14 +62,26 @@ export default class PreviewFormCmp extends NavigationMixin(LightningElement) {
     }
 
     connectedCallback() {
-        this.FormData();
+
+        try {
+            this.spinnerDataTable = true
+            this.activepreview = true;
+            this.FormData();
+        } catch (error) {
+            console.log(error + 'catched');
+            this.spinnerDataTable = false;
+        }
+       
     }
 
     FormData() {
         try {
-            this.spinnerDataTable = true;
+            console.log(this.formid);
+            console.log(this.formid);
+            this.spinnerDataTable = false;
             formdetails({ id: this.formid })
                 .then(result => {
+                    console.log(result);
                     this.Progressbarvalue = result.Progress_Indicator__c;
                     this.captchavalue = result.Captcha_Type__c;
                     this.getFieldCSS = result.Form_Styling__c;

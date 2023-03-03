@@ -87,6 +87,8 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
     error_toast = true;
 
     @api ParentMessage = '';
+    
+    
     @api FormName = '';
 
     @track MainList = [];
@@ -130,6 +132,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
     @track hovercss;
     @track focuscss;
     @track fieldcss;
+    @track fieldstype;
 
     connectedCallback() {
 
@@ -848,6 +851,8 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
                         console.log('inside inner loop');
                         let fieldofObj = fieldList[j].Name.split(',');
                         let fieldtype;
+                        this.fieldstype = fieldList[j].Name.split(',')[1];
+                        console.log(this.fieldstype + 'ftype');
                         if (fieldofObj[1] == 'Extra') {
                             fieldtype = false;
                         } else {
@@ -1234,6 +1239,7 @@ export default class FormBuilder extends NavigationMixin(LightningElement) {
             var pagelength = result.pageList.length == this.PageList.length;
             this.PageList = result.pageList;
             this.setPageField(result.fieldList);
+            
             if (pagelength) {
                 this.template.querySelector('c-toast-component').showToast('error', 'You cannot delete the page', 3000);
 

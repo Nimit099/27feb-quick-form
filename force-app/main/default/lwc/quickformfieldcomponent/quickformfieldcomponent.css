@@ -1,5 +1,5 @@
 .flex {
-    display: flex;
+    display: flex !important;
 }
 
 .rightfield {
@@ -522,4 +522,8 @@ select:hover,
 .starrating {
     min-height: 40px;
     position: relative;
+}
+
+.slds-scope .slds-form_stacked .slds-form-element:not(.slds-form-element_readonly){
+    display: flex !important;
 }
