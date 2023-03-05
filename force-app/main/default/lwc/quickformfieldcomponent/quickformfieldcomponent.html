@@ -373,22 +373,56 @@
                             </div>
                         </template>
                         <template if:true={sTruePicklist}>
-<!-- Change variable --> <select class="slds-input slds-select"  onchange={salutationValue}
+                        <select class="slds-input slds-select"  onchange={ds}
                             disabled={isdisabled}>
-                            <template for:each={salutationvalue} for:item="value">
-                                <option value={value} key={value}>{value}</option>
+                            <template for:each={picklistvalue} for:item="value">
+                                <option value={value.value} key={value}>{value.key}</option>
                             </template>
                         </select>
                         </template>
                         <template if:true={sTrueRefernce}>
-<!-- Change variable --> <select class="slds-input slds-select"  onchange={salutationValue}
-                            disabled={isdisabled}>
-                            <template for:each={salutationvalue} for:item="value">
-                                <option value={value} key={value}>{value}</option>
-                            </template>
-                        </select>
-                        </template>
 
+                        <input onmousemove={handlehover} onmouseout={handleblur}  onkeyup={referencevalues}  onfocusin={handlefocus} onclick={getreferncevalue}
+                       value ={searchkey} data-id={fieldId} data-name={fieldstype} onblur={handleblur1} disabled={isdisabled} type="text" class="slds-input" />
+    
+                        <div if:true={usrViewBool} id="userListView"
+                            class="dropuser slds-listbox slds-listbox_vertical slds-dropdown slds-dropdown_fluid slds-dropdown_left">
+                            <ul class="slds-listbox slds-listbox_vertical slds-dropdown_length-5 slds-dropdown_fluid customClass"
+                                tabindex="0" role="presentation">
+                                <template for:each={referencevalue} for:item="option">
+                                    <li key={option.Id} role="presentation" class="listbox-item slds-listbox__item"
+                                        data-name={option.Name} onclick={selectreferencevalue} value={option.Id} title={option.Name}>
+                                        <div id={option.Id}
+                                            class="usrnameClass slds-media slds-listbox__option slds-listbox__option_plain slds-media_small"
+                                             role="option">
+                                            <span class="slds-media__figure slds-listbox__option-icon">
+                                                <lightning-icon icon-name="standard:user" size="small"></lightning-icon>
+                                            </span>
+                                            <span class="slds-truncate">
+                                                <span>{option.Name}</span>
+                                            </span>
+                                        </div>
+                                    </li>
+                                </template>
+                            </ul>
+                        </div>
+
+
+                        <!-- <select class="slds-input slds-select"  onchange={ds}
+                            disabled={isdisabled}>
+                            <template for:each={referencevalue} for:item="value">
+                                <option value={value.Id} key={value}>{value.Name}</option>
+                            </template>
+                        </select> -->
+                        </template>
+                        <template if:true={sTrueMultiPicklist}>
+    <!-- Change variable --> <select class="slds-input slds-select"  onchange={ds}
+                                disabled={isdisabled}>
+                                <template for:each={picklistvalue} for:item="value">
+                                    <option value={value.value} key={value}>{value.key}</option>
+                                </template>
+                            </select>
+                        </template>
 
                     </div>
 

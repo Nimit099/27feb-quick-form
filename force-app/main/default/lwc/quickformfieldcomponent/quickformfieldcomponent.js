@@ -9,6 +9,8 @@ import EmojiRating2 from '@salesforce/resourceUrl/EmojiRating2';
 import EmojiRating3 from '@salesforce/resourceUrl/EmojiRating3';
 import EmojiRating4 from '@salesforce/resourceUrl/EmojiRating4';
 import getScaleRating from '@salesforce/apex/FormBuilderController.getScaleRating';
+import getreferencevalue from '@salesforce/apex/FormBuilderController.getreferencevalue';
+import getpicklistvalue from '@salesforce/apex/FormBuilderController.getpicklistvalue';
 
 export default class Quickformfieldcomponent extends LightningElement {
 
@@ -56,8 +58,22 @@ export default class Quickformfieldcomponent extends LightningElement {
     @api fieldName;
     @track fieldcount = true;
     d = false;
+    @track picklistvalue = [];
+    usrViewBool = false;
+    referencevalue;
+    outsideClick;
+    @track searchkey = '';
     connectedCallback() {
         this.fieldstype = this.tView.split(',')[1];
+        if (this.fieldstype == 'REFERENCE') {
+            // this.referencevalues();
+        }
+        else if (this.fieldstype == 'PICKLIST') {
+            this.picklistvalues();
+        }
+        else if (this.fieldstype == 'MULTIPICKLIST') {
+            this.picklistvalues();
+        }
         getScaleRating()
             .then(result => {
                 this.scaleRating = result;
@@ -190,9 +206,9 @@ export default class Quickformfieldcomponent extends LightningElement {
     }
 
     handlehover(event) {
-        console.log('onhover hovercssproperty --> '+this.hovercssproperty);
+        console.log('onhover hovercssproperty --> ' + this.hovercssproperty);
         let str = this.hovercssproperty;
-        console.log('onhover str --> '+str);
+        console.log('onhover str --> ' + str);
         if (this.onfocus) {
             this.handlefocus(event)
         } else {
@@ -202,6 +218,9 @@ export default class Quickformfieldcomponent extends LightningElement {
     }
 
     handlefocus(event) {
+        if (event.currentTarget.dataset.name == 'REFERENCE') {
+            this.fieldId = event.currentTarget.dataset.id;
+        }
         console.log('handlefocus ***');
         console.log('this.onfocus --> ', this.onfocus);
         console.log('FieldCSS->> ' + this.focuscssproperty);
@@ -223,6 +242,7 @@ export default class Quickformfieldcomponent extends LightningElement {
     }
 
     handleblur1(event) {
+        this.usrViewBool = false;
         console.log('Blur On Field');
         console.log(event);
         console.log('this.onfocus --> ', this.onfocus);
@@ -268,9 +288,9 @@ export default class Quickformfieldcomponent extends LightningElement {
     }
     get isTrueEmail() {
         this.tView = this.tView.split(',')[0];
-      
-            return this.tView == 'QFEMAILID' || this.FieldLabel == 'QFEMAILID';
-        
+
+        return this.tView == 'QFEMAILID' || this.FieldLabel == 'QFEMAILID';
+
     }
 
     get isTrueFullName() {
@@ -278,24 +298,24 @@ export default class Quickformfieldcomponent extends LightningElement {
         return this.tView == 'QFFULLNAME' || this.FieldLabel == 'QFFULLNAME';
     }
     get isTrueName() {
-       
+
         return this.tView == 'QFNAME' || this.FieldLabel == 'QFNAME';
-        
+
     }
     get isTrueAddress() {
-       
-            return this.tView == 'QFADDRESS' || this.FieldLabel == 'QFADDRESS';
-        
+
+        return this.tView == 'QFADDRESS' || this.FieldLabel == 'QFADDRESS';
+
     }
     get isTruePhone() {
-       
-            return this.tView == 'QFPHONE';
-        
+
+        return this.tView == 'QFPHONE';
+
     }
     get isTrueCheckBox() {
-       
-            return this.tView == 'QFCHECKBOX';
-        
+
+        return this.tView == 'QFCHECKBOX';
+
     }
     get isTruePageBreak() {
         return this.tView == 'QFPAGEBREAK';
@@ -304,9 +324,9 @@ export default class Quickformfieldcomponent extends LightningElement {
         return this.tView == 'QFSHORTTEXT';
     }
     get isTrueLongText() {
-       
-            return this.tView == 'QFLONGTEXT';
-        
+
+        return this.tView == 'QFLONGTEXT';
+
     }
     get isTrueFileUpload() {
         return this.tView == 'QFFILEUPLOAD';
@@ -318,9 +338,9 @@ export default class Quickformfieldcomponent extends LightningElement {
         return this.tView == 'QFDROPDOWN';
     }
     get isTrueNumber() {
-        
-            return this.tView == 'Number';
-        
+
+        return this.tView == 'Number';
+
     }
     get isTruePrice() {
         return this.tView == 'QFPRICE';
@@ -328,20 +348,20 @@ export default class Quickformfieldcomponent extends LightningElement {
 
 
     get isTrueDate() {
-      
-            return this.tView == 'QFDATE';
-        
+
+        return this.tView == 'QFDATE';
+
     }
 
     get isTrueTime() {
-        
-            return this.tView == 'QFTIME';
-        
+
+        return this.tView == 'QFTIME';
+
     }
     get isTrueDateTime() {
 
-            return this.tView == 'QFDATETIME';
-        
+        return this.tView == 'QFDATETIME';
+
     }
     get isTrueRating() {
         return this.tView == 'QFRATING';
@@ -356,30 +376,30 @@ export default class Quickformfieldcomponent extends LightningElement {
         return this.tView == 'QFTERMSOFSERVICE';
     }
     get isTrueLink() {
-            return this.tView == 'QFLINK';
-        
+        return this.tView == 'QFLINK';
+
     }
     get isTrueSign() {
         return this.tView == 'QFSIGNATURE';
     }
-    get isTruePassword(){
-       
-            return this.tView == 'Password';
-    
+    get isTruePassword() {
+
+        return this.tView == 'Password';
+
     }
     get isTrueRichText() {
         console.log('inside the true rich text');
         return this.tView == 'QFRICHTEXT';
     }
-    get isTruePercent(){
-        
-            return this.tView == 'Percent';
-        
+    get isTruePercent() {
+
+        return this.tView == 'Percent';
+
     }
-    get isTrueCurrency(){
-       
-            return this.tView == 'Currency';
-        
+    get isTrueCurrency() {
+
+        return this.tView == 'Currency';
+
     }
     get isTruePageBreak() {
         return this.tView == 'QFPAGEBREAK';
@@ -389,107 +409,172 @@ export default class Quickformfieldcomponent extends LightningElement {
 
 
     get sTrueEmail() {
-        if( this.fieldstype == 'EMAIL'  ){
+        if (this.fieldstype == 'EMAIL') {
             console.log('fiedsd');
-            this.fieldcount = false;
+
             return true;
         }
     }
 
     get sTrueName() {
-        if( this.fieldstype == 'STRING'  ){
-            this.fieldcount = false;
+        if (this.fieldstype == 'STRING') {
+
             return true;
         }
     }
     get sTrueAddress() {
-        if( this.fieldstype == 'QFADDRESS'  ){
-            this.fieldcount = false;
+        if (this.fieldstype == 'QFADDRESS') {
+
             return true;
         }
     }
     get sTruePhone() {
-        if( this.fieldstype == 'PHONE'  ){
-            this.fieldcount = false;
+        if (this.fieldstype == 'PHONE') {
+
             return true;
         }
     }
     get sTrueCheckBox() {
-        if( this.fieldstype == 'BOOLEAN'  ){
-            this.fieldcount = false;
+        if (this.fieldstype == 'BOOLEAN') {
+
             return true;
         }
     }
     get sTrueLongText() {
-        if( this.fieldstype == 'TEXTAREA'  ){
-            this.fieldcount = false;
+        if (this.fieldstype == 'TEXTAREA') {
+
             return true;
         }
     }
 
     get sTrueNumber() {
-        if( this.fieldstype == 'DOUBLE'  ){
-            this.fieldcount = false;
+        if (this.fieldstype == 'DOUBLE') {
+
             return true;
         }
     }
 
     get sTrueDate() {
-        if( this.fieldstype == 'DATE'  ){
-            this.fieldcount = false;
+        if (this.fieldstype == 'DATE') {
+
             return true;
         }
     }
 
     get sTrueTime() {
-        if( this.fieldstype == 'TIME'  ){
-            this.fieldcount = false;
+        if (this.fieldstype == 'TIME') {
+
             return true;
         }
     }
     get sTrueDateTime() {
-        if( this.fieldstype == 'DATETIME'  ){
-            this.fieldcount = false;
+        if (this.fieldstype == 'DATETIME') {
+
             return true;
         }
     }
 
     get sTrueLink() {
-        if( this.fieldstype == 'URL'  ){
-            this.fieldcount = false;
+        if (this.fieldstype == 'URL') {
+
             return true;
         }
     }
 
-    get sTruePassword(){
-        if( this.fieldstype == 'ENCRYPTEDSTRING'  ){
-            this.fieldcount = false;
+    get sTruePassword() {
+        if (this.fieldstype == 'ENCRYPTEDSTRING') {
+
             return true;
         }
     }
 
-    get sTruePercent(){
-        if( this.fieldstype == 'PERCENT'  ){
-            this.fieldcount = false;
+    get sTruePercent() {
+        if (this.fieldstype == 'PERCENT') {
+
             return true;
         }
     }
-    get sTrueCurrency(){
-        if( this.fieldstype == 'CURRENCY'  ){
-            this.fieldcount = false;
+    get sTrueCurrency() {
+        if (this.fieldstype == 'CURRENCY') {
+
             return true;
         }
     }
-    get sTruePicklist(){
-        if(this.fieldstype == 'PICKLIST' ){
-            this.fieldcount = false;
+    get sTruePicklist() {
+        if (this.fieldstype == 'PICKLIST') {
+
             return true;
         }
     }
-    get sTrueRefernce(){
-        if(this.fieldstype == 'REFERENCE' ){
-            this.fieldcount = false;
+    get sTrueMultiPicklist() {
+        if (this.fieldstype == 'MULTIPICKLIST') {
+
             return true;
+        }
+    }
+    get sTrueRefernce() {
+        if (this.fieldstype == 'REFERENCE') {
+
+            return true;
+        }
+    }
+
+    getreferncevalue(event) {
+        try {
+            document.addEventListener('click', this.outsideClick = this.closereference.bind(this));
+            event.stopPropagation();
+
+            getreferencevalue({ id: this.fieldId, searchkey: this.searchkey })
+                .then(result => {
+                    this.referencevalue = result;
+                    this.usrViewBool = true;
+                    return false;
+                });
+        } catch (error) {
+            console.log('Reference eor' + error);
+            this.usrViewBool = false;
+        }
+    }
+    closereference(event) {
+        document.removeEventListener('click', this.outsideClick);
+        this.usrViewBool = false;
+    }
+    selectreferencevalue(event) {
+        this.searchkey = event.target.value;
+    }
+
+    referencevalues(event) {
+        try {
+ 
+            this.searchkey = event.target.value;
+            getreferencevalue({ id: this.fieldId, searchkey: this.searchkey })
+                .then(result => {
+                    this.referencevalue = result;
+                    this.usrViewBool = true;
+
+                });
+        } catch (error) {
+            console.log('Reference error' + error);
+            this.usrViewBool = false;
+        }
+    }
+    picklistvalues() {
+        try {
+            getpicklistvalue({ id: this.fieldId })
+                .then(result => {
+                    console.log(JSON.stringify(result) + 'Picklist');
+
+                    for (let key in result) {
+                        console.log(result[key] + 'pickvlaue');
+                        console.log(key);
+                        this.picklistvalue.push({ value: result[key], key: key });
+                        // console.log(this.picklistvalue[key] + 'values');
+                    }
+
+
+                });
+        } catch (error) {
+            console.log('Picklist error' + error);
         }
     }
 
@@ -511,7 +596,7 @@ export default class Quickformfieldcomponent extends LightningElement {
     //     else if(this.fieldstype == 'DATE'){return this.fieldstype = 'date'}//
     //     else if(this.fieldstype == 'BOOLEAN'){return 'checkbox'}//
     //     else if(this.fieldstype == 'Lookup'){return this.fieldstype = 'Text'}
-        
+
     // }
 
     OnFieldClick(event) {
@@ -603,7 +688,7 @@ export default class Quickformfieldcomponent extends LightningElement {
                 }
             }
         }
-        
+
         function draw() {
             ctx.beginPath();
             ctx.moveTo(prevX, prevY);

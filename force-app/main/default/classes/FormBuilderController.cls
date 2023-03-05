@@ -1453,4 +1453,61 @@ public with sharing class FormBuilderController{
         }
     }
 
+    @AuraEnabled
+    public static List<SObject> getreferencevalue(Id id , String searchkey){
+        try {
+            String searchkeyword = '%'+searchkey+'%'; 
+            String Query; 
+            Form_Fields__c MappedObject = [SELECT Id,Mapped_Obj__c,Field_Mapping__c FROM Form_Fields__c WHERE Id =: id];
+
+            Schema.DescribeFieldResult f = Schema.getGlobalDescribe().get(MappedObject.Mapped_Obj__c).getDescribe().fields.getMap().get(MappedObject.Field_Mapping__c).getDescribe();
+            String Objects;
+            for(Schema.SObjectType reference : f.getReferenceTo()) {
+                 Objects = reference.getDescribe().getName();
+            }
+            if(searchkey == null || searchkey == 'undefined' || searchkey == ''){ 
+             Query= 'SELECT Id, Name FROM '+ Objects + ' Limit 1000';
+            }
+            else{
+             Query= 'SELECT Id, Name FROM '+ Objects + ' WHERE Name LIKE :searchkeyword';
+            }
+            List<sObject> ObjectRecords = Database.query(Query);
+            
+            return  ObjectRecords;
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
+    @AuraEnabled
+    public static Map<String,String> getpicklistvalue(Id id){
+        try {
+
+            Form_Fields__c MappedObject = [SELECT Id,Mapped_Obj__c,Field_Mapping__c FROM Form_Fields__c WHERE Id =: id];
+
+            Map<String, Schema.SObjectType> gd = Schema.getGlobalDescribe();
+            Set<String> objectKeys = gd.keySet();
+            Map<String,String> picklistvalue = new Map<String,String>();
+           
+                //Iterate through all objects to locate ACCOUNT Object
+                
+                    Schema.SObjectType systemObjectType = gd.get(MappedObject.Mapped_Obj__c);
+                    Schema.DescribeSObjectResult r = systemObjectType.getDescribe();
+                    Map<String, Schema.SObjectField> M = r.fields.getMap();
+                    Set<String> fieldNames = M.keySet();
+                    Schema.SObjectField field = M.get(MappedObject.Field_Mapping__c);
+                    Schema.DescribeFieldResult fieldDesc = field.getDescribe();
+
+
+                    //extract the picklist values
+                        // System.debug(fieldDesc.getPicklistValues() + ' ::::::::::::::::::::::::::::::::::: ') ;
+                        for(Integer i = 0; i < fieldDesc.getPicklistValues().size(); i++){
+                            picklistvalue.put(fieldDesc.getPicklistValues()[i].getLabel(),fieldDesc.getPicklistValues()[i].getValue());
+                        }
+
+              
+        return picklistvalue;
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
 }
