@@ -372,15 +372,21 @@
                                 </div>
                             </div>
                         </template>
-                        <template if:true={d}>
-                            <input onmousemove={handlehover} onmouseout={handleblur} onfocusin={handlefocus}
-                                onblur={handleblur1} placeholder={placeholder} type={fieldstype} value=""
-                                onclick={OnFieldClick} class="slds-input" disabled={isdisabled} />
+                        <template if:true={sTruePicklist}>
+<!-- Change variable --> <select class="slds-input slds-select"  onchange={salutationValue}
+                            disabled={isdisabled}>
+                            <template for:each={salutationvalue} for:item="value">
+                                <option value={value} key={value}>{value}</option>
+                            </template>
+                        </select>
                         </template>
-                        <template if:true={d}>
-                            <input onmousemove={handlehover} onmouseout={handleblur} onfocusin={handlefocus}
-                                onblur={handleblur1} placeholder={placeholder} type={fieldstype} value=""
-                                onclick={OnFieldClick} class="slds-input" disabled={isdisabled} />
+                        <template if:true={sTrueRefernce}>
+<!-- Change variable --> <select class="slds-input slds-select"  onchange={salutationValue}
+                            disabled={isdisabled}>
+                            <template for:each={salutationvalue} for:item="value">
+                                <option value={value} key={value}>{value}</option>
+                            </template>
+                        </select>
                         </template>
 
 

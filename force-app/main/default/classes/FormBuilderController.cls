@@ -53,7 +53,8 @@ public with sharing class FormBuilderController{
             Set<String> compoundFields = new Set<String>();
             Integer Position = 0;
             for (String fieldName : fieldMap.keySet()){
-                if (fieldMap.get(fieldName).getDescribe().isUpdateable() && fieldMap.get(fieldName).getDescribe().isNillable() == true){
+                System.debug(fieldName);
+                if (fieldMap.get(fieldName).getDescribe().getRelationshipName() != null || fieldMap.get(fieldName).getDescribe().isUpdateable() && fieldMap.get(fieldName).getDescribe().isNillable() == true){
                     // list of all field API name
                     System.debug(fieldMap.get(fieldName).getDescribe().getCompoundFieldName() + '===> getfields');
                     if (fieldMap.get(fieldName).getDescribe().getCompoundFieldName() == null){
@@ -1101,8 +1102,8 @@ public with sharing class FormBuilderController{
                         Schema.SObjectType leadSchema = schemaMap.get(type) ;
                         Map<String, Schema.SObjectField> fieldMap = leadSchema.getDescribe().fields.getMap();
                         for (String fieldName : fieldMap.keySet()){
-                            if (fieldMap.get(fieldName).getDescribe().isUpdateable()){
-                                if (fieldMap.get(fieldName).getDescribe().isNillable() == false){
+             
+                                if( fieldName == 'Name' || (!fieldMap.get(fieldName).getDescribe().isNillable() && !fieldMap.get(fieldName).getDescribe().isDefaultedOnCreate  () && fieldMap.get(fieldName).getDescribe().isCreateable()) ){
                                     Position = Position + 1;
                                     System.debug('##Field API Name=' + fieldName);
                                     Form_Fields__c field = new Form_Fields__c();
@@ -1136,7 +1137,7 @@ public with sharing class FormBuilderController{
                                                                  '?$`~Salutation<!@!>';
                                     Fields.add(field);
                                 }
-                            }
+                            
                         }
                         iteration = iteration + 1;
                     }

@@ -480,6 +480,18 @@ export default class Quickformfieldcomponent extends LightningElement {
             return true;
         }
     }
+    get sTruePicklist(){
+        if(this.fieldstype == 'PICKLIST' ){
+            this.fieldcount = false;
+            return true;
+        }
+    }
+    get sTrueRefernce(){
+        if(this.fieldstype == 'REFERENCE' ){
+            this.fieldcount = false;
+            return true;
+        }
+    }
 
     // get fieldstypes(){
     //     console.log(this.fieldstype + 'fieldstype');
