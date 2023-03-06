@@ -527,3 +527,28 @@ select:hover,
 .slds-scope .slds-form_stacked .slds-form-element:not(.slds-form-element_readonly){
     display: flex !important;
 }
+.dropuser{
+    position: relative;
+     width:40%;
+     max-width: none !important;
+     min-width: none !important;
+}
+.multipicklist{
+    display: flex;
+    justify-content: space-between;
+}
+.arrows{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.leftarrow{
+    height: 26%;
+    width: 30px;
+    background-color: #6699CC;
+    display: flex;
+    justify-content: center;
+}
+.tickicons{
+    display: none;
+}

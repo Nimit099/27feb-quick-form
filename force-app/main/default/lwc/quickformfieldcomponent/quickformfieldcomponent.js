@@ -8,13 +8,19 @@ import EmojiRating5 from '@salesforce/resourceUrl/EmojiRating5';
 import EmojiRating2 from '@salesforce/resourceUrl/EmojiRating2';
 import EmojiRating3 from '@salesforce/resourceUrl/EmojiRating3';
 import EmojiRating4 from '@salesforce/resourceUrl/EmojiRating4';
+import multiright from '@salesforce/resourceUrl/multiright';
+import multileft from '@salesforce/resourceUrl/multileft';
+import multitick from '@salesforce/resourceUrl/multitick';
 import getScaleRating from '@salesforce/apex/FormBuilderController.getScaleRating';
 import getreferencevalue from '@salesforce/apex/FormBuilderController.getreferencevalue';
 import getpicklistvalue from '@salesforce/apex/FormBuilderController.getpicklistvalue';
 
 export default class Quickformfieldcomponent extends LightningElement {
 
-    // icons
+    // icons'
+    multiright = multiright;
+    multileft = multileft;
+    multitick = multitick;
     emojiRating1 = EmojiRating1;
     emojiRating2 = EmojiRating2;
     emojiRating3 = EmojiRating3;
@@ -62,7 +68,9 @@ export default class Quickformfieldcomponent extends LightningElement {
     usrViewBool = false;
     referencevalue;
     outsideClick;
+     selectedmultipicklistvalues = [];
     @track searchkey = '';
+    selmultipicklistvalues = [];
     connectedCallback() {
         this.fieldstype = this.tView.split(',')[1];
         if (this.fieldstype == 'REFERENCE') {
@@ -545,7 +553,7 @@ export default class Quickformfieldcomponent extends LightningElement {
 
     referencevalues(event) {
         try {
- 
+
             this.searchkey = event.target.value;
             getreferencevalue({ id: this.fieldId, searchkey: this.searchkey })
                 .then(result => {
@@ -720,4 +728,95 @@ export default class Quickformfieldcomponent extends LightningElement {
             console.log('In the catch part of emojiRatingValue ==>', { error });
         }
     }
+
+    selectedvalues(event) {
+        try {   
+            if(this.selmultipicklistvalues.length > 0){
+                var ab = this.selmultipicklistvalues;
+                this.selmultipicklistvalues.push({ value: event.currentTarget.dataset.id, key: event.currentTarget.dataset.name })
+                this.template.querySelector('div[data-id="' + event.currentTarget.dataset.id + '"]').style.display = 'block';
+                ab.forEach((element,index) =>{
+                    if (element.value == event.currentTarget.dataset.id) {
+                        ab.splice(index,1);
+                        this.template.querySelector('div[data-id="' + event.currentTarget.dataset.id + '"]').style.display = 'none';
+                        this.selmultipicklistvalues.splice(index,1);
+                        this.selmultipicklistvalues.pop();
+                    }
+                })
+      
+                // var ab = this.selmultipicklistvalues;
+                // console.log(this.selmultipicklistvalues.length + ' leb');
+                // console.log(ab.length + ' leb');
+                // for (let index = 0; index < this.selmultipicklistvalues.length ; index++) {
+                //    console.log(this.selmultipicklistvalues.length + ' leb1');
+                //    console.log(ab.length + ' leb1');
+                //     if(this.selmultipicklistvalues[index].value == event.currentTarget.dataset.id){
+                //         console.log(this.selmultipicklistvalues.length + ' leb2');
+                //         console.log(ab.length + ' leb2');
+                //         this.selmultipicklistvalues = this.selmultipicklistvalues.splice(index, 1);
+                //          this.template.querySelector('div[data-id="' + event.currentTarget.dataset.id + '"]').style.display = 'none';
+                //          console.log(this.selmultipicklistvalues.length + ' leb3');
+                //          console.log(ab.length + ' leb3');
+
+                //     }
+                //     else{
+                //         console.log(this.selmultipicklistvalues.length + ' leb4');
+                //         console.log(ab.length + ' leb4');
+
+                //        ab.push({ value: event.currentTarget.dataset.id, key: event.currentTarget.dataset.name });
+                //         this.template.querySelector('div[data-id="' + event.currentTarget.dataset.id + '"]').style.display = 'block';
+                //         console.log(this.selmultipicklistvalues.length + ' leb5');
+                //         console.log(ab.length + ' leb5');
+
+                //     }
+                // } 
+                // this.selmultipicklistvalues = ab;           
+            } else {
+                this.selmultipicklistvalues.push({ value: event.currentTarget.dataset.id, key: event.currentTarget.dataset.name });
+                this.template.querySelector('div[data-id="' + event.currentTarget.dataset.id + '"]').style.display = 'block';
+                console.log(this.selmultipicklistvalues.length);
+            }
+        } catch (error) {
+            console.log(error + 'selected error');
+        }
+    }
+    unselectedvalues(event) {
+        try {
+            this.selmultipicklistvalues.push({ value: event.currentTarget.dataset.id, key: event.currentTarget.dataset.name });
+            console.log(JSON.stringify(this.selmultipicklistvalues));
+            this.template.querySelector('div[data-id="' + event.currentTarget.dataset.id + '"]').style.display = 'block';
+        } catch (error) {
+            console.log(error + 'unselectedvalue');
+        }
+    }
+    rightarrowmulti(event) {
+        for (let i = 0; i < this.selmultipicklistvalues.length; i++) {
+            this.template.querySelector('div[data-id="' + this.selmultipicklistvalues[i].value + '"]').style.display = 'none';
+        }
+        for (var j = 0; j < this.selmultipicklistvalues.length; j++) {
+            for (var i = 0; i < this.picklistvalue.length; i++) {
+                if (this.picklistvalue[i].value == this.selmultipicklistvalues[j].value) {
+                    this.selectedmultipicklistvalues.push(this.selmultipicklistvalues[j]);
+                    console.log(this.picklistvalue[i]);
+                    this.picklistvalue.splice(i, 1);
+                }
+            }
+        }
+        this.selmultipicklistvalues = [];
+    }
+    leftarrowmulti() {
+        for (let i = 0; i < this.selmultipicklistvalues.length; i++) {
+            this.template.querySelector('div[data-id="' + this.selmultipicklistvalues[i].value + '"]').style.display = 'none';
+        }
+        for (var j = 0; j < this.selmultipicklistvalues.length; j++) {
+            for (var i = 0; i < this.selectedmultipicklistvalues.length; i++) {
+                if (this.selectedmultipicklistvalues[i].value == this.selmultipicklistvalues[j].value) {
+                    this.picklistvalue.push(this.selmultipicklistvalues[j]);
+                    this.selectedmultipicklistvalues.splice(i, 1);
+                }
+            }
+        }
+        this.selmultipicklistvalues = [];
+    }
 }
+
