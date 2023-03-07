@@ -76,6 +76,7 @@ export default class Qf_publish extends LightningElement {
 
     copyTextFieldHelper(event) {
         try {
+
             let hiddenInput = this.template.querySelector('input');
             console.log('OUTPUT : ', hiddenInput);
             let sel_val = hiddenInput.select();

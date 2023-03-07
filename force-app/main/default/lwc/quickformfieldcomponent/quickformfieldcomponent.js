@@ -732,45 +732,25 @@ export default class Quickformfieldcomponent extends LightningElement {
     selectedvalues(event) {
         try {   
             if(this.selmultipicklistvalues.length > 0){
-                var ab = this.selmultipicklistvalues;
-                this.selmultipicklistvalues.push({ value: event.currentTarget.dataset.id, key: event.currentTarget.dataset.name })
-                this.template.querySelector('div[data-id="' + event.currentTarget.dataset.id + '"]').style.display = 'block';
-                ab.forEach((element,index) =>{
-                    if (element.value == event.currentTarget.dataset.id) {
-                        ab.splice(index,1);
-                        this.template.querySelector('div[data-id="' + event.currentTarget.dataset.id + '"]').style.display = 'none';
-                        this.selmultipicklistvalues.splice(index,1);
-                        this.selmultipicklistvalues.pop();
+                var i;
+                this.selmultipicklistvalues.forEach((element,index) =>{
+                    if(element.value == event.currentTarget.dataset.id){
+                        console.log('OUTPUT : ',i);
+                        i = index;
                     }
                 })
-      
-                // var ab = this.selmultipicklistvalues;
-                // console.log(this.selmultipicklistvalues.length + ' leb');
-                // console.log(ab.length + ' leb');
-                // for (let index = 0; index < this.selmultipicklistvalues.length ; index++) {
-                //    console.log(this.selmultipicklistvalues.length + ' leb1');
-                //    console.log(ab.length + ' leb1');
-                //     if(this.selmultipicklistvalues[index].value == event.currentTarget.dataset.id){
-                //         console.log(this.selmultipicklistvalues.length + ' leb2');
-                //         console.log(ab.length + ' leb2');
-                //         this.selmultipicklistvalues = this.selmultipicklistvalues.splice(index, 1);
-                //          this.template.querySelector('div[data-id="' + event.currentTarget.dataset.id + '"]').style.display = 'none';
-                //          console.log(this.selmultipicklistvalues.length + ' leb3');
-                //          console.log(ab.length + ' leb3');
-
-                //     }
-                //     else{
-                //         console.log(this.selmultipicklistvalues.length + ' leb4');
-                //         console.log(ab.length + ' leb4');
-
-                //        ab.push({ value: event.currentTarget.dataset.id, key: event.currentTarget.dataset.name });
-                //         this.template.querySelector('div[data-id="' + event.currentTarget.dataset.id + '"]').style.display = 'block';
-                //         console.log(this.selmultipicklistvalues.length + ' leb5');
-                //         console.log(ab.length + ' leb5');
-
-                //     }
-                // } 
-                // this.selmultipicklistvalues = ab;           
+                if(i == undefined){
+                    this.selmultipicklistvalues.push({ value: event.currentTarget.dataset.id, key: event.currentTarget.dataset.name });
+                    console.log('OUTPUT :if '+this.selmultipicklistvalues.length);
+                    this.template.querySelector('div[data-id="' + event.currentTarget.dataset.id + '"]').style.display = 'block';
+                }
+                else{
+                    this.selmultipicklistvalues.splice(i,1);
+                    console.log('OUTPUT : else ',this.selmultipicklistvalues.length);
+                    this.template.querySelector('div[data-id="' + event.currentTarget.dataset.id + '"]').style.display = 'none';
+                        
+                }
+          
             } else {
                 this.selmultipicklistvalues.push({ value: event.currentTarget.dataset.id, key: event.currentTarget.dataset.name });
                 this.template.querySelector('div[data-id="' + event.currentTarget.dataset.id + '"]').style.display = 'block';
@@ -781,12 +761,34 @@ export default class Quickformfieldcomponent extends LightningElement {
         }
     }
     unselectedvalues(event) {
-        try {
-            this.selmultipicklistvalues.push({ value: event.currentTarget.dataset.id, key: event.currentTarget.dataset.name });
-            console.log(JSON.stringify(this.selmultipicklistvalues));
-            this.template.querySelector('div[data-id="' + event.currentTarget.dataset.id + '"]').style.display = 'block';
+        try {   
+            if(this.selmultipicklistvalues.length > 0){
+                var i;
+                this.selmultipicklistvalues.forEach((element,index) =>{
+                    if(element.value == event.currentTarget.dataset.id){
+                        console.log('OUTPUT : ',i);
+                        i = index;
+                    }
+                })
+                if(i == undefined){
+                    this.selmultipicklistvalues.push({ value: event.currentTarget.dataset.id, key: event.currentTarget.dataset.name });
+                    console.log('OUTPUT :if '+this.selmultipicklistvalues.length);
+                    this.template.querySelector('div[data-id="' + event.currentTarget.dataset.id + '"]').style.display = 'block';
+                }
+                else{
+                    this.selmultipicklistvalues.splice(i,1);
+                    console.log('OUTPUT : else ',this.selmultipicklistvalues.length);
+                    this.template.querySelector('div[data-id="' + event.currentTarget.dataset.id + '"]').style.display = 'none';
+                        
+                }
+          
+            } else {
+                this.selmultipicklistvalues.push({ value: event.currentTarget.dataset.id, key: event.currentTarget.dataset.name });
+                this.template.querySelector('div[data-id="' + event.currentTarget.dataset.id + '"]').style.display = 'block';
+                console.log(this.selmultipicklistvalues.length);
+            }
         } catch (error) {
-            console.log(error + 'unselectedvalue');
+            console.log(error + 'unselected error');
         }
     }
     rightarrowmulti(event) {
@@ -819,4 +821,3 @@ export default class Quickformfieldcomponent extends LightningElement {
         this.selmultipicklistvalues = [];
     }
 }
-
